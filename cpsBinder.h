@@ -2,7 +2,6 @@
 #define cpsBinder_h
 
 #include "cpsTypes.h"
-#include "cpsObjectTranslator.h"
 #include <type_traits>
 #define cpsUnRefConst(T) typename std::remove_const<typename std::remove_reference<T>::type>::type
 
@@ -12,17 +11,16 @@ template<class R>
 struct cpsFB_Fn0
 {
     typedef R (*F)();
-    cpsObject invoke(F f, va_list args)
+    R invoke(F f, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
-        return cpsToCsObject<RV>(f());
+        return f();
     }
 };
 template<>
 struct cpsFB_Fn0<void>
 {
     typedef void (*F)();
-    cpsObject invoke(F f, va_list args)
+    void* invoke(F f, va_list args)
     {
         f();
         return nullptr;
@@ -33,17 +31,16 @@ template<class R, class C>
 struct cpsFB_MemFn0
 {
     typedef R (C::*F)();
-    cpsObject invoke(F f, C &o, va_list args)
+    R invoke(F f, C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
-        return cpsToCsObject<RV>((o.*f)());
+        return (o.*f)();
     }
 };
 template<class C>
 struct cpsFB_MemFn0<void, C>
 {
     typedef void (C::*F)();
-    cpsObject invoke(F f, C &o, va_list args)
+    void* invoke(F f, C &o, va_list args)
     {
         (o.*f)();
         return nullptr;
@@ -54,17 +51,16 @@ template<class R, class C>
 struct cpsFB_ConstMemFn0
 {
     typedef R (C::*F)() const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    R invoke(F f, const C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
-        return cpsToCsObject<RV>((o.*f)());
+        return (o.*f)();
     }
 };
 template<class C>
 struct cpsFB_ConstMemFn0<void, C>
 {
     typedef void (C::*F)() const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    void* invoke(F f, const C &o, va_list args)
     {
         (o.*f)();
         return nullptr;
@@ -77,23 +73,22 @@ template<class R, class A0>
 struct cpsFB_Fn1
 {
     typedef R (*F)(A0);
-    cpsObject invoke(F f, va_list args)
+    R invoke(F f, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        return cpsToCsObject<RV>(f(mioToCppObject<A0V>(a0)));
+        A0V &a0 = va_arg(args, A0V);
+        return f(a0);
     }
 };
 template<class A0>
 struct cpsFB_Fn1 < void, A0 >
 {
     typedef void (*F)(A0);
-    cpsObject invoke(F f, va_list args)
+    void* invoke(F f, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        f(mioToCppObject<A0V>(a0));
+        A0V &a0 = va_arg(args, A0V);
+        f(a0);
         return nullptr;
     }
 };
@@ -102,23 +97,22 @@ template<class R, class C, class A0>
 struct cpsFB_MemFn1
 {
     typedef R (C::*F)(A0);
-    cpsObject invoke(F f, C &o, va_list args)
+    R invoke(F f, C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0)));
+        A0V &a0 = va_arg(args, A0V);
+        return (o.*f)(a0);
     }
 };
 template<class C, class A0>
 struct cpsFB_MemFn1 < void, C, A0 >
 {
     typedef void (C::*F)(A0);
-    cpsObject invoke(F f, C &o, va_list args)
+    void* invoke(F f, C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0));
+        A0V &a0 = va_arg(args, A0V);
+        (o.*f)(a0);
         return nullptr;
     }
 };
@@ -127,23 +121,22 @@ template<class R, class C, class A0>
 struct cpsFB_ConstMemFn1
 {
     typedef R (C::*F)(A0) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    R invoke(F f, const C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0)));
+        A0V &a0 = va_arg(args, A0V);
+        return (o.*f)(a0);
     }
 };
 template<class C, class A0>
 struct cpsFB_ConstMemFn1 < void, C, A0 >
 {
     typedef void (C::*F)(A0) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    void* invoke(F f, const C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
-        cpsObject a0 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0));
+        A0V &a0 = va_arg(args, A0V);
+        (o.*f)(a0);
         return nullptr;
     }
 };
@@ -154,27 +147,26 @@ template<class R, class A0, class A1>
 struct cpsFB_Fn2
 {
     typedef R(*F)(A0, A1);
-    cpsObject invoke(F f, va_list args)
+    R invoke(F f, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        return cpsToCsObject<RV>(f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        return f(a0, a1);
     }
 };
 template<class A0, class A1>
 struct cpsFB_Fn2 < void, A0, A1 >
 {
     typedef void(*F)(A0, A1);
-    cpsObject invoke(F f, va_list args)
+    void* invoke(F f, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        f(a0, a1);
         return nullptr;
     }
 };
@@ -183,27 +175,26 @@ template<class R, class C, class A0, class A1>
 struct cpsFB_MemFn2
 {
     typedef R(C::*F)(A0, A1);
-    cpsObject invoke(F f, C &o, va_list args)
+    R invoke(F f, C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        return (o.*f)(a0, a1);
     }
 };
 template<class C, class A0, class A1>
 struct cpsFB_MemFn2 < void, C, A0, A1 >
 {
     typedef void (C::*F)(A0, A1);
-    cpsObject invoke(F f, C &o, va_list args)
+    void* invoke(F f, C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        (o.*f)(a0, a1);
         return nullptr;
     }
 };
@@ -212,27 +203,26 @@ template<class R, class C, class A0, class A1>
 struct cpsFB_ConstMemFn2
 {
     typedef R(C::*F)(A0, A1) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    R invoke(F f, const C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        return (o.*f)(a0, a1);
     }
 };
 template<class C, class A0, class A1>
 struct cpsFB_ConstMemFn2 < void, C, A0, A1 >
 {
     typedef void (C::*F)(A0, A1) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    void* invoke(F f, const C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        (o.*f)(a0, a1);
         return nullptr;
     }
 };
@@ -243,31 +233,30 @@ template<class R, class A0, class A1, class A2>
 struct cpsFB_Fn3
 {
     typedef R(*F)(A0, A1, A2);
-    cpsObject invoke(F f, va_list args)
+    R invoke(F f, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        return cpsToCsObject<RV>(f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        return f(a0, a1, a2);
     }
 };
 template<class A0, class A1, class A2>
 struct cpsFB_Fn3 < void, A0, A1, A2 >
 {
     typedef void(*F)(A0, A1, A2);
-    cpsObject invoke(F f, va_list args)
+    void* invoke(F f, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        f(a0, a1, a2);
         return nullptr;
     }
 };
@@ -276,31 +265,30 @@ template<class R, class C, class A0, class A1, class A2>
 struct cpsFB_MemFn3
 {
     typedef R(C::*F)(A0, A1, A2);
-    cpsObject invoke(F f, C &o, va_list args)
+    R invoke(F f, C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        return (o.*f)(a0, a1, a2);
     }
 };
 template<class C, class A0, class A1, class A2>
 struct cpsFB_MemFn3 < void, C, A0, A1, A2 >
 {
     typedef void (C::*F)(A0, A1, A2);
-    cpsObject invoke(F f, C &o, va_list args)
+    void* invoke(F f, C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        (o.*f)(a0, a1, a2);
         return nullptr;
     }
 };
@@ -309,31 +297,30 @@ template<class R, class C, class A0, class A1, class A2>
 struct cpsFB_ConstMemFn3
 {
     typedef R(C::*F)(A0, A1, A2) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    R invoke(F f, const C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        return (o.*f)(a0, a1, a2);
     }
 };
 template<class C, class A0, class A1, class A2>
 struct cpsFB_ConstMemFn3 < void, C, A0, A1, A2 >
 {
     typedef void (C::*F)(A0, A1, A2) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    void* invoke(F f, const C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        (o.*f)(a0, a1, a2);
         return nullptr;
     }
 };
@@ -344,35 +331,34 @@ template<class R, class A0, class A1, class A2, class A3>
 struct cpsFB_Fn4
 {
     typedef R(*F)(A0, A1, A2, A3);
-    cpsObject invoke(F f, va_list args)
+    R invoke(F f, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        return cpsToCsObject<RV>(f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        return f(a0, a1, a2, a3);
     }
 };
 template<class A0, class A1, class A2, class A3>
 struct cpsFB_Fn4 < void, A0, A1, A2, A3 >
 {
     typedef void(*F)(A0, A1, A2, A3);
-    cpsObject invoke(F f, va_list args)
+    void* invoke(F f, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        f(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        f(a0, a1, a2, a3);
         return nullptr;
     }
 };
@@ -381,35 +367,34 @@ template<class R, class C, class A0, class A1, class A2, class A3>
 struct cpsFB_MemFn4
 {
     typedef R(C::*F)(A0, A1, A2, A3);
-    cpsObject invoke(F f, C &o, va_list args)
+    R invoke(F f, C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        return (o.*f)(a0, a1, a2, a3);
     }
 };
 template<class C, class A0, class A1, class A2, class A3>
 struct cpsFB_MemFn4 < void, C, A0, A1, A2, A3 >
 {
     typedef void (C::*F)(A0, A1, A2, A3);
-    cpsObject invoke(F f, C &o, va_list args)
+    void* invoke(F f, C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        (o.*f)(a0, a1, a2, a3);
         return nullptr;
     }
 };
@@ -418,123 +403,124 @@ template<class R, class C, class A0, class A1, class A2, class A3>
 struct cpsFB_ConstMemFn4
 {
     typedef R(C::*F)(A0, A1, A2, A3) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    R invoke(F f, const C &o, va_list args)
     {
-        typedef cpsUnRefConst(R) RV;
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        return cpsToCsObject<RV>((o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3)));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        return (o.*f)(a0, a1, a2, a3);
     }
 };
 template<class C, class A0, class A1, class A2, class A3>
 struct cpsFB_ConstMemFn4 < void, C, A0, A1, A2, A3 >
 {
     typedef void (C::*F)(A0, A1, A2, A3) const;
-    cpsObject invoke(F f, const C &o, va_list args)
+    void* invoke(F f, const C &o, va_list args)
     {
         typedef cpsUnRefConst(A0) A0V;
         typedef cpsUnRefConst(A1) A1V;
         typedef cpsUnRefConst(A2) A2V;
         typedef cpsUnRefConst(A3) A3V;
-        cpsObject a0 = va_arg(args, void*);
-        cpsObject a1 = va_arg(args, void*);
-        cpsObject a2 = va_arg(args, void*);
-        cpsObject a3 = va_arg(args, void*);
-        (o.*f)(mioToCppObject<A0V>(a0), mioToCppObject<A1V>(a1), mioToCppObject<A2V>(a2), mioToCppObject<A3V>(a3));
+        A0V &a0 = va_arg(args, A0V);
+        A1V &a1 = va_arg(args, A1V);
+        A2V &a2 = va_arg(args, A2V);
+        A3V &a3 = va_arg(args, A3V);
+        (o.*f)(a0, a1, a2, a3);
         return nullptr;
     }
 };
 
 
 
+template<class T> struct cpsReturnType { typedef cpsUnRefConst(T) type; };
+template<> struct cpsReturnType<void> { typedef void* type; };
 
 
 template<class R, class C>
-inline cpsObject cpsCSCall(R(*f)(), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(*f)(), C *o, va_list args)
 {
     return cpsFB_Fn0<R>().invoke(f, args);
 }
 template<class R, class C>
-inline cpsObject cpsCSCall(R(C::*f)(), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(), C *o, va_list args)
 {
     return cpsFB_MemFn0<R, C>().invoke(f, *o, args);
 }
 template<class R, class C>
-inline cpsObject cpsCSCall(R(C::*f)() const, const C o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)() const, const C o, va_list args)
 {
     return cpsFB_ConstMemFn0<R, C>().invoke(f, *o, args);
 }
 
 
 template<class R, class C, class A0>
-inline cpsObject cpsCSCall(R(*f)(A0), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(*f)(A0), C *o, va_list args)
 {
     return cpsFB_Fn1<R, A0>().invoke(f, args);
 }
 template<class R, class C, class A0>
-inline cpsObject cpsCSCall(R(C::*f)(A0), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0), C *o, va_list args)
 {
     return cpsFB_MemFn1<R, C, A0>().invoke(f, *o, args);
 }
 template<class R, class C, class A0>
-inline cpsObject cpsCSCall(R(C::*f)(A0) const, const C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0) const, const C *o, va_list args)
 {
     return cpsFB_ConstMemFn1<R, C, A0>().invoke(f, *o, args);
 }
 
 
 template<class R, class C, class A0, class A1>
-inline cpsObject cpsCSCall(R(*f)(A0, A1), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(*f)(A0, A1), C *o, va_list args)
 {
     return cpsFB_Fn2<R, A0, A1>().invoke(f, args);
 }
 template<class R, class C, class A0, class A1>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1), C *o, va_list args)
 {
     return cpsFB_MemFn2<R, C, A0, A1>().invoke(f, *o, args);
 }
 template<class R, class C, class A0, class A1>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1) const, const C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1) const, const C *o, va_list args)
 {
     return cpsFB_ConstMemFn2<R, C, A0, A1>().invoke(f, *o, args);
 }
 
 
 template<class R, class C, class A0, class A1, class A2>
-inline cpsObject cpsCSCall(R(*f)(A0, A1, A2), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(*f)(A0, A1, A2), C *o, va_list args)
 {
     return cpsFB_Fn3<R, A0, A1, A2>().invoke(f, args);
 }
 template<class R, class C, class A0, class A1, class A2>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1, A2), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1, A2), C *o, va_list args)
 {
     return cpsFB_MemFn3<R, C, A0, A1, A2>().invoke(f, *o, args);
 }
 template<class R, class C, class A0, class A1, class A2>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1, A2) const, const C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1, A2) const, const C *o, va_list args)
 {
     return cpsFB_ConstMemFn3<R, C, A0, A1, A2>().invoke(f, *o, args);
 }
 
 
 template<class R, class C, class A0, class A1, class A2, class A3>
-inline cpsObject cpsCSCall(R(*f)(A0, A1, A2, A3), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(*f)(A0, A1, A2, A3), C *o, va_list args)
 {
     return cpsFB_Fn4<R, A0, A1, A2, A3>().invoke(f, args);
 }
 template<class R, class C, class A0, class A1, class A2, class A3>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1, A2, A3), C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1, A2, A3), C *o, va_list args)
 {
     return cpsFB_MemFn4<R, C, A0, A1, A2, A3>().invoke(f, *o, args);
 }
 template<class R, class C, class A0, class A1, class A2, class A3>
-inline cpsObject cpsCSCall(R(C::*f)(A0, A1, A2, A3) const, const C *o, va_list args)
+inline typename cpsReturnType<R>::type cpsCSCall(R(C::*f)(A0, A1, A2, A3) const, const C *o, va_list args)
 {
     return cpsFB_ConstMemFn4<R, C, A0, A1, A2, A3>().invoke(f, *o, args);
 }
@@ -631,10 +617,11 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
     cpsAddMethodHelper cpsP(cpsCurrentClass)##_dtor_(cpsS(cpsCurrentClass) "::dtor", &cpsP(cpsCurrentClass)##_dtor);
 
 #define cpsExportMethod(MethodName)\
-    cpsExport void* cpsP(cpsCurrentClass)##_##MethodName(void *o, ...)\
+    cpsExport auto cpsP(cpsCurrentClass)##_##MethodName(void *o, ...) -> decltype(cpsCSCall(&cpsP(cpsCurrentClass)::##MethodName, (cpsP(cpsCurrentClass)*)nullptr, nullptr))\
     {\
         typedef cpsP(cpsCurrentClass) this_t;\
-        cpsObject ret = nullptr;\
+        typedef decltype(cpsCSCall(&this_t::##MethodName, (this_t*)nullptr, nullptr)) ret_t;\
+        ret_t ret = ret_t();\
         va_list args;\
         va_start(args, o);\
         cpsGuard(\
@@ -647,6 +634,6 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
 
 
 #define cpsDefineEntryPoint()\
-    cpsExport void cpsInitialize() {}
+    cpsCLinkage cpsExport void cpsInitialize() {}
 
 #endif // cpsBinder_h

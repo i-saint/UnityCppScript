@@ -2,12 +2,31 @@
 #include <string>
 #include <vector>
 
+struct Vector2
+{
+    union {
+        struct { float x, y; };
+        float v[2];
+    };
+    Vector2(float a = 0.0f, float b = 0.0f) : x(a), y(b){}
+};
+
 struct Vector3
 {
     union {
         struct { float x, y, z; };
         float v[3];
     };
+    Vector3(float a = 0.0f, float b = 0.0f, float c = 0.0f) : x(a), y(b), z(c){}
+};
+
+struct Vector4
+{
+    union {
+        struct { float x, y, z, w; };
+        float v[4];
+    };
+    Vector4(float a = 0.0f, float b = 0.0f, float c = 0.0f, float d = 0.0f) : x(a), y(b), z(c), w(d){}
 };
 
 
@@ -21,18 +40,21 @@ public:
     void Start();
     void Update();
 
-    int memfn1(int a1);
-    int memfn2(int a1, int a2);
-    int memfn3(int a1, int a2, int a3);
-    int memfn4(int a1, int a2, int a3, int a4);
-    int cmemfn1(int a1) const;
-    int cmemfn2(int a1, int a2) const;
-    int cmemfn3(int a1, int a2, int a3) const;
-    int cmemfn4(int a1, int a2, int a3, int a4) const;
-    static int smemfn1(int a1);
-    static int smemfn2(int a1, int a2);
-    static int smemfn3(int a1, int a2, int a3);
-    static int smemfn4(int a1, int a2, int a3, int a4);
+    int test1(int a1, int a2, int a3, int a4);
+    int test2(float a1, Vector2 a2);
+
+    int memfn1(float a1);
+    int memfn2(float a1, Vector2 a2);
+    int memfn3(float a1, Vector2 a2, Vector3 a3);
+    int memfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
+    int cmemfn1(float a1) const;
+    int cmemfn2(float a1, Vector2 a2) const;
+    int cmemfn3(float a1, Vector2 a2, Vector3 a3) const;
+    int cmemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4) const;
+    static int smemfn1(float a1);
+    static int smemfn2(float a1, Vector2 a2);
+    static int smemfn3(float a1, Vector2 a2, Vector3 a3);
+    static int smemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
 
 private:
     int m_frame;
@@ -47,6 +69,8 @@ cpsDefineEntryPoint()
 cpsExportClass()
 cpsExportMethod(Start)
 cpsExportMethod(Update)
+cpsExportMethod(test1)
+cpsExportMethod(test2)
 cpsExportMethod(memfn1)
 cpsExportMethod(memfn2)
 cpsExportMethod(memfn3)
@@ -60,6 +84,7 @@ cpsExportMethod(smemfn2)
 cpsExportMethod(smemfn3)
 cpsExportMethod(smemfn4)
 #undef cpsCurrentClass
+
 
 
 inline std::string StringizeArgTypes(cpsMethod mt)
@@ -116,7 +141,7 @@ void TestCppBehaviour::Start()
 
 void TestCppBehaviour::Update()
 {
-    if (++m_frame % 60 == 0) {
+    if (++m_frame % 180 == 0) {
         // crash test
         //*(int*)nullptr = 0;
 
@@ -135,76 +160,98 @@ void TestCppBehaviour::Update()
 }
 
 
-int TestCppBehaviour::memfn1(int a1)
+int TestCppBehaviour::test1(int a1, int a2, int a3, int a4)
 {
-    cpsDebugPrint("TestCppBehaviour::memfn1(%d) : %d\n", a1, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::memfn2(int a1, int a2)
-{
-    cpsDebugPrint("TestCppBehaviour::memfn2(%d, %d) : %d\n", a1, a2, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::memfn3(int a1, int a2, int a3)
-{
-    cpsDebugPrint("TestCppBehaviour::memfn3(%d, %d, %d) : %d\n", a1, a2, a3, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::memfn4(int a1, int a2, int a3, int a4)
-{
-    cpsDebugPrint("TestCppBehaviour::memfn4(%d, %d, %d, %d) : %d\n", a1, a2, a3, a4, m_frame);
-    return m_frame;
-}
-
-
-int TestCppBehaviour::cmemfn1(int a1) const
-{
-    cpsDebugPrint("TestCppBehaviour::cmemfn1(%d) : %d\n", a1, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::cmemfn2(int a1, int a2) const
-{
-    cpsDebugPrint("TestCppBehaviour::cmemfn2(%d, %d) : %d\n", a1, a2, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::cmemfn3(int a1, int a2, int a3) const
-{
-    cpsDebugPrint("TestCppBehaviour::cmemfn3(%d, %d, %d) : %d\n", a1, a2, a3, m_frame);
-    return m_frame;
-}
-
-int TestCppBehaviour::cmemfn4(int a1, int a2, int a3, int a4) const
-{
-    cpsDebugPrint("TestCppBehaviour::cmemfn4(%d, %d, %d, %d) : %d\n", a1, a2, a3, a4, m_frame);
-    return m_frame;
-}
-
-
-int TestCppBehaviour::smemfn1(int a1)
-{
-    cpsDebugPrint("TestCppBehaviour::smemfn1(%d) : %d\n", a1, 1);
+    cpsDebugPrint("TestCppBehaviour::test1(%d, %d, %d, %d)\n", a1, a2, a3, a4);
     return 1;
 }
 
-int TestCppBehaviour::smemfn2(int a1, int a2)
+int TestCppBehaviour::test2(float a1, Vector2 a2)
 {
-    cpsDebugPrint("TestCppBehaviour::smemfn2(%d, %d) : %d\n", a1, a2, 2);
+    cpsDebugPrint("TestCppBehaviour::test2({%f, %f})\n", a2.x, a2.y);
     return 2;
 }
 
-int TestCppBehaviour::smemfn3(int a1, int a2, int a3)
+
+
+int TestCppBehaviour::memfn1(float a1)
 {
-    cpsDebugPrint("TestCppBehaviour::smemfn3(%d, %d, %d) : %d\n", a1, a2, a3, 3);
+    cpsDebugPrint("TestCppBehaviour::memfn1(%f)\n", a1);
+    float f = (float)m_frame;
+    return 1;
+}
+
+int TestCppBehaviour::memfn2(float a1, Vector2 a2)
+{
+    cpsDebugPrint("TestCppBehaviour::memfn2(..., {%f, %f})\n", a2.x, a2.y);
+    float f = (float)m_frame;
+    return 2;
+}
+
+int TestCppBehaviour::memfn3(float a1, Vector2 a2, Vector3 a3)
+{
+    cpsDebugPrint("TestCppBehaviour::memfn3(..., {%f, %f, %f})\n", a3.x, a3.y, a3.z);
+    float f = (float)m_frame;
     return 3;
 }
 
-int TestCppBehaviour::smemfn4(int a1, int a2, int a3, int a4)
+int TestCppBehaviour::memfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4)
 {
-    cpsDebugPrint("TestCppBehaviour::smemfn4(%d, %d, %d, %d) : %d\n", a1, a2, a3, a4, 4);
+    cpsDebugPrint("TestCppBehaviour::memfn4((..., {%f, %f, %f, %f})\n", a4.x, a4.y, a4.z, a4.w);
+    float f = (float)m_frame;
     return 4;
+}
+
+
+int TestCppBehaviour::cmemfn1(float a1) const
+{
+    cpsDebugPrint("TestCppBehaviour::cmemfn1(%f)\n", a1);
+    float f = (float)m_frame;
+    return 5;
+}
+
+int TestCppBehaviour::cmemfn2(float a1, Vector2 a2) const
+{
+    cpsDebugPrint("TestCppBehaviour::cmemfn2(..., {%f, %f})\n", a2.x, a2.y);
+    float f = (float)m_frame;
+    return 6;
+}
+
+int TestCppBehaviour::cmemfn3(float a1, Vector2 a2, Vector3 a3) const
+{
+    cpsDebugPrint("TestCppBehaviour::cmemfn3(..., {%f, %f, %f})\n", a3.x, a3.y, a3.z);
+    float f = (float)m_frame;
+    return 7;
+}
+
+int TestCppBehaviour::cmemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4) const
+{
+    cpsDebugPrint("TestCppBehaviour::cmemfn4((..., {%f, %f, %f, %f})\n", a4.x, a4.y, a4.z, a4.w);
+    float f = (float)m_frame;
+    return 8;
+}
+
+
+int TestCppBehaviour::smemfn1(float a1)
+{
+    cpsDebugPrint("TestCppBehaviour::smemfn1(%f)\n", a1);
+    return 9;
+}
+
+int TestCppBehaviour::smemfn2(float a1, Vector2 a2)
+{
+    cpsDebugPrint("TestCppBehaviour::smemfn2(..., {%f, %f})\n", a2.x, a2.y);
+    return 10;
+}
+
+int TestCppBehaviour::smemfn3(float a1, Vector2 a2, Vector3 a3)
+{
+    cpsDebugPrint("TestCppBehaviour::smemfn3(..., {%f, %f, %f})\n", a3.x, a3.y, a3.z);
+    return 11;
+}
+
+int TestCppBehaviour::smemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4)
+{
+    cpsDebugPrint("TestCppBehaviour::smemfn4((..., {%f, %f, %f, %f})\n", a4.x, a4.y, a4.z, a4.w);
+    return 12;
 }

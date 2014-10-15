@@ -36,16 +36,8 @@ public class TestCppBehaviour : CppBehaviour
 
 
 
-
     Vector3 v3value;
 
-    TestCppBehaviour()
-    {
-
-    }
-
-    ~TestCppBehaviour()
-    { }
 
     void Awake()
     {
@@ -69,58 +61,91 @@ public class TestCppBehaviour : CppBehaviour
 
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int memfn1(int a1);
+    public extern int test1(int a1, int a2, int a3, int a4);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int memfn2(int a1, int a2);
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int memfn3(int a1, int a2, int a3);
-
-    [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int memfn4(int a1, int a2, int a3, int a4);
+    public extern int test2(float a1, Vector2 a2);
 
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int cmemfn1(int a1);
+    public extern int memfn1(float a1);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int cmemfn2(int a1, int a2);
+    public extern int memfn2(float a1, Vector2 a2);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int cmemfn3(int a1, int a2, int a3);
+    public extern int memfn3(float a1, Vector2 a2, Vector3 a3);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int cmemfn4(int a1, int a2, int a3, int a4);
+    public extern int memfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
 
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int smemfn1(int a1);
+    public extern int cmemfn1(float a1);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int smemfn2(int a1, int a2);
+    public extern int cmemfn2(float a1, Vector2 a2);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int smemfn3(int a1, int a2, int a3);
+    public extern int cmemfn3(float a1, Vector2 a2, Vector3 a3);
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int smemfn4(int a1, int a2, int a3, int a4);
+    public extern int cmemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
+
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)]
+    public extern int smemfn1(float a1);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)]
+    public extern int smemfn2(float a1, Vector2 a2);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)]
+    public extern int smemfn3(float a1, Vector2 a2, Vector3 a3);
+
+    [MethodImplAttribute(MethodImplOptions.InternalCall)]
+    public extern int smemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
 
 
     void ThisFunctionWillBeCalledFromCpp()
     {
         Debug.Log("ThisFunctionWillBeCalledFromCpp()");
-        memfn1(1);
-        memfn2(1, 2);
-        memfn3(1, 2, 3);
-        memfn4(1, 2, 3, 4);
-        cmemfn1(1);
-        cmemfn2(1, 2);
-        cmemfn3(1, 2, 3);
-        cmemfn4(1, 2, 3, 4);
-        smemfn1(1);
-        smemfn2(1, 2);
-        smemfn3(1, 2, 3);
-        smemfn4(1, 2, 3, 4);
-   }
+
+        //Vector3 v3 = ReturnVector3();
+        //Debug.Log("v3: "+v3.x+", "+v3.y+", "+v3.z);
+
+        float f = 1.0f;
+        Vector2 v2 = new Vector2(0.0f, 1.0f);
+        Vector3 v3 = new Vector3(0.0f, 1.0f, 2.0f);
+        Vector4 v4 = new Vector4(0.0f, 1.0f, 2.0f, 3.0f);
+
+        //test1(10, 20, 30, 40);
+        //test2(1.0f, v2);
+
+        memfn1(f);
+        //Debug.Log("memfn1: " + f);
+        memfn2(f, v2);
+        //Debug.Log("memfn2: " + v2.x + ", " + v2.y);
+        memfn3(f, v2, v3);
+        //Debug.Log("memfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        memfn4(f, v2, v3, v4);
+        //Debug.Log("memfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+
+        cmemfn1(f);
+        //Debug.Log("cmemfn1: " + f);
+        cmemfn2(f, v2);
+        //Debug.Log("cmemfn2: " + v2.x + ", " + v2.y);
+        cmemfn3(f, v2, v3);
+        //Debug.Log("cmemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        cmemfn4(f, v2, v3, v4);
+        //Debug.Log("cmemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+
+        smemfn1(f);
+        //Debug.Log("smemfn1: " + f);
+        smemfn2(f, v2);
+        //Debug.Log("smemfn2: " + v2.x + ", " + v2.y);
+        smemfn3(f, v2, v3);
+        //Debug.Log("smemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        smemfn4(f, v2, v3, v4);
+        //Debug.Log("smemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+    }
 }

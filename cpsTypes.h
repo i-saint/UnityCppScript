@@ -5,7 +5,8 @@
 #include <cstdio>
 #include <cstdarg>
 
-#define cpsExport extern "C" __declspec(dllexport)
+#define cpsCLinkage extern "C"
+#define cpsExport __declspec(dllexport)
 #ifndef cpsAPI
 #   pragma comment(lib, "CppScriptCore.lib")
 #   define cpsAPI __declspec(dllimport)

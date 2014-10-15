@@ -115,7 +115,7 @@ cpsAPI void cpsDebugPrint(const char *format, ...)
     va_list args;
     va_start(args, format);
 #ifdef WIN32
-    char buf[1024 * 2];
+    char buf[1024 * 8];
     vsprintf(buf, format, args);
     ::OutputDebugStringA(buf);
 #else  // WIN32
