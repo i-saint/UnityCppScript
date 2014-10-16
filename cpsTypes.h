@@ -84,6 +84,7 @@ public:
     void eachArgTypes(const std::function<void(cpsType&)>&) const;
     
     cpsObject invoke(cpsObject obj, void **args);
+    cpsMethod instantiate(cpsClass *params, int num_params);
 
 private:
     void *mmethod;
@@ -113,6 +114,8 @@ public:
     void eachPropertiesUpwards(const std::function<void(cpsProperty&, cpsClass&)> &f);
     void eachMethodsUpwards(const std::function<void(cpsMethod&, cpsClass&)> &f);
 
+    //cpsClass insantiate(cpsClass *template_params);
+
 private:
     void *mclass;
 };
@@ -125,10 +128,9 @@ public:
     operator void*() const { return mobj; }
     operator bool() const { return mobj != nullptr; }
 
+    void*       getDomain() const;
     cpsClass    getClass() const;
-    cpsField    findField(const char *name) const;
-    cpsProperty findProperty(const char *name) const;
-    cpsMethod   findMethod(const char *name) const;
+    void*       getData();
 
 private:
     void *mobj;

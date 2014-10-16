@@ -539,7 +539,7 @@ inline cpsField cpsGetCppThisField(cpsObject o)
 {
     // できれば static にしたいが、ゲームスタートの度に field のデータ更新されるっぽい上、実行中に C# スクリプトが更新される可能性もあるため危険。
     // マスタービルドでだけ static にする最適化はありかもしれないが、とりあえず保留。
-    cpsField field = o.findField("this_cpp");
+    cpsField field = o.getClass().findField("this_cpp");
     return field;
 }
 template<class T>
@@ -566,7 +566,7 @@ inline void cpsDeleteCppThis(cpsObject o)
 template<class T>
 inline T* cpsGetFieldValuePtr(cpsObject parent, const char *field_name)
 {
-    int offset = parent.findField(field_name).getOffset();
+    int offset = parent.getClass().findField(field_name).getOffset();
     return (T*)((size_t&)parent + offset);
 }
 

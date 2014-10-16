@@ -76,28 +76,28 @@
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)_tmp\$(ProjectName)_$(Configuration)_$(Platform)\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);lib\x86</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)_tmp\$(ProjectName)_$(Configuration)_$(Platform)\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);lib\x64</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)_tmp\$(ProjectName)_$(Configuration)_$(Platform)\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);lib\x86</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)_tmp\$(ProjectName)_$(Configuration)_$(Platform)\</IntDir>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);lib\x64</LibraryPath>
+    <LibraryPath>$(SolutionDir)lib\$(Platform);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

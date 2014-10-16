@@ -106,6 +106,12 @@ public class TestCppBehaviour : CppBehaviour
     public extern int smemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
 
 
+    T TestTemplateMethod<T>() where T : struct
+    {
+        Debug.Log("TestTemplateMethod()");
+        return new T();
+    }
+
     void ThisFunctionWillBeCalledFromCpp()
     {
         Debug.Log("ThisFunctionWillBeCalledFromCpp()");

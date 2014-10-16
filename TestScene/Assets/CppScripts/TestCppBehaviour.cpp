@@ -1,4 +1,5 @@
 ﻿#include "CppBehaviour.h"
+#include "monoAPI.h"
 #include <string>
 #include <vector>
 
@@ -100,20 +101,17 @@ inline std::string StringizeArgTypes(cpsMethod mt)
 }
 
 
-TestCppBehaviour::TestCppBehaviour(void *o)
-: super(o)
-, m_frame(0)
-, m_v3v(cpsGetFieldValuePtr<Vector3>(o, "v3value"))
+void DumpClassStructure(cpsClass cpsc)
 {
-    cpsDebugPrint("TestCppBehaviour::TestCppBehaviour()\n");
+    cpsDebugPrint("class %s\n", cpsc.getName());
 
     cpsDebugPrint("methods:\n");
-    this_cs.getClass().eachMethodsUpwards([&](cpsMethod &m, cpsClass &c){
+    cpsc.eachMethodsUpwards([&](cpsMethod &m, cpsClass &c){
         cpsDebugPrint("    %s::%s(%s) : %s\n", c.getName(), m.getName(), StringizeArgTypes(m).c_str(), m.getReturnType().getName());
     });
 
     cpsDebugPrint("properties:\n");
-    this_cs.getClass().eachPropertiesUpwards([&](cpsProperty &m, cpsClass &c){
+    cpsc.eachPropertiesUpwards([&](cpsProperty &m, cpsClass &c){
         cpsDebugPrint("    %s::%s\n", c.getName(), m.getName());
         if (cpsMethod getter = m.getGetter()) {
             cpsDebugPrint("        getter(%s) : %s\n", StringizeArgTypes(getter).c_str(), getter.getReturnType().getName());
@@ -124,9 +122,19 @@ TestCppBehaviour::TestCppBehaviour(void *o)
     });
 
     cpsDebugPrint("fields:\n");
-    this_cs.getClass().eachFieldsUpwards([&](cpsField &m, cpsClass &c){
+    cpsc.eachFieldsUpwards([&](cpsField &m, cpsClass &c){
         cpsDebugPrint("    %s::%s : %s\n", c.getName(), m.getName(), m.getType().getName());
     });
+}
+
+
+TestCppBehaviour::TestCppBehaviour(void *o)
+: super(o)
+, m_frame(0)
+, m_v3v(cpsGetFieldValuePtr<Vector3>(o, "v3value"))
+{
+    cpsDebugPrint("TestCppBehaviour::TestCppBehaviour()\n");
+    DumpClassStructure(this_cs.getClass());
 }
 
 TestCppBehaviour::~TestCppBehaviour()
@@ -137,6 +145,22 @@ TestCppBehaviour::~TestCppBehaviour()
 void TestCppBehaviour::Start()
 {
     cpsDebugPrint("TestCppBehaviour::Start()\n");
+
+
+    MonoDomain *domain = mono_domain_get();
+    MonoAssembly *as = mono_domain_assembly_open(domain, "UnityEngine");
+    MonoImage    *img = mono_assembly_get_image(as);
+
+    cpsClass ctransform = mono_class_from_name(img, "UnityEngine", "Transform");
+
+    cpsMethod gmethod = this_cs.getClass().findMethod("GetComponent", 0);
+    cpsMethod imethod = gmethod.instantiate(&ctransform, 1);
+    cpsObject obj = imethod.invoke(this_cs, nullptr);
+    DumpClassStructure(obj.getClass());
+
+    cpsMethod get_position = obj.getClass().findMethod("get_position");
+    Vector3 pos = *(Vector3*)get_position.invoke(obj, nullptr).getData();
+    cpsDebugPrint("%.2f, %.2f, %.2f\n", pos.x, pos.y, pos.z);
 }
 
 void TestCppBehaviour::Update()

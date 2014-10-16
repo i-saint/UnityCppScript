@@ -70,39 +70,58 @@ cpsMethod cpsProperty::getSetter() const
 const char* cpsMethod::getName() const
 {
     if (!mmethod) { return nullptr; }
-    return mono_method_get_name(mmethod);
+    return mono_method_get_name((MonoMethod*)mmethod);
 }
 
 cpsObject cpsMethod::invoke(cpsObject obj, void **args)
 {
     if (!mmethod) { return nullptr; }
-    return mono_runtime_invoke(mmethod, obj, args, nullptr);
+    return mono_runtime_invoke((MonoMethod*)mmethod, obj, args, nullptr);
 }
 
 int cpsMethod::getParamCount() const
 {
     if (!mmethod) { return -1; }
-    void *sig = mono_method_signature(mmethod);
+    void *sig = mono_method_signature((MonoMethod*)mmethod);
     return mono_signature_get_param_count(sig);
 }
 
 cpsType cpsMethod::getReturnType() const
 {
     if (!mmethod) { return nullptr; }
-    void *sig = mono_method_signature(mmethod);
+    void *sig = mono_method_signature((MonoMethod*)mmethod);
     return mono_signature_get_return_type(sig);
 }
 
 void cpsMethod::eachArgTypes(const std::function<void(cpsType&)>& f) const
 {
     if (!mmethod) { return; }
-    void *sig = mono_method_signature(mmethod);
+    void *sig = mono_method_signature((MonoMethod*)mmethod);
     void *mt = nullptr;
     gpointer iter = nullptr;
     while (mt = mono_signature_get_params(sig, &iter)) {
         cpsType miot = mt;
         f(miot);
     }
+}
+
+cpsMethod cpsMethod::instantiate(cpsClass *params, int num_params)
+{
+    void *buf = malloc(sizeof(MonoGenericInst)+(sizeof(void*)*(num_params-1)));
+    MonoGenericInst *gi = (MonoGenericInst*)buf;
+    gi->id = -1;
+    gi->is_open = 0;
+    gi->type_argc = num_params;
+    for (int i = 0; i < num_params; ++i) {
+        gi->type_argv[i] = params[i].getType();
+    }
+    MonoGenericContext ctx = { nullptr, gi };
+    //MonoMethod *ret = mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
+    //return (MonoMethod*)ret;
+    MonoMethodInflated *ret = (MonoMethodInflated*)mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
+    ((MonoMethod*)ret)->signature = mono_method_signature((MonoMethod*)ret);
+    ret->method.normal.header = mono_method_get_header((MonoMethod*)ret);
+    return (MonoMethod*)ret;
 }
 
 
@@ -133,7 +152,12 @@ cpsProperty cpsClass::findProperty(const char *name) const
 cpsMethod cpsClass::findMethod(const char *name, int num_args) const
 {
     if (!mclass) { return nullptr; }
-    return mono_class_get_method_from_name(mclass, name, num_args);
+    for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
+        if (MonoMethod *ret = mono_class_get_method_from_name(mc, name, num_args)) {
+            return ret;
+        }
+    }
+    return nullptr;
 }
 
 void cpsClass::eachFields(const std::function<void(cpsField&)> &f)
@@ -220,19 +244,14 @@ cpsClass cpsObject::getClass() const
     return mono_object_get_class(mobj);
 }
 
-cpsField cpsObject::findField(const char *name) const
+void* cpsObject::getDomain() const
 {
-    return getClass().findField(name);
+    return mono_object_get_domain(mobj);
 }
 
-cpsProperty cpsObject::findProperty(const char *name) const
+void* cpsObject::getData()
 {
-    return getClass().findProperty(name);
-}
-
-cpsMethod cpsObject::findMethod(const char *name) const
-{
-    return getClass().findMethod(name);
+    return (char*)mobj + sizeof(void*)*2;
 }
 
 

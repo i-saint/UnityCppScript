@@ -10,9 +10,9 @@ public:
     CppBehaviour(void *o) : this_cs(o) {}
     virtual ~CppBehaviour() {}
 
-    cpsField    findField(const char *name) const       { return this_cs.findField(name); }
-    cpsProperty findProperty(const char *name) const    { return this_cs.findProperty(name); }
-    cpsMethod   findMethod(const char *name) const      { return this_cs.findMethod(name); }
+    cpsField    findField(const char *name) const       { return this_cs.getClass().findField(name); }
+    cpsProperty findProperty(const char *name) const    { return this_cs.getClass().findProperty(name); }
+    cpsMethod   findMethod(const char *name, int num_args = -1) const { return this_cs.getClass().findMethod(name, num_args); }
 
 protected:
     cpsObject this_cs;
