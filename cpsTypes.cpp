@@ -107,21 +107,17 @@ void cpsMethod::eachArgTypes(const std::function<void(cpsType&)>& f) const
 
 cpsMethod cpsMethod::instantiate(cpsClass *params, int num_params)
 {
+    // todo: fix this leak
     void *buf = malloc(sizeof(MonoGenericInst)+(sizeof(void*)*(num_params-1)));
     MonoGenericInst *gi = (MonoGenericInst*)buf;
     gi->id = -1;
-    gi->is_open = 0;
+    gi->is_open = 0; // must be zero!
     gi->type_argc = num_params;
     for (int i = 0; i < num_params; ++i) {
         gi->type_argv[i] = params[i].getType();
     }
     MonoGenericContext ctx = { nullptr, gi };
-    //MonoMethod *ret = mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
-    //return (MonoMethod*)ret;
-    MonoMethodInflated *ret = (MonoMethodInflated*)mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
-    ((MonoMethod*)ret)->signature = mono_method_signature((MonoMethod*)ret);
-    ret->method.normal.header = mono_method_get_header((MonoMethod*)ret);
-    return (MonoMethod*)ret;
+    return mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
 }
 
 
