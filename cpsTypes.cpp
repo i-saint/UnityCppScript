@@ -5,6 +5,17 @@
 #include <algorithm>
 
 
+cpsImage cpsImage::findImage(const char *name)
+{
+    return mono_assembly_get_image(mono_domain_assembly_open(mono_domain_get(), name));
+}
+
+cpsClass cpsImage::findClass(const char *namespace_, const char *class_name)
+{
+    return mono_class_from_name(mimage, namespace_, class_name);
+}
+
+
 const char* cpsType::getName() const
 {
     if (!mtype) { return nullptr; }

@@ -20,6 +20,21 @@ class cpsField;
 class cpsProperty;
 
 
+class cpsAPI cpsImage
+{
+public:
+    static cpsImage findImage(const char *name); // name: not includes extensions. ex: "UnityEngine"
+
+    cpsImage(void *m) : mimage(m) {}
+    operator void*() const { return mimage; }
+    operator bool() const { return mimage != nullptr; }
+
+    cpsClass findClass(const char *namespace_, const char *class_name);
+
+private:
+    void *mimage;
+};
+
 class cpsAPI cpsType
 {
 public:

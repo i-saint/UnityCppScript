@@ -3,6 +3,9 @@
 
 #include "cpsBinder.h"
 #include "cpsUtils.h"
+#include "cpsUnityEngine.h"
+using namespace cpsUnityEngine;
+
 
 class CppBehaviour
 {
