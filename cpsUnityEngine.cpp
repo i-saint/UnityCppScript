@@ -11,6 +11,10 @@
 namespace cpsUnityEngine
 {
 
+const Vector3 Vector3::up = Vector3(0.0f, 1.0f, 0.0f);
+
+
+
 cpsImage& GetImage()
 {
     static cpsCachedImage s_image;
@@ -249,6 +253,178 @@ void Transform::set_hasChanged(bool v)
     gboolean b = v;
     void *args[] = {&b};
     s_method.invoke(mobj, args);
+}
+
+
+void Transform::Translate(const Vector3& v, Space s)
+{
+    static const char *typenames[] = {"UnityEngine.Vector3", "UnityEngine.Space"};
+    cpsBindMethod("Translate", 2, typenames);
+    void *args[] = { (void*)&v, &s };
+    s_method.invoke(mobj, args);
+}
+void Transform::Translate(const Vector3& v, Transform relative)
+{
+    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Transform" };
+    cpsBindMethod("Translate", 2, typenames);
+    void *args[] = { (void*)&v, relative.mobj };
+    s_method.invoke(mobj, args);
+}
+
+void Transform::Rotate(const Vector3& eulerAngles, Space s)
+{
+    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Space" };
+    cpsBindMethod("Rotate", 2, typenames);
+    void *args[] = { (void*)&eulerAngles, &s };
+    s_method.invoke(mobj, args);
+}
+void Transform::Rotate(const Vector3& axis, float angle, Space s)
+{
+    static const char *typenames[] = { "UnityEngine.Vector3", "System.Single", "UnityEngine.Space" };
+    cpsBindMethod("Rotate", 3, typenames);
+    void *args[] = { (void*)&axis, &angle, &s };
+    s_method.invoke(mobj, args);
+}
+void Transform::RotateAround(const Vector3& point, const Vector3& axis, float angle)
+{
+    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Vector3", "System.Single" };
+    cpsBindMethod("RotateAround", 3, typenames);
+    void *args[] = { (void*)&point, (void*)&axis, &angle };
+    s_method.invoke(mobj, args);
+}
+
+void Transform::LookAt(Transform t, const Vector3& up)
+{
+    static const char *typenames[] = { "UnityEngine.Transform", "UnityEngine.Vector3" };
+    cpsBindMethod("LookAt", 2, typenames);
+    void *args[] = { t.mobj, (void*)&up };
+    s_method.invoke(mobj, args);
+}
+void Transform::LookAt(const Vector3& worldPos, const Vector3&up)
+{
+    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Vector3" };
+    cpsBindMethod("LookAt", 2, typenames);
+    void *args[] = { (void*)&worldPos, (void*)&up };
+    s_method.invoke(mobj, args);
+}
+
+Vector3 Transform::TransformDirection(const Vector3& v)
+{
+    cpsBindMethod("TransformDirection", 1);
+    void *args[] = { (void*)&v };
+    return s_method.invoke(mobj, args).getData<Vector3>();
+}
+
+Vector3 Transform::InverseTransformDirection(const Vector3& v)
+{
+    cpsBindMethod("InverseTransformDirection", 1);
+    void *args[] = { (void*)&v };
+    return s_method.invoke(mobj, args).getData<Vector3>();
+}
+
+Vector3 Transform::TransformPoint(const Vector3& v)
+{
+    cpsBindMethod("TransformPoint", 1);
+    void *args[] = { (void*)&v };
+    return s_method.invoke(mobj, args).getData<Vector3>();
+}
+
+Vector3 Transform::InverseTransformPoint(const Vector3& v)
+{
+    cpsBindMethod("InverseTransformPoint", 1);
+    void *args[] = { (void*)&v };
+    return s_method.invoke(mobj, args).getData<Vector3>();
+}
+
+void Transform::DetachChildren()
+{
+    cpsBindMethod("DetachChildren", 0);
+    s_method.invoke(mobj);
+}
+
+void Transform::SetAsFirstSibling()
+{
+    cpsBindMethod("SetAsFirstSibling", 0);
+    s_method.invoke(mobj);
+}
+
+void Transform::SetAsLastSibling()
+{
+    cpsBindMethod("SetAsLastSibling", 0);
+    s_method.invoke(mobj);
+}
+
+void Transform::SetSiblingIndex(int i)
+{
+    cpsBindMethod("SetAsLastSibling", 1);
+    void *args[] = { (void*)&i };
+    s_method.invoke(mobj, args);
+}
+
+int Transform::GetSiblingIndex()
+{
+    cpsBindMethod("GetSiblingIndex", 0);
+    return s_method.invoke(mobj).getData<int>();;
+}
+
+Transform Transform::Find(const char *name)
+{
+    cpsBindMethod("Find", 1);
+    void *args[] = { mono_string_new(mono_domain_get(), name) };
+    return s_method.invoke(mobj, args).getData<void*>();
+}
+
+void Transform::SendTransformChangedScale()
+{
+    cpsBindMethod("SendTransformChangedScale", 0);
+    s_method.invoke(mobj);
+}
+
+bool Transform::IsChildOf(Transform t)
+{
+    cpsBindMethod("IsChildOf", 1);
+    void *args[] = { t.mobj };
+    return s_method.invoke(mobj, args).getData<gboolean>()!=0;
+}
+
+Transform Transform::FindChild(const char *name)
+{
+    cpsBindMethod("FindChild", 1);
+    void *args[] = { mono_string_new(mono_domain_get(), name) };
+    return s_method.invoke(mobj, args).getData<void*>();
+}
+
+void Transform::RotateAround(const Vector3& axis, float a)
+{
+    cpsBindMethod("RotateAround", 2);
+    void *args[] = { (void*)&axis, &a };
+    s_method.invoke(mobj, args);
+}
+
+void Transform::RotateAroundLocal(const Vector3& axis, float a)
+{
+    cpsBindMethod("RotateAroundLocal", 2);
+    void *args[] = { (void*)&axis, &a };
+    s_method.invoke(mobj, args);
+}
+
+Transform Transform::GetChild(int i)
+{
+    cpsBindMethod("GetChild", 1);
+    void *args[] = { &i };
+    return s_method.invoke(mobj, args).getData<void*>();
+}
+
+int Transform::GetChildCount()
+{
+    cpsBindMethod("GetChildCount", 0);
+    return s_method.invoke(mobj).getData<int>();
+}
+
+bool Transform::IsNonUniformScaleTransform()
+{
+    cpsBindMethod("IsNonUniformScaleTransform", 0);
+    return s_method.invoke(mobj).getData<gboolean>()!=0;
 }
 
 

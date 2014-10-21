@@ -202,9 +202,32 @@ cpsProperty cpsClass::findProperty(const char *name) const
 cpsMethod cpsClass::findMethod(const char *name, int num_args, const char **arg_typenames) const
 {
     if (!mclass) { return nullptr; }
-    for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
-        if (MonoMethod *ret = mono_class_get_method_from_name(mc, name, num_args)) {
-            return ret;
+    if (arg_typenames != nullptr) {
+        for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
+            void *method;
+            gpointer iter = nullptr;
+            while ((method = mono_class_get_methods(mclass, &iter))) {
+                if (strcmp(mono_method_get_name((MonoMethod*)method), name) != 0) { continue; }
+                MonoMethodSignature *sig = mono_method_signature((MonoMethod*)method);
+                if (mono_signature_get_param_count(sig) != num_args) { continue; }
+                MonoType *mt = nullptr;
+                gpointer iter = nullptr;
+                for (int ia = 0; ia < num_args; ++ia) {
+                    mt = mono_signature_get_params(sig, &iter);
+                    if (strcmp(mono_type_get_name(mt), arg_typenames[ia]) != 0) {
+                        goto next_method;
+                    }
+                }
+                return method;
+            next_method:;
+            }
+        }
+    }
+    else {
+        for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
+            if (MonoMethod *ret = mono_class_get_method_from_name(mc, name, num_args)) {
+                return ret;
+            }
         }
     }
     return nullptr;

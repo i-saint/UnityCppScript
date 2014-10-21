@@ -34,6 +34,8 @@ namespace cpsUnityEngine
 
     struct Vector3
     {
+        static const Vector3 up;
+
         union {
             struct { float x, y, z; };
             float v[3];
@@ -69,7 +71,7 @@ namespace cpsUnityEngine
 
     enum Space {
         World = 0,
-        Seld = 1,
+        Self = 1,
     };
 
 
@@ -145,54 +147,38 @@ namespace cpsUnityEngine
         bool        get_hasChanged();
         void        set_hasChanged(bool v);
 
-        void Translate(const Vector3& v);
-        void Translate(const Vector3& v, Space s);
-        void Translate(float x, float y, float z);
-        void Translate(float x, float y, float z, Space s);
-        void Translate(const Vector3& v, Transform t);
-        void Translate(float x, float y, float z, Transform t);
 
-        void Rotate(const Vector3& v);
-        void Rotate(const Vector3& v, Space s);
-        void Rotate(float x, float y, float z);
-        void Rotate(float x, float y, float z, Space s);
-        void Rotate(const Vector3& v, float a);
-        void Rotate(const Vector3& v, float a, Space s);
+        void        Translate(const Vector3& v, Space s = Self);
+        void        Translate(const Vector3& v, Transform relative);
 
-        void RotateAround(const Vector3& point, const Vector3& axis, float angle);
+        void        Rotate(const Vector3& eulerAngles, Space s = Self);
+        void        Rotate(const Vector3& axis, float angle, Space s = Self);
+        void        RotateAround(const Vector3& point, const Vector3& axis, float angle);
 
-        void LookAt(Transform t);
-        void LookAt(Transform t, const Vector3& v);
-        void LookAt(const Vector3& v1, const Vector3& v);
-        void LookAt(const Vector3& v);
+        void        LookAt(Transform t, const Vector3& v = Vector3::up);
+        void        LookAt(const Vector3& worldPos, const Vector3& v = Vector3::up);
 
-        Vector3 TransformDirection(const Vector3& v);
-        Vector3 TransformDirection(float x, float y, float z);
+        Vector3     TransformDirection(const Vector3& v);
+        Vector3     InverseTransformDirection(const Vector3& v);
+        Vector3     TransformPoint(const Vector3& v);
+        Vector3     InverseTransformPoint(const Vector3& v);
 
-        Vector3 InverseTransformDirection(const Vector3& v);
-        Vector3 InverseTransformDirection(float x, float y, float z);
+        void        DetachChildren();
+        void        SetAsFirstSibling();
+        void        SetAsLastSibling();
+        void        SetSiblingIndex(int i);
+        int         GetSiblingIndex();
 
-        Vector3 TransformPoint(const Vector3& v);
-        Vector3 TransformPoint(float x, float y, float z);
-
-        Vector3 InverseTransformPoint(const Vector3& v);
-        Vector3 InverseTransformPoint(float x, float y, float z);
-
-        void DetachChildren();
-        void SetAsFirstSibling();
-        void SetAsLastSibling();
-        void SetSiblingIndex(int i);
-        int GetSiblingIndex();
-        Transform Find(const char *name);
-        void SendTransformChangedScale();
-        bool IsChildOf(Transform t);
-        Transform FindChild(const char *name);
+        Transform   Find(const char *name);
+        void        SendTransformChangedScale();
+        bool        IsChildOf(Transform t);
+        Transform   FindChild(const char *name);
+        void        RotateAround(const Vector3& axis, float a);
+        void        RotateAroundLocal(const Vector3& axis, float a);
+        Transform   GetChild(int i);
+        int         GetChildCount();
+        bool        IsNonUniformScaleTransform();
         // System.Collections.IEnumerator GetEnumerator();
-        void RotateAround(const Vector3& axis, float a);
-        void RotateAroundLocal(const Vector3& axis, float a);
-        Transform GetChild(int i);
-        int GetChildCount();
-        bool IsNonUniformScaleTransform();
     };
 
     class cpsAPI Camera

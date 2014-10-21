@@ -134,19 +134,21 @@ void TestCppBehaviour::Update()
         }
 
         {
-            cpsDebugPrint("v3value: %.2f, %.2f, %.2f\n", m_v3v->x, m_v3v->y, m_v3v->z);
             m_v3v->x += 1.0f;
             m_v3v->y += 2.0f;
             m_v3v->z += 3.0f;
         }
         {
             Vector3 pos = trans.get_position();
-            cpsDebugPrint("%.2f, %.2f, %.2f\n", pos.x, pos.y, pos.z);
             pos.x += 0.1f;
             pos.y += 0.1f;
             pos.z += 0.1f;
             trans.set_position(pos);
+            trans.Translate(Vector3(0.0f, 0.1f, 0.2f));
         }
+    }
+    {
+        trans.Rotate(Vector3(0.0f, 1.0f, 0.0f), 1.0f);
     }
 }
 
