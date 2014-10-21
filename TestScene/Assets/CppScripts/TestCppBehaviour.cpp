@@ -30,6 +30,7 @@ public:
     static int smemfn4(float a1, Vector2 a2, Vector3 a3, Vector4 a4);
 
 private:
+    Transform trans;
     int m_frame;
     Vector3 *m_v3v;
 };
@@ -117,28 +118,14 @@ TestCppBehaviour::~TestCppBehaviour()
 void TestCppBehaviour::Start()
 {
     cpsDebugPrint("TestCppBehaviour::Start()\n");
+    trans = GetComponent<Transform>();
 
-
-    MonoDomain *domain = mono_domain_get();
-    MonoAssembly *as = mono_domain_assembly_open(domain, "UnityEngine");
-    MonoImage    *img = mono_assembly_get_image(as);
-
-    cpsClass ctransform = mono_class_from_name(img, "UnityEngine", "Transform");
-
-    cpsMethod gmethod = this_cs.getClass().findMethod("GetComponent", 0);
-    cpsMethod imethod = gmethod.instantiate(&ctransform, 1);
-    cpsObject obj = imethod.invoke(this_cs, nullptr);
-    DumpClassStructure(obj.getClass());
-
-    cpsMethod get_position = obj.getClass().findMethod("get_position");
-    Vector3 pos = *(Vector3*)get_position.invoke(obj, nullptr).getData();
-    cpsDebugPrint("%.2f, %.2f, %.2f\n", pos.x, pos.y, pos.z);
 }
 
 void TestCppBehaviour::Update()
 {
-    if (++m_frame % 180 == 0) {
-        // crash test
+    if (++m_frame % 120 == 0) {
+        //// crash test
         //*(int*)nullptr = 0;
 
         cpsDebugPrint("TestCppBehaviour::Update()\n");
@@ -147,10 +134,18 @@ void TestCppBehaviour::Update()
         }
 
         {
-            cpsDebugPrint("    v3value: %.2f, %.2f, %.2f\n", m_v3v->x, m_v3v->y, m_v3v->z);
+            cpsDebugPrint("v3value: %.2f, %.2f, %.2f\n", m_v3v->x, m_v3v->y, m_v3v->z);
             m_v3v->x += 1.0f;
             m_v3v->y += 2.0f;
             m_v3v->z += 3.0f;
+        }
+        {
+            Vector3 pos = trans.get_position();
+            cpsDebugPrint("%.2f, %.2f, %.2f\n", pos.x, pos.y, pos.z);
+            pos.x += 0.1f;
+            pos.y += 0.1f;
+            pos.z += 0.1f;
+            trans.set_position(pos);
         }
     }
 }

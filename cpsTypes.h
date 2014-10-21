@@ -31,7 +31,7 @@ public:
 
     cpsClass findClass(const char *namespace_, const char *class_name);
 
-private:
+public:
     void *mimage;
 };
 
@@ -44,7 +44,7 @@ public:
     const char* getName() const;
     cpsClass getClass() const;
 
-private:
+public:
     void *mtype;
 };
 
@@ -65,7 +65,7 @@ public:
     void getValueImpl(cpsObject obj, void *p) const;
     void setValueImpl(cpsObject obj, const void *p);
 
-private:
+public:
     void *mfield;
 };
 
@@ -81,7 +81,7 @@ public:
     cpsMethod getGetter() const;
     cpsMethod getSetter() const;
 
-private:
+public:
     void *mproperty;
 };
 
@@ -97,11 +97,15 @@ public:
     int getParamCount() const;
     cpsType getReturnType() const;
     void eachArgTypes(const std::function<void(cpsType&)>&) const;
-    
-    cpsObject invoke(cpsObject obj, void **args);
+    bool isGeneric() const;
+    bool isInflated() const;
+    bool isStatic() const;
+    bool isVirtual() const;
+
+    cpsObject invoke(cpsObject obj, void **args=nullptr);
     cpsMethod instantiate(cpsClass *params, int num_params);
 
-private:
+public:
     void *mmethod;
 };
 
@@ -118,7 +122,7 @@ public:
 
     cpsField    findField(const char *name) const;
     cpsProperty findProperty(const char *name) const;
-    cpsMethod   findMethod(const char *name, int num_args=-1) const; // num_args: -1=don't care
+    cpsMethod   findMethod(const char *name, int num_args=-1, const char **arg_typenames=nullptr) const; // num_args: -1=don't care
 
     // enumerate members (not include parent class members)
     void eachFields(const std::function<void(cpsField&)> &f);
@@ -131,7 +135,7 @@ public:
 
     //cpsClass insantiate(cpsClass *template_params);
 
-private:
+public:
     void *mclass;
 };
 
@@ -145,9 +149,11 @@ public:
 
     void*       getDomain() const;
     cpsClass    getClass() const;
-    void*       getData();
+    void*       getDataPtr() const;
+    template<class T> const T& getData() const { return *(T*)getDataPtr(); }
+    template<class T> T getDataValue() const { return *(T*)getDataPtr(); }
 
-private:
+public:
     void *mobj;
 };
 

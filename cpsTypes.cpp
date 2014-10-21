@@ -48,13 +48,13 @@ int cpsField::getOffset() const
 void cpsField::getValueImpl(cpsObject obj, void *p) const
 {
     if (!mfield) { return; }
-    mono_field_get_value(obj, mfield, p);
+    mono_field_get_value((MonoObject*)(void*)obj, mfield, p);
 }
 
 void cpsField::setValueImpl(cpsObject obj, const void *p)
 {
     if (!mfield) { return; }
-    mono_field_set_value(obj, mfield, (void*)p);
+    mono_field_set_value((MonoObject*)(void*)obj, mfield, (void*)p);
 }
 
 
@@ -78,16 +78,59 @@ cpsMethod cpsProperty::getSetter() const
 
 
 
+#define METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK        0x0007
+#define METHOD_ATTRIBUTE_COMPILER_CONTROLLED       0x0000
+#define METHOD_ATTRIBUTE_PRIVATE                   0x0001
+#define METHOD_ATTRIBUTE_FAM_AND_ASSEM             0x0002
+#define METHOD_ATTRIBUTE_ASSEM                     0x0003
+#define METHOD_ATTRIBUTE_FAMILY                    0x0004
+#define METHOD_ATTRIBUTE_FAM_OR_ASSEM              0x0005
+#define METHOD_ATTRIBUTE_PUBLIC                    0x0006
+#define METHOD_ATTRIBUTE_STATIC                    0x0010
+#define METHOD_ATTRIBUTE_FINAL                     0x0020
+#define METHOD_ATTRIBUTE_VIRTUAL                   0x0040
+#define METHOD_ATTRIBUTE_HIDE_BY_SIG               0x0080
+#define METHOD_ATTRIBUTE_VTABLE_LAYOUT_MASK        0x0100
+#define METHOD_ATTRIBUTE_REUSE_SLOT                0x0000
+#define METHOD_ATTRIBUTE_NEW_SLOT                  0x0100
+#define METHOD_ATTRIBUTE_STRICT                    0x0200
+#define METHOD_ATTRIBUTE_ABSTRACT                  0x0400
+#define METHOD_ATTRIBUTE_SPECIAL_NAME              0x0800
+#define METHOD_ATTRIBUTE_PINVOKE_IMPL              0x2000
+#define METHOD_ATTRIBUTE_UNMANAGED_EXPORT          0x0008
+
+
 const char* cpsMethod::getName() const
 {
     if (!mmethod) { return nullptr; }
     return mono_method_get_name((MonoMethod*)mmethod);
 }
 
+bool cpsMethod::isGeneric() const
+{
+    return (((MonoMethod*)mmethod)->is_generic) != 0;
+}
+
+bool cpsMethod::isInflated() const
+{
+    return (((MonoMethod*)mmethod)->is_inflated) != 0;
+}
+
+bool cpsMethod::isStatic() const
+{
+    return (((MonoMethod*)mmethod)->flags & METHOD_ATTRIBUTE_STATIC) != 0;
+}
+
+bool cpsMethod::isVirtual() const
+{
+    return (((MonoMethod*)mmethod)->flags & METHOD_ATTRIBUTE_VIRTUAL) != 0;
+}
+
+
 cpsObject cpsMethod::invoke(cpsObject obj, void **args)
 {
     if (!mmethod) { return nullptr; }
-    return mono_runtime_invoke((MonoMethod*)mmethod, obj, args, nullptr);
+    return mono_runtime_invoke((MonoMethod*)mmethod, (MonoObject*)(void*)obj, args, nullptr);
 }
 
 int cpsMethod::getParamCount() const
@@ -156,7 +199,7 @@ cpsProperty cpsClass::findProperty(const char *name) const
     return mono_class_get_property_from_name(mclass, name);
 }
 
-cpsMethod cpsClass::findMethod(const char *name, int num_args) const
+cpsMethod cpsClass::findMethod(const char *name, int num_args, const char **arg_typenames) const
 {
     if (!mclass) { return nullptr; }
     for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
@@ -248,19 +291,21 @@ cpsClass cpsClass::getParent() const
 
 cpsClass cpsObject::getClass() const
 {
-    return mono_object_get_class(mobj);
+    return mono_object_get_class((MonoObject*)mobj);
 }
 
 void* cpsObject::getDomain() const
 {
-    return mono_object_get_domain(mobj);
+    return mono_object_get_domain((MonoObject*)mobj);
 }
 
-void* cpsObject::getData()
+void* cpsObject::getDataPtr() const
 {
     return (char*)mobj + sizeof(void*)*2;
 }
 
+
+void cpsClearCache();
 
 cpsAPI void cpsAddMethod(const char *name, void *addr)
 {
@@ -307,4 +352,5 @@ cpsCLinkage cpsExport void cpsCoreInitialize()
 
 #endif
     }
+    cpsClearCache();
 }

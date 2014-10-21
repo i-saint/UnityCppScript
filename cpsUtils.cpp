@@ -1,5 +1,7 @@
 ﻿#include "cpsInternal.h"
 #include "cpsUtils.h"
+#include "cpsUnityEngine.h"
+#include <vector>
 #include <algorithm>
 
 #if defined(_WIN32) && !defined(cpsWithoutDbgHelp)
@@ -114,13 +116,58 @@ cpsAPI void cpsDebugPrint(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
-#ifdef WIN32
     char buf[1024 * 8];
     vsprintf(buf, format, args);
+    cpsUnityEngine::Debug::Log(buf);
+#ifdef WIN32
     ::OutputDebugStringA(buf);
 #else  // WIN32
-    vprintf(format, args);
+    puts(buf);
 #endif // WIN32
     va_end(args);
 }
 
+
+struct cpsCaches
+{
+    std::vector<cpsCachedImage*>    images;
+    std::vector<cpsCachedClass*>    classes;
+    std::vector<cpsCachedField*>    fields;
+    std::vector<cpsCachedMethod*>   methods;
+    std::vector<cpsCachedProperty*> properties;
+} g_cpsCaches;
+
+void cpsClearCache()
+{
+    for (auto o : g_cpsCaches.images)      { o->mimage = nullptr; }
+    for (auto o : g_cpsCaches.classes)     { o->mclass = nullptr; }
+    for (auto o : g_cpsCaches.fields)      { o->mfield = nullptr; }
+    for (auto o : g_cpsCaches.methods)     { o->mmethod = nullptr; }
+    for (auto o : g_cpsCaches.properties)  { o->mproperty = nullptr; }
+}
+
+
+cpsCachedImage::cpsCachedImage() : cpsImage(nullptr)
+{
+    g_cpsCaches.images.push_back(this);
+}
+
+cpsCachedClass::cpsCachedClass() : cpsClass(nullptr)
+{
+    g_cpsCaches.classes.push_back(this);
+}
+
+cpsCachedField::cpsCachedField() : cpsField(nullptr)
+{
+    g_cpsCaches.fields.push_back(this);
+}
+
+cpsCachedMethod::cpsCachedMethod() : cpsMethod(nullptr)
+{
+    g_cpsCaches.methods.push_back(this);
+}
+
+cpsCachedProperty::cpsCachedProperty() : cpsProperty(nullptr)
+{
+    g_cpsCaches.properties.push_back(this);
+}

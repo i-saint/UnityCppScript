@@ -30,22 +30,31 @@ typedef float               gfloat;
 typedef double              gdouble;
 typedef unsigned __int16    gunichar2;
 
+#define MONO_ZERO_LEN_ARRAY 1
+
 typedef void MonoDomain;
 typedef void MonoAssembly;
 typedef void MonoImage;
-
-//typedef void MonoMethod;
-
 
 typedef void MonoMethodSignature;
 typedef void MonoMethodDesc;
 typedef void MonoType;
 typedef void MonoClass;
 typedef void MonoClassField;
-typedef void MonoString;
-typedef void MonoObject;
 typedef void MonoProperty;
 typedef void MonoEvent;
+typedef void MonoVTable;
+typedef void MonoThreadsSync;
+
+struct MonoObject {
+    MonoVTable *vtable;
+    MonoThreadsSync *synchronisation;
+};
+struct MonoString {
+    MonoObject object;
+    gint32 length;
+    gunichar2 chars[MONO_ZERO_LEN_ARRAY];
+};
 
 struct MonoMethod {
     guint16 flags;  /* method flags */
@@ -96,7 +105,7 @@ struct MonoGenericInst {
     guint id;			/* unique ID for debugging */
     guint type_argc : 22;	/* number of type arguments */
     guint is_open : 1;	/* if this is an open type */
-    MonoType *type_argv[1];
+    MonoType *type_argv[MONO_ZERO_LEN_ARRAY];
 };
 
 struct MonoGenericContext {

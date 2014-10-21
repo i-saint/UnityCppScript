@@ -15,6 +15,9 @@ public class CppBehaviour : MonoBehaviour
 
     internal IntPtr this_cpp;
 
+    [SerializeField]
+    internal byte[] serialize_data;
+
     public CppBehaviour()
     {
         cpsCoreInitialize();
