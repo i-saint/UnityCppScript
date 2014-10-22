@@ -537,10 +537,11 @@ struct cpsAddMethodHelper { cpsAddMethodHelper(const char *name, void *addr) { c
 template<class T>
 inline cpsField cpsGetCppThisField(cpsObject o)
 {
-    // できれば static にしたいが、ゲームスタートの度に field のデータ更新されるっぽい上、実行中に C# スクリプトが更新される可能性もあるため危険。
-    // マスタービルドでだけ static にする最適化はありかもしれないが、とりあえず保留。
-    cpsField field = o.getClass().findField("this_cpp");
-    return field;
+    cpsCachedField s_field;
+    if (!s_field) {
+        s_field = o.getClass().findField("this_cpp");
+    }
+    return s_field;
 }
 template<class T>
 inline T* cpsGetCppThis(cpsObject o)

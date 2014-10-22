@@ -4,6 +4,7 @@
 #include <functional>
 #include <cstdio>
 #include <cstdarg>
+#include <cstdint>
 
 #define cpsCLinkage extern "C"
 #define cpsExport __declspec(dllexport)
@@ -18,6 +19,9 @@ class cpsClass;
 class cpsMethod;
 class cpsField;
 class cpsProperty;
+
+typedef char        cps_char8;
+typedef uint16_t    cps_char16;
 
 
 class cpsAPI cpsImage
@@ -151,7 +155,6 @@ public:
     cpsClass    getClass() const;
     void*       getDataPtr() const;
     template<class T> const T& getData() const { return *(T*)getDataPtr(); }
-    template<class T> T getDataValue() const { return *(T*)getDataPtr(); }
 
 public:
     void *mobj;

@@ -13,8 +13,8 @@ public:
     void Start();
     void Update();
 
-    int test1(int a1, int a2, int a3, int a4);
-    int test2(float a1, Vector2 a2);
+    void test1(void *a);
+    void test2(void *str);
 
     int memfn1(float a1);
     int memfn2(float a1, Vector2 a2);
@@ -61,45 +61,6 @@ cpsExportMethod(smemfn4)
 
 
 
-inline std::string StringizeArgTypes(cpsMethod mt)
-{
-    std::string ret;
-    bool first = true;
-    mt.eachArgTypes([&](cpsType &t){
-        if (!first) { ret += ", "; }
-        first = false;
-        ret += t.getName();
-    });
-    return ret;
-}
-
-
-void DumpClassStructure(cpsClass cpsc)
-{
-    cpsDebugPrint("class %s\n", cpsc.getName());
-
-    cpsDebugPrint("methods:\n");
-    cpsc.eachMethodsUpwards([&](cpsMethod &m, cpsClass &c){
-        cpsDebugPrint("    %s::%s(%s) : %s\n", c.getName(), m.getName(), StringizeArgTypes(m).c_str(), m.getReturnType().getName());
-    });
-
-    cpsDebugPrint("properties:\n");
-    cpsc.eachPropertiesUpwards([&](cpsProperty &m, cpsClass &c){
-        cpsDebugPrint("    %s::%s\n", c.getName(), m.getName());
-        if (cpsMethod getter = m.getGetter()) {
-            cpsDebugPrint("        getter(%s) : %s\n", StringizeArgTypes(getter).c_str(), getter.getReturnType().getName());
-        }
-        if (cpsMethod setter = m.getSetter()) {
-            cpsDebugPrint("        setter(%s) : %s\n", StringizeArgTypes(setter).c_str(), setter.getReturnType().getName());
-        }
-    });
-
-    cpsDebugPrint("fields:\n");
-    cpsc.eachFieldsUpwards([&](cpsField &m, cpsClass &c){
-        cpsDebugPrint("    %s::%s : %s\n", c.getName(), m.getName(), m.getType().getName());
-    });
-}
-
 
 TestCppBehaviour::TestCppBehaviour(void *o)
 : super(o)
@@ -107,7 +68,6 @@ TestCppBehaviour::TestCppBehaviour(void *o)
 , m_v3v(cpsGetFieldValuePtr<Vector3>(o, "v3value"))
 {
     cpsDebugPrint("TestCppBehaviour::TestCppBehaviour()\n");
-    DumpClassStructure(this_cs.getClass());
 }
 
 TestCppBehaviour::~TestCppBehaviour()
@@ -119,7 +79,10 @@ void TestCppBehaviour::Start()
 {
     cpsDebugPrint("TestCppBehaviour::Start()\n");
     trans = GetComponent<Transform>();
-
+    cpsDumpClassStructure(Collider::getClass());
+    cpsDumpClassStructure(Collider2D::getClass());
+    cpsDumpClassStructure(Rigidbody::getClass());
+    cpsDumpClassStructure(Rigidbody2D::getClass());
 }
 
 void TestCppBehaviour::Update()
@@ -129,6 +92,7 @@ void TestCppBehaviour::Update()
         //*(int*)nullptr = 0;
 
         cpsDebugPrint("TestCppBehaviour::Update()\n");
+        cpsDebugPrint("name: %s\n", trans.get_name());
         if (cpsMethod method = findMethod("ThisFunctionWillBeCalledFromCpp")) {
             method.invoke(this_cs, nullptr);
         }
@@ -153,16 +117,19 @@ void TestCppBehaviour::Update()
 }
 
 
-int TestCppBehaviour::test1(int a1, int a2, int a3, int a4)
+void TestCppBehaviour::test1(void *a)
 {
-    cpsDebugPrint("TestCppBehaviour::test1(%d, %d, %d, %d)\n", a1, a2, a3, a4);
-    return 1;
+    cpsArray<Vector3> v3a(a);
+    cpsDebugPrint("TestCppBehaviour::test1()\n");
+    for (auto &v : v3a) {
+        cpsDebugPrint("    {%.2f, %.2f, %.2f}\n", v.x, v.y, v.z);
+    }
 }
 
-int TestCppBehaviour::test2(float a1, Vector2 a2)
+void TestCppBehaviour::test2(void *str)
 {
-    cpsDebugPrint("TestCppBehaviour::test2({%f, %f})\n", a2.x, a2.y);
-    return 2;
+    cpsDebugPrint("TestCppBehaviour::test2()\n");
+    cpsDebugPrint("%s\n", cpsToUTF8(str));
 }
 
 

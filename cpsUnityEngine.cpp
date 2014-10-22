@@ -3,6 +3,11 @@
 #include "cpsUnityEngine.h"
 
 
+#define cpsBindClass(...)\
+    static cpsCachedClass s_class;\
+    if (!s_class) { s_class = GetImage().findClass(__VA_ARGS__); }\
+    return s_class;
+
 #define cpsBindMethod(...)\
     static cpsCachedMethod s_method;\
     if (!s_method) { s_method = getClass().findMethod(__VA_ARGS__); }
@@ -11,7 +16,15 @@
 namespace cpsUnityEngine
 {
 
+const Vector2 Vector2::zero = Vector2(0.0f, 0.0f);
+const Vector2 Vector2::one = Vector2(1.0f, 1.0f);
+
+const Vector3 Vector3::zero = Vector3(0.0f, 0.0f, 0.0f);
+const Vector3 Vector3::one = Vector3(1.0f, 1.0f, 1.0f);
 const Vector3 Vector3::up = Vector3(0.0f, 1.0f, 0.0f);
+
+const Vector4 Vector4::zero = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+const Vector4 Vector4::one = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 
 
@@ -24,22 +37,19 @@ cpsImage& GetImage()
 
 
 
-cpsClass Application::getClass()
+/*static*/ cpsClass Application::getClass()
 {
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "Application"); }
-    return s_class;
+    cpsBindClass("UnityEngine", "Application");
 }
 
-std::string Application::get_dataPath()
+/*static*/ const char* Application::get_dataPath()
 {
     cpsBindMethod("get_dataPath");
-
     cpsObject ret = s_method.invoke(nullptr, nullptr);
-    return std::string((char*)((MonoString*)ret.mobj)->chars);
+    return cpsToUTF8(ret);
 }
 
-bool Application::get_isEditor()
+/*static*/ bool Application::get_isEditor()
 {
     cpsBindMethod("get_isEditor");
     cpsObject ret = s_method.invoke(nullptr, nullptr);
@@ -48,52 +58,231 @@ bool Application::get_isEditor()
 
 
 
-cpsClass Debug::getClass()
+/*static*/ cpsClass Debug::getClass()
 {
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "Debug"); }
-    return s_class;
+    cpsBindClass("UnityEngine", "Debug");
 }
 
-void Debug::Log(const char *message)
+/*static*/ void Debug::Log(const char *message)
 {
     cpsBindMethod("Log", 1);
 
-    MonoString *str = mono_string_new(mono_domain_get(), message);
+    MonoString *str = (MonoString*)cpsNewString(message);
     void *args[] = { str };
     s_method.invoke(nullptr, args);
 }
 
-void Debug::Log(const char *message, cpsObject obj)
+/*static*/ void Debug::Log(const char *message, cpsObject obj)
 {
     cpsBindMethod("Log", 2);
 
-    MonoString *str = mono_string_new(mono_domain_get(), message);
+    MonoString *str = (MonoString*)cpsNewString(message);
     void *args[] = { str, obj };
+    s_method.invoke(nullptr, args);
+}
+
+/*static*/ cpsClass Graphics::getClass()
+{
+    cpsBindClass("UnityEngine", "Graphics");
+}
+
+
+/*static*/ cpsClass Object::getClass() { cpsBindClass("UnityEngine", "Object"); }
+Object::Object(cpsObject v) : super(v) {}
+
+const char* Object::get_name() const
+{
+    cpsBindMethod("get_name");
+    return cpsToUTF8(s_method.invoke(mobj));
+}
+void Object::set_name(const char *name)
+{
+    cpsBindMethod("set_name");
+    void *args[] = { cpsNewString(name) };
+    s_method.invoke(mobj, args);
+}
+HideFlags Object::get_hideFlags() const
+{
+    cpsBindMethod("get_hideFlags");
+    return s_method.invoke(mobj).getData<HideFlags>();
+}
+void Object::set_hideFlags(HideFlags flags)
+{
+    cpsBindMethod("set_hideFlags");
+    void *args[] = { &flags };
+    s_method.invoke(mobj, args);
+}
+void* Object::obj_address() const
+{
+    cpsBindMethod("obj_address");
+    return s_method.invoke(mobj).getData<void*>();
+}
+
+int Object::GetInstanceID() const
+{
+    cpsBindMethod("GetInstanceID");
+    return s_method.invoke(mobj).getData<int>();
+}
+const char* Object::ToString() const
+{
+    cpsBindMethod("ToString");
+    return cpsToUTF8(s_method.invoke(mobj));
+}
+
+/*static*/ Object Object::Instantiate(Object original, const Vector3 &position, const Quaternion &rotation)
+{
+    cpsBindMethod("Instantiate", 3);
+    void *args[] = { original, (void*)&position, (void*)&rotation };
+    return s_method.invoke(nullptr, args).getData<void*>();
+}
+/*static*/ Object Object::Instantiate(Object original)
+{
+    cpsBindMethod("Instantiate", 1);
+    void *args[] = { original };
+    return s_method.invoke(nullptr, args).getData<void*>();
+}
+/*static*/ void Object::Destroy(cpsObject obj, float delay)
+{
+    cpsBindMethod("Destroy", 2);
+    void *args[] = { obj, &delay };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Object::DestroyImmediate(Object obj, bool allowDestroyingAssets)
+{
+    cpsBindMethod("DestroyImmediate", 2);
+    gboolean b = allowDestroyingAssets;
+    void *args[] = { obj, &b };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Object::DontDestroyOnLoad(Object obj)
+{
+    cpsBindMethod("DontDestroyOnLoad", 1);
+    void *args[] = { obj };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Object::DestroyObject(Object obj, float delay)
+{
+    cpsBindMethod("DestroyObject", 2);
+    void *args[] = { obj, &delay };
     s_method.invoke(nullptr, args);
 }
 
 
 
-Component::Component(cpsObject obj)
-    : cpsObject(obj)
-{
+/*static*/ cpsClass Texture::getClass() { cpsBindClass("UnityEngine", "Texture"); }
+Texture::Texture(cpsObject v) : super(v) {}
 
+
+
+/*static*/ cpsClass RenderTexture::getClass() { cpsBindClass("UnityEngine", "RenderTexture"); }
+RenderTexture::RenderTexture(cpsObject v) : super(v) {}
+
+
+
+/*static*/ cpsClass ComputeBuffer::getClass() { cpsBindClass("UnityEngine", "ComputeBuffer"); }
+ComputeBuffer::ComputeBuffer(cpsObject v) : super(v) {}
+
+
+
+/*static*/ cpsClass PhysicMaterial::getClass() { cpsBindClass("UnityEngine", "PhysicMaterial"); }
+PhysicMaterial::PhysicMaterial(cpsObject v) : super(v) {}
+
+
+
+/*static*/ cpsClass PhysicMaterial2D::getClass() { cpsBindClass("UnityEngine", "PhysicMaterial2D"); }
+PhysicMaterial2D::PhysicMaterial2D(cpsObject v) : super(v) {}
+
+
+
+/*static*/ cpsClass GameObject::getClass() { cpsBindClass("UnityEngine", "GameObject"); }
+GameObject::GameObject(cpsObject v) : super(v) {}
+
+
+
+/*static*/ cpsClass Behaviour::getClass() { cpsBindClass("UnityEngine", "Behaviour"); }
+Behaviour::Behaviour(cpsObject obj) : super(obj) {}
+
+bool Behaviour::get_enabled() const
+{
+    cpsBindMethod("get_enabled");
+    return s_method.invoke(mobj).getData<gboolean>() != 0;
+}
+void Behaviour::set_enabled(bool v)
+{
+    cpsBindMethod("set_enabled");
+    gboolean b = v;
+    void *args[] = { &b };
+    s_method.invoke(mobj, args);
 }
 
 
-Transform::Transform(cpsObject obj)
-    : Component(obj)
-{
 
+/*static*/ cpsClass Component::getClass() { cpsBindClass("UnityEngine", "Component"); }
+Component::Component(cpsObject obj) : super(obj) {}
+
+GameObject Component::get_gameObject() const
+{
+    cpsBindMethod("get_gameObject");
+    return s_method.invoke(mobj).getData<void*>();
+}
+bool Component::get_active() const
+{
+    cpsBindMethod("get_active");
+    return s_method.invoke(mobj).getData<gboolean>()!=0;
+}
+void Component::set_active(bool v)
+{
+    cpsBindMethod("set_active");
+    gboolean b = v;
+    void *args[] = { &b };
+    s_method.invoke(mobj, args);
+}
+const char* Component::get_tag() const
+{
+    cpsBindMethod("get_tag");
+    return cpsToUTF8(s_method.invoke(mobj));
+}
+void Component::set_tag(const char *v)
+{
+    cpsBindMethod("set_tag");
+    void *args[] = { cpsNewString(v) };
+    s_method.invoke(mobj, args);
 }
 
-cpsClass Transform::getClass()
+bool Component::CompareTag(const char *v)
 {
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "Transform"); }
-    return s_class;
+    cpsBindMethod("CompareTag", 1);
+    void *args[] = { cpsNewString(v) };
+    return s_method.invoke(mobj, args).getData<gboolean>()!=0;
 }
+
+void Component::SendMessageUpwards(const char *method_name, cpsObject obj, SendMessageOptions opt)
+{
+    cpsBindMethod("SendMessageUpwards", 3);
+    void *args[] = { cpsNewString(method_name), obj, &opt };
+    s_method.invoke(mobj, args);
+}
+
+void Component::SendMessage(const char *method_name, cpsObject obj, SendMessageOptions opt)
+{
+    cpsBindMethod("SendMessage", 3);
+    void *args[] = { cpsNewString(method_name), obj, &opt };
+    s_method.invoke(mobj, args);
+}
+
+void Component::BroadcastMessage(const char *method_name, cpsObject obj, SendMessageOptions opt)
+{
+    cpsBindMethod("BroadcastMessage", 3);
+    void *args[] = { cpsNewString(method_name), obj, &opt };
+    s_method.invoke(mobj, args);
+}
+
+
+
+
+
+/*static*/ cpsClass Transform::getClass() { cpsBindClass("UnityEngine", "Transform"); }
+Transform::Transform(cpsObject obj) : super(obj) {}
 
 Vector3 Transform::get_position() const
 {
@@ -370,7 +559,7 @@ int Transform::GetSiblingIndex()
 Transform Transform::Find(const char *name)
 {
     cpsBindMethod("Find", 1);
-    void *args[] = { mono_string_new(mono_domain_get(), name) };
+    void *args[] = { cpsNewString(name) };
     return s_method.invoke(mobj, args).getData<void*>();
 }
 
@@ -390,7 +579,7 @@ bool Transform::IsChildOf(Transform t)
 Transform Transform::FindChild(const char *name)
 {
     cpsBindMethod("FindChild", 1);
-    void *args[] = { mono_string_new(mono_domain_get(), name) };
+    void *args[] = { cpsNewString(name) };
     return s_method.invoke(mobj, args).getData<void*>();
 }
 
@@ -429,30 +618,109 @@ bool Transform::IsNonUniformScaleTransform()
 
 
 
-cpsClass Camera::getClass()
+/*static*/ cpsClass Rigidbody::getClass() { cpsBindClass("UnityEngine", "Rigidbody"); }
+Rigidbody::Rigidbody(cpsObject obj) : super(obj) {}
+
+
+
+/*static*/ cpsClass Rigidbody2D::getClass() { cpsBindClass("UnityEngine", "Rigidbody2D"); }
+Rigidbody2D::Rigidbody2D(cpsObject obj) : super(obj) {}
+
+
+
+/*static*/ cpsClass Collider::getClass() { cpsBindClass("UnityEngine", "Collider"); }
+Collider::Collider(cpsObject obj) : super(obj) {}
+
+bool Collider::get_enabled()
 {
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "Camera"); }
-    return s_class;
+    cpsBindMethod("get_enabled");
+    return s_method.invoke(mobj).getData<gboolean>() != 0;
+}
+void Collider::set_enabled(bool v)
+{
+    cpsBindMethod("set_enabled");
+    gboolean b = v;
+    void *args[] = {&b};
+    s_method.invoke(mobj, args);
+}
+
+Rigidbody Collider::get_attachedRigidbody()
+{
+    cpsBindMethod("get_attachedRigidbody");
+    return s_method.invoke(mobj).getData<void*>();
+}
+bool Collider::get_isTrigger()
+{
+    cpsBindMethod("get_isTrigger");
+    return s_method.invoke(mobj).getData<gboolean>() != 0;
+}
+void Collider::set_isTrigger(bool v)
+{
+    cpsBindMethod("set_isTrigger");
+    gboolean b = v;
+    void *args[] = { &b };
+    s_method.invoke(mobj, args);
+}
+
+PhysicMaterial Collider::get_material()
+{
+    cpsBindMethod("get_material");
+    return s_method.invoke(mobj).getData<void*>();
+}
+void Collider::set_material(PhysicMaterial v)
+{
+    cpsBindMethod("set_material");
+    void *args[] = { v.mobj };
+    s_method.invoke(mobj, args);
+}
+PhysicMaterial Collider::get_sharedMaterial()
+{
+    cpsBindMethod("get_sharedMaterial");
+    return s_method.invoke(mobj).getData<void*>();
+}
+void Collider::set_sharedMaterial(PhysicMaterial v)
+{
+    cpsBindMethod("set_sharedMaterial");
+    void *args[] = { v.mobj };
+    s_method.invoke(mobj, args);
+}
+Bounds Collider::get_bounds()
+{
+    cpsBindMethod("get_bounds");
+    return s_method.invoke(mobj).getData<Bounds>();
+}
+
+Vector3 Collider::ClosestPointOnBounds(const Vector3 &v)
+{
+    cpsBindMethod("ClosestPointOnBounds");
+    void *args[] = { (void*)&v };
+    return s_method.invoke(mobj, args).getData<Vector3>();
+}
+
+bool Collider::Raycast(const Ray &ray, RaycastHit &hit, float dist)
+{
+    cpsBindMethod("Raycast");
+    void *args[] = { (void*)&ray, (void*)&hit, &dist };
+    return s_method.invoke(mobj, args).getData<gboolean>() != 0;
 }
 
 
 
-cpsClass Graphics::getClass()
-{
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "Graphics"); }
-    return s_class;
-}
+/*static*/ cpsClass Collider2D::getClass() { cpsBindClass("UnityEngine", "Collider2D"); }
+Collider2D::Collider2D(cpsObject obj) : super(obj) {}
 
 
 
-cpsClass ComputeBuffer::getClass()
-{
-    static cpsCachedClass s_class;
-    if (!s_class) { s_class = GetImage().findClass("UnityEngine", "ComputeBuffer"); }
-    return s_class;
-}
+/*static*/ cpsClass Camera::getClass() { cpsBindClass("UnityEngine", "Camera"); }
+Camera::Camera(cpsObject obj) : super(obj) {}
+
+
+
+/*static*/ cpsClass Light::getClass() { cpsBindClass("UnityEngine", "Light"); }
+Light::Light(cpsObject obj) : super(obj) {}
+
+
+
 
 
 } // namespace cpsUnityEngine

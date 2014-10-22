@@ -19,12 +19,12 @@ cpsClass cpsImage::findClass(const char *namespace_, const char *class_name)
 const char* cpsType::getName() const
 {
     if (!mtype) { return nullptr; }
-    return mono_type_get_name(mtype);
+    return mono_type_get_name((MonoType*)mtype);
 }
 
 cpsClass cpsType::getClass() const
 {
-    return mono_type_get_class(mtype);
+    return mono_type_get_class((MonoType*)mtype);
 }
 
 
@@ -168,7 +168,7 @@ cpsMethod cpsMethod::instantiate(cpsClass *params, int num_params)
     gi->is_open = 0; // must be zero!
     gi->type_argc = num_params;
     for (int i = 0; i < num_params; ++i) {
-        gi->type_argv[i] = params[i].getType();
+        gi->type_argv[i] = (MonoType*)params[i].getType().mtype;
     }
     MonoGenericContext ctx = { nullptr, gi };
     return mono_class_inflate_generic_method((MonoMethod*)mmethod, &ctx);
@@ -178,25 +178,25 @@ cpsMethod cpsMethod::instantiate(cpsClass *params, int num_params)
 const char* cpsClass::getName() const
 {
     if (!mclass) { return nullptr; }
-    return mono_class_get_name(mclass);
+    return mono_class_get_name((MonoClass*)mclass);
 }
 
 cpsType cpsClass::getType() const
 {
     if (!mclass) { return nullptr; }
-    return mono_class_get_type(mclass);
+    return mono_class_get_type((MonoClass*)mclass);
 }
 
 cpsField cpsClass::findField(const char *name) const
 {
     if (!mclass) { return nullptr; }
-    return mono_class_get_field_from_name(mclass, name);
+    return mono_class_get_field_from_name((MonoClass*)mclass, name);
 }
 
 cpsProperty cpsClass::findProperty(const char *name) const
 {
     if (!mclass) { return nullptr; }
-    return mono_class_get_property_from_name(mclass, name);
+    return mono_class_get_property_from_name((MonoClass*)mclass, name);
 }
 
 cpsMethod cpsClass::findMethod(const char *name, int num_args, const char **arg_typenames) const
@@ -206,7 +206,7 @@ cpsMethod cpsClass::findMethod(const char *name, int num_args, const char **arg_
         for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
             void *method;
             gpointer iter = nullptr;
-            while ((method = mono_class_get_methods(mclass, &iter))) {
+            while ((method = mono_class_get_methods((MonoClass*)mclass, &iter))) {
                 if (strcmp(mono_method_get_name((MonoMethod*)method), name) != 0) { continue; }
                 MonoMethodSignature *sig = mono_method_signature((MonoMethod*)method);
                 if (mono_signature_get_param_count(sig) != num_args) { continue; }
@@ -225,7 +225,7 @@ cpsMethod cpsClass::findMethod(const char *name, int num_args, const char **arg_
     }
     else {
         for (cpsClass mc = mclass; mc; mc = mc.getParent()) {
-            if (MonoMethod *ret = mono_class_get_method_from_name(mc, name, num_args)) {
+            if (MonoMethod *ret = mono_class_get_method_from_name((MonoClass*)mc.mclass, name, num_args)) {
                 return ret;
             }
         }
@@ -237,7 +237,7 @@ void cpsClass::eachFields(const std::function<void(cpsField&)> &f)
 {
     void *field;
     gpointer iter = nullptr;
-    while ((field = mono_class_get_fields(mclass, &iter))) {
+    while ((field = mono_class_get_fields((MonoClass*)mclass, &iter))) {
         cpsField mf = field;
         f(mf);
     }
@@ -247,7 +247,7 @@ void cpsClass::eachProperties(const std::function<void(cpsProperty&)> &f)
 {
     void *prop;
     gpointer iter = nullptr;
-    while ((prop = mono_class_get_properties(mclass, &iter))) {
+    while ((prop = mono_class_get_properties((MonoClass*)mclass, &iter))) {
         cpsProperty mp = prop;
         f(mp);
     }
@@ -257,7 +257,7 @@ void cpsClass::eachMethods(const std::function<void(cpsMethod&)> &f)
 {
     void *method;
     gpointer iter = nullptr;
-    while ((method = mono_class_get_methods(mclass, &iter))) {
+    while ((method = mono_class_get_methods((MonoClass*)mclass, &iter))) {
         cpsMethod mm = method;
         f(mm);
     }
@@ -269,7 +269,7 @@ void cpsClass::eachFieldsUpwards(const std::function<void(cpsField&, cpsClass&)>
     do {
         void *field;
         gpointer iter = nullptr;
-        while (field = mono_class_get_fields(c, &iter)) {
+        while (field = mono_class_get_fields((MonoClass*)c.mclass, &iter)) {
             cpsField m = field;
             f(m, c);
         }
@@ -283,7 +283,7 @@ void cpsClass::eachPropertiesUpwards(const std::function<void(cpsProperty&, cpsC
     do {
         void *prop;
         gpointer iter = nullptr;
-        while (prop = mono_class_get_properties(c, &iter)) {
+        while (prop = mono_class_get_properties((MonoClass*)c.mclass, &iter)) {
             cpsProperty m = prop;
             f(m, c);
         }
@@ -297,7 +297,7 @@ void cpsClass::eachMethodsUpwards(const std::function<void(cpsMethod&, cpsClass&
     do {
         void *method;
         gpointer iter = nullptr;
-        while (method = mono_class_get_methods(c, &iter)) {
+        while (method = mono_class_get_methods((MonoClass*)c.mclass, &iter)) {
             cpsMethod m = method;
             f(m, c);
         }
@@ -308,7 +308,7 @@ void cpsClass::eachMethodsUpwards(const std::function<void(cpsMethod&, cpsClass&
 
 cpsClass cpsClass::getParent() const
 {
-    return mono_class_get_parent(mclass);
+    return mono_class_get_parent((MonoClass*)mclass);
 }
 
 
@@ -338,6 +338,7 @@ cpsAPI void cpsAddMethod(const char *name, void *addr)
 cpsCLinkage cpsExport void cpsCoreInitialize()
 {
     static bool s_is_first = true;
+
     if (s_is_first) {
         s_is_first = false;
 

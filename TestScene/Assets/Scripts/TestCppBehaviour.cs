@@ -64,10 +64,9 @@ public class TestCppBehaviour : CppBehaviour
 
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int test1(int a1, int a2, int a3, int a4);
-
+    public extern void test1(Vector3[] a);
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
-    public extern int test2(float a1, Vector2 a2);
+    public extern void test2(string s);
 
 
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -118,6 +117,14 @@ public class TestCppBehaviour : CppBehaviour
     void ThisFunctionWillBeCalledFromCpp()
     {
         Debug.Log("ThisFunctionWillBeCalledFromCpp()");
+
+        Vector3[] v3array = new Vector3[] {
+            Vector3.one * 1.0f,
+            Vector3.one * 2.0f,
+            Vector3.one * 3.0f,
+        };
+        test1(v3array);
+        test2("hogehoge");
 
         //Vector3 v3 = ReturnVector3();
         //Debug.Log("v3: "+v3.x+", "+v3.y+", "+v3.z);
