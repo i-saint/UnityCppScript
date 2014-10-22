@@ -10,7 +10,7 @@ using namespace cpsUnityEngine;
 class CppBehaviour
 {
 public:
-    CppBehaviour(void *o) : this_cs(o) {}
+    CppBehaviour(cpsObject o) : this_cs(o) {}
     virtual ~CppBehaviour() {}
 
     template <class T>

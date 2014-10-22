@@ -8,13 +8,13 @@ class TestCppBehaviour : public CppBehaviour
 {
 typedef CppBehaviour super;
 public:
-    TestCppBehaviour(void *o);
+    TestCppBehaviour(cpsObject o);
     virtual ~TestCppBehaviour();
     void Start();
     void Update();
 
-    void test1(void *a);
-    void test2(void *str);
+    void test1(cpsArray a);
+    void test2(cpsString str);
 
     int memfn1(float a1);
     int memfn2(float a1, Vector2 a2);
@@ -62,7 +62,7 @@ cpsExportMethod(smemfn4)
 
 
 
-TestCppBehaviour::TestCppBehaviour(void *o)
+TestCppBehaviour::TestCppBehaviour(cpsObject o)
 : super(o)
 , m_frame(0)
 , m_v3v(cpsGetFieldValuePtr<Vector3>(o, "v3value"))
@@ -92,7 +92,7 @@ void TestCppBehaviour::Update()
         //*(int*)nullptr = 0;
 
         cpsDebugPrint("TestCppBehaviour::Update()\n");
-        cpsDebugPrint("name: %s\n", trans.get_name());
+        cpsDebugPrint("name: %s\n", trans.get_name().toUTF8());
         if (cpsMethod method = findMethod("ThisFunctionWillBeCalledFromCpp")) {
             method.invoke(this_cs, nullptr);
         }
@@ -117,19 +117,19 @@ void TestCppBehaviour::Update()
 }
 
 
-void TestCppBehaviour::test1(void *a)
+void TestCppBehaviour::test1(cpsArray a)
 {
-    cpsArray<Vector3> v3a(a);
+    cpsTArray<Vector3> v3a(a);
     cpsDebugPrint("TestCppBehaviour::test1()\n");
     for (auto &v : v3a) {
         cpsDebugPrint("    {%.2f, %.2f, %.2f}\n", v.x, v.y, v.z);
     }
 }
 
-void TestCppBehaviour::test2(void *str)
+void TestCppBehaviour::test2(cpsString str)
 {
     cpsDebugPrint("TestCppBehaviour::test2()\n");
-    cpsDebugPrint("%s\n", cpsToUTF8(str));
+    cpsDebugPrint("%s\n", str.toUTF8());
 }
 
 

@@ -537,7 +537,7 @@ struct cpsAddMethodHelper { cpsAddMethodHelper(const char *name, void *addr) { c
 template<class T>
 inline cpsField cpsGetCppThisField(cpsObject o)
 {
-    cpsCachedField s_field;
+    static cpsCachedField s_field;
     if (!s_field) {
         s_field = o.getClass().findField("this_cpp");
     }
@@ -600,14 +600,14 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
 #define cpsP(...) __VA_ARGS__
 
 #define cpsExportClass()\
-    cpsExport void cpsP(cpsCurrentClass)##_ctor(void *o)\
+    cpsExport void cpsP(cpsCurrentClass)##_ctor(MonoObject *o)\
     {\
         typedef cpsP(cpsCurrentClass) this_t;\
         cpsGuard(\
             cpsSetCppThis<this_t>(o); \
         )\
     }\
-    cpsExport void cpsP(cpsCurrentClass)##_dtor(void *o)\
+    cpsExport void cpsP(cpsCurrentClass)##_dtor(MonoObject *o)\
     {\
         typedef cpsP(cpsCurrentClass) this_t;\
         cpsGuard(\
@@ -618,7 +618,7 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
     cpsAddMethodHelper cpsP(cpsCurrentClass)##_dtor_(cpsS(cpsCurrentClass) "::dtor", &cpsP(cpsCurrentClass)##_dtor);
 
 #define cpsExportMethod(MethodName)\
-    cpsExport auto cpsP(cpsCurrentClass)##_##MethodName(void *o, ...) -> decltype(cpsCSCall(&cpsP(cpsCurrentClass)::##MethodName, (cpsP(cpsCurrentClass)*)nullptr, nullptr))\
+    cpsExport auto cpsP(cpsCurrentClass)##_##MethodName(MonoObject *o, ...) -> decltype(cpsCSCall(&cpsP(cpsCurrentClass)::##MethodName, (cpsP(cpsCurrentClass)*)nullptr, nullptr))\
     {\
         typedef cpsP(cpsCurrentClass) this_t;\
         typedef decltype(cpsCSCall(&this_t::##MethodName, (this_t*)nullptr, nullptr)) ret_t;\

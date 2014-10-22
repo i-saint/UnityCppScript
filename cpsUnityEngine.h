@@ -115,7 +115,7 @@ struct cpsAPI RaycastHit
 {
     float       distance;
     Vector2     uv;
-    void*       collider; // Collider
+    cpsObject   collider; // Collider
     Vector3     point;
     Vector3     normal;
     int         faceID;
@@ -125,7 +125,7 @@ struct cpsAPI RaycastHit2D
 {
     float       distance;
     float       fraction;
-    void*       collider; // Collider2D
+    cpsObject   collider; // Collider2D
     Vector2     centroid;
     Vector2     point;
     Vector2     normal;
@@ -137,8 +137,8 @@ struct cpsAPI RaycastHit2D
 class cpsAPI Application
 {
 public:
-    static cpsClass getClass();
-    static const char*  get_dataPath();
+    static cpsClass     getClass();
+    static cpsString    get_dataPath();
     static bool         get_isEditor();
 };
 
@@ -147,8 +147,8 @@ class cpsAPI Debug
 {
 public:
     static cpsClass getClass();
-    static void Log(const char *message);
-    static void Log(const char *message, cpsObject obj);
+    static void Log(cpsString message);
+    static void Log(cpsString message, cpsObject obj);
 };
 
 
@@ -188,14 +188,14 @@ public:
     static cpsClass getClass();
 
     Object(cpsObject = nullptr);
-    const char* get_name() const;
-    void        set_name(const char *name);
+    cpsString   get_name() const;
+    void        set_name(cpsString name);
     HideFlags   get_hideFlags() const;
     void        set_hideFlags(HideFlags flags);
     void*       obj_address() const;
 
     int         GetInstanceID() const;
-    const char* ToString() const;
+    cpsString   ToString() const;
 
     template<class T>
     static T FindObjectOfType()
@@ -211,7 +211,7 @@ public:
     }
 
     template<class T>
-    static cpsArray<T> FindObjectsOfType()
+    static cpsTArray<T> FindObjectsOfType()
     {
         static cpsCachedMethod s_generics;
         static cpsCachedMethod s_method;
@@ -220,7 +220,7 @@ public:
             s_generics = mobj.getClass().findMethod("FindObjectsOfType", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
-        return cpsArray<T>(s_method.invoke(mobj));
+        return cpsTArray<T>(s_method.invoke(mobj));
     }
 
     static Object   Instantiate(Object original, const Vector3 &position, const Quaternion &rotation);
@@ -317,8 +317,8 @@ public:
     GameObject  get_gameObject() const;
     bool        get_active() const;
     void        set_active(bool v);
-    const char* get_tag() const;
-    void        set_tag(const char *);
+    cpsString   get_tag() const;
+    void        set_tag(cpsString tag);
 
     template<class ComponentT>
     ComponentT GetComponent()
@@ -334,7 +334,7 @@ public:
     }
 
     template<class ComponentT>
-    cpsArray<ComponentT> GetComponents()
+    cpsTArray<ComponentT> GetComponents()
     {
         static cpsCachedMethod s_generics;
         static cpsCachedMethod s_method;
@@ -343,7 +343,7 @@ public:
             s_generics = mobj.getClass().findMethod("GetComponents", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
-        return cpsArray<ComponentT>(s_method.invoke(mobj));
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
     }
 
     template<class ComponentT>
@@ -360,7 +360,7 @@ public:
     }
 
     template<class ComponentT>
-    cpsArray<ComponentT> GetComponentsInChildren()
+    cpsTArray<ComponentT> GetComponentsInChildren()
     {
         static cpsCachedMethod s_generics;
         static cpsCachedMethod s_method;
@@ -369,7 +369,7 @@ public:
             s_generics = mobj.getClass().findMethod("GetComponentsInChildren", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
-        return cpsArray<ComponentT>(s_method.invoke(mobj));
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
     }
 
     template<class ComponentT>
@@ -386,7 +386,7 @@ public:
     }
 
     template<class ComponentT>
-    cpsArray<ComponentT> GetComponentsInParent()
+    cpsTArray<ComponentT> GetComponentsInParent()
     {
         static cpsCachedMethod s_generics;
         static cpsCachedMethod s_method;
@@ -395,13 +395,13 @@ public:
             s_generics = mobj.getClass().findMethod("GetComponentsInParent", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
-        return cpsArray<ComponentT>(s_method.invoke(mobj));
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
     }
 
-    bool CompareTag(const char *tag);
-    void SendMessageUpwards(const char *method_name, cpsObject obj=nullptr, SendMessageOptions opt = RequireReceiver);
-    void SendMessage(const char *method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
-    void BroadcastMessage(const char *method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
+    bool CompareTag(cpsString tag);
+    void SendMessageUpwards(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
+    void SendMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
+    void BroadcastMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
 };
 
 class cpsAPI Behaviour : public Component
@@ -467,10 +467,10 @@ public:
     void        SetAsLastSibling();
     void        SetSiblingIndex(int i);
     int         GetSiblingIndex();
-    Transform   Find(const char *name);
+    Transform   Find(cpsString name);
     void        SendTransformChangedScale();
     bool        IsChildOf(Transform t);
-    Transform   FindChild(const char *name);
+    Transform   FindChild(cpsString name);
     void        RotateAround(const Vector3& axis, float a);
     void        RotateAroundLocal(const Vector3& axis, float a);
     Transform   GetChild(int i);

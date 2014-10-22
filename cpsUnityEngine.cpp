@@ -42,11 +42,10 @@ cpsImage& GetImage()
     cpsBindClass("UnityEngine", "Application");
 }
 
-/*static*/ const char* Application::get_dataPath()
+/*static*/ cpsString Application::get_dataPath()
 {
     cpsBindMethod("get_dataPath");
-    cpsObject ret = s_method.invoke(nullptr, nullptr);
-    return cpsToUTF8(ret);
+    return cpsString(s_method.invoke(nullptr, nullptr));
 }
 
 /*static*/ bool Application::get_isEditor()
@@ -63,21 +62,19 @@ cpsImage& GetImage()
     cpsBindClass("UnityEngine", "Debug");
 }
 
-/*static*/ void Debug::Log(const char *message)
+/*static*/ void Debug::Log(cpsString message)
 {
     cpsBindMethod("Log", 1);
 
-    MonoString *str = (MonoString*)cpsNewString(message);
-    void *args[] = { str };
+    void *args[] = { message };
     s_method.invoke(nullptr, args);
 }
 
-/*static*/ void Debug::Log(const char *message, cpsObject obj)
+/*static*/ void Debug::Log(cpsString message, cpsObject obj)
 {
     cpsBindMethod("Log", 2);
 
-    MonoString *str = (MonoString*)cpsNewString(message);
-    void *args[] = { str, obj };
+    void *args[] = { message, obj };
     s_method.invoke(nullptr, args);
 }
 
@@ -90,15 +87,15 @@ cpsImage& GetImage()
 /*static*/ cpsClass Object::getClass() { cpsBindClass("UnityEngine", "Object"); }
 Object::Object(cpsObject v) : super(v) {}
 
-const char* Object::get_name() const
+cpsString Object::get_name() const
 {
     cpsBindMethod("get_name");
-    return cpsToUTF8(s_method.invoke(mobj));
+    return cpsString(s_method.invoke(mobj));
 }
-void Object::set_name(const char *name)
+void Object::set_name(cpsString name)
 {
     cpsBindMethod("set_name");
-    void *args[] = { cpsNewString(name) };
+    void *args[] = { name };
     s_method.invoke(mobj, args);
 }
 HideFlags Object::get_hideFlags() const
@@ -123,23 +120,23 @@ int Object::GetInstanceID() const
     cpsBindMethod("GetInstanceID");
     return s_method.invoke(mobj).getData<int>();
 }
-const char* Object::ToString() const
+cpsString Object::ToString() const
 {
     cpsBindMethod("ToString");
-    return cpsToUTF8(s_method.invoke(mobj));
+    return cpsString(s_method.invoke(mobj));
 }
 
 /*static*/ Object Object::Instantiate(Object original, const Vector3 &position, const Quaternion &rotation)
 {
     cpsBindMethod("Instantiate", 3);
     void *args[] = { original, (void*)&position, (void*)&rotation };
-    return s_method.invoke(nullptr, args).getData<void*>();
+    return s_method.invoke(nullptr, args).getData<MonoObject*>();
 }
 /*static*/ Object Object::Instantiate(Object original)
 {
     cpsBindMethod("Instantiate", 1);
     void *args[] = { original };
-    return s_method.invoke(nullptr, args).getData<void*>();
+    return s_method.invoke(nullptr, args).getData<MonoObject*>();
 }
 /*static*/ void Object::Destroy(cpsObject obj, float delay)
 {
@@ -223,7 +220,7 @@ Component::Component(cpsObject obj) : super(obj) {}
 GameObject Component::get_gameObject() const
 {
     cpsBindMethod("get_gameObject");
-    return s_method.invoke(mobj).getData<void*>();
+    return s_method.invoke(mobj).getData<MonoObject*>();
 }
 bool Component::get_active() const
 {
@@ -237,43 +234,43 @@ void Component::set_active(bool v)
     void *args[] = { &b };
     s_method.invoke(mobj, args);
 }
-const char* Component::get_tag() const
+cpsString Component::get_tag() const
 {
     cpsBindMethod("get_tag");
-    return cpsToUTF8(s_method.invoke(mobj));
+    return cpsString(s_method.invoke(mobj));
 }
-void Component::set_tag(const char *v)
+void Component::set_tag(cpsString v)
 {
     cpsBindMethod("set_tag");
-    void *args[] = { cpsNewString(v) };
+    void *args[] = { v };
     s_method.invoke(mobj, args);
 }
 
-bool Component::CompareTag(const char *v)
+bool Component::CompareTag(cpsString v)
 {
     cpsBindMethod("CompareTag", 1);
-    void *args[] = { cpsNewString(v) };
+    void *args[] = { v };
     return s_method.invoke(mobj, args).getData<gboolean>()!=0;
 }
 
-void Component::SendMessageUpwards(const char *method_name, cpsObject obj, SendMessageOptions opt)
+void Component::SendMessageUpwards(cpsString method_name, cpsObject obj, SendMessageOptions opt)
 {
     cpsBindMethod("SendMessageUpwards", 3);
-    void *args[] = { cpsNewString(method_name), obj, &opt };
+    void *args[] = { method_name, obj, &opt };
     s_method.invoke(mobj, args);
 }
 
-void Component::SendMessage(const char *method_name, cpsObject obj, SendMessageOptions opt)
+void Component::SendMessage(cpsString method_name, cpsObject obj, SendMessageOptions opt)
 {
     cpsBindMethod("SendMessage", 3);
-    void *args[] = { cpsNewString(method_name), obj, &opt };
+    void *args[] = { method_name, obj, &opt };
     s_method.invoke(mobj, args);
 }
 
-void Component::BroadcastMessage(const char *method_name, cpsObject obj, SendMessageOptions opt)
+void Component::BroadcastMessage(cpsString method_name, cpsObject obj, SendMessageOptions opt)
 {
     cpsBindMethod("BroadcastMessage", 3);
-    void *args[] = { cpsNewString(method_name), obj, &opt };
+    void *args[] = { method_name, obj, &opt };
     s_method.invoke(mobj, args);
 }
 
@@ -556,11 +553,11 @@ int Transform::GetSiblingIndex()
     return s_method.invoke(mobj).getData<int>();;
 }
 
-Transform Transform::Find(const char *name)
+Transform Transform::Find(cpsString name)
 {
     cpsBindMethod("Find", 1);
-    void *args[] = { cpsNewString(name) };
-    return s_method.invoke(mobj, args).getData<void*>();
+    void *args[] = { name };
+    return s_method.invoke(mobj, args).getData<MonoObject*>();
 }
 
 void Transform::SendTransformChangedScale()
@@ -576,11 +573,11 @@ bool Transform::IsChildOf(Transform t)
     return s_method.invoke(mobj, args).getData<gboolean>()!=0;
 }
 
-Transform Transform::FindChild(const char *name)
+Transform Transform::FindChild(cpsString name)
 {
     cpsBindMethod("FindChild", 1);
-    void *args[] = { cpsNewString(name) };
-    return s_method.invoke(mobj, args).getData<void*>();
+    void *args[] = { name };
+    return s_method.invoke(mobj, args).getData<MonoObject*>();
 }
 
 void Transform::RotateAround(const Vector3& axis, float a)
@@ -601,7 +598,7 @@ Transform Transform::GetChild(int i)
 {
     cpsBindMethod("GetChild", 1);
     void *args[] = { &i };
-    return s_method.invoke(mobj, args).getData<void*>();
+    return s_method.invoke(mobj, args).getData<MonoObject*>();
 }
 
 int Transform::GetChildCount()
@@ -647,7 +644,7 @@ void Collider::set_enabled(bool v)
 Rigidbody Collider::get_attachedRigidbody()
 {
     cpsBindMethod("get_attachedRigidbody");
-    return s_method.invoke(mobj).getData<void*>();
+    return s_method.invoke(mobj).getData<MonoObject*>();
 }
 bool Collider::get_isTrigger()
 {
@@ -665,7 +662,7 @@ void Collider::set_isTrigger(bool v)
 PhysicMaterial Collider::get_material()
 {
     cpsBindMethod("get_material");
-    return s_method.invoke(mobj).getData<void*>();
+    return s_method.invoke(mobj).getData<MonoObject*>();
 }
 void Collider::set_material(PhysicMaterial v)
 {
@@ -676,7 +673,7 @@ void Collider::set_material(PhysicMaterial v)
 PhysicMaterial Collider::get_sharedMaterial()
 {
     cpsBindMethod("get_sharedMaterial");
-    return s_method.invoke(mobj).getData<void*>();
+    return s_method.invoke(mobj).getData<MonoObject*>();
 }
 void Collider::set_sharedMaterial(PhysicMaterial v)
 {

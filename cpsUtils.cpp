@@ -168,7 +168,7 @@ cpsAPI void cpsDebugPrint(const char *format, ...)
     char buf[1024 * 8];
     vsprintf(buf, format, args);
 
-    cpsUnityEngine::Debug::Log(buf);
+    cpsUnityEngine::Debug::Log(cpsString::create(buf));
 
 #ifdef WIN32
     ::OutputDebugStringA(buf);
@@ -198,38 +198,6 @@ void cpsClearCache()
     for (auto o : g_cpsCaches.properties)  { o->mproperty = nullptr; }
 }
 
-cpsAPI void cpsGetArraySizeAndData(void *cs_array, size_t &size, void *& data)
-{
-    if (cs_array == nullptr) { return; }
-    MonoArray *ma = (MonoArray*)cs_array;
-    size = ma->max_length;
-    data = ma->vector;
-}
-
-cpsAPI void* cpsNewString(const cps_char8 *str, int len)
-{
-    return mono_string_new_len(mono_domain_get(), str, len==-1 ? (int)strlen(str) : len);
-}
-
-cpsAPI void* cpsNewString(const cps_char16 *str, int len)
-{
-    if (len == -1) {
-        for (len = 0;; ++len) {
-            if (str[len] == 0) { break; }
-        }
-    }
-    return mono_string_new_utf16(mono_domain_get(), str, len);
-}
-
-cpsAPI const cps_char8*  cpsToUTF8(void *cs_string)
-{
-    return mono_string_to_utf8((MonoString*)cs_string);
-}
-
-cpsAPI const cps_char16* cpsToUTF16(void *cs_string)
-{
-    return mono_string_to_utf16((MonoString*)cs_string);
-}
 
 cpsCachedImage::cpsCachedImage() : cpsImage(nullptr)
 {

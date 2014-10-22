@@ -40,24 +40,24 @@ typedef gint32 mono_array_lower_bound_t;
 #   define USE_UINT8_BIT_FIELD(type, field) type field
 #endif
 
-typedef void MonoDomain;
-typedef void MonoAssembly;
-typedef void MonoImage;
+struct MonoDomain;
+struct MonoAssembly;
+struct MonoImage;
 
-typedef void MonoMethodSignature;
-typedef void MonoMethodDesc;
-typedef void MonoClassField;
-typedef void MonoProperty;
-typedef void MonoEvent;
-typedef void MonoThreadsSync;
-typedef void MonoRuntimeGenericContext;
-typedef void MonoMarshalType;
-typedef void MonoGenericClass;
-typedef void MonoGenericContainer;
-typedef void MonoClassRuntimeInfo;
-typedef void MonoClassExt;
-typedef void MonoArrayType;
-typedef void MonoGenericParam;
+struct MonoMethodSignature;
+struct MonoMethodDesc;
+struct MonoClassField;
+struct MonoProperty;
+struct MonoEvent;
+struct MonoThreadsSync;
+struct MonoRuntimeGenericContext;
+struct MonoMarshalType;
+struct MonoGenericClass;
+struct MonoGenericContainer;
+struct MonoClassRuntimeInfo;
+struct MonoClassExt;
+struct MonoArrayType;
+struct MonoGenericParam;
 enum MonoTypeEnum;
 
 struct MonoCustomMod;
