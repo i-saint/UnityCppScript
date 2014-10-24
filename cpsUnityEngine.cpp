@@ -28,7 +28,7 @@ const Vector4 Vector4::one = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 
 
-cpsImage& GetImage()
+cpsAPI cpsImage& GetImage()
 {
     static cpsCachedImage s_image;
     if (!s_image) { s_image = cpsImage::findImage("UnityEngine"); }

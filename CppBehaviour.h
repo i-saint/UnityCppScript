@@ -6,12 +6,19 @@
 #include "cpsUnityEngine.h"
 using namespace cpsUnityEngine;
 
+class Serializer
+{
+public:
+    void io(char *data, size_t size);
+};
+
 
 class CppBehaviour
 {
 public:
     CppBehaviour(cpsObject o) : this_cs(o) {}
     virtual ~CppBehaviour() {}
+    virtual void serialize(Serializer &s) {}
 
     template <class T>
     T GetComponent() const

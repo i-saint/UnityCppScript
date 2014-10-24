@@ -203,23 +203,44 @@ cpsCachedImage::cpsCachedImage() : cpsImage(nullptr)
 {
     g_cpsCaches.images.push_back(this);
 }
+cpsCachedImage::~cpsCachedImage()
+{
+    g_cpsCaches.images.erase(std::find(g_cpsCaches.images.begin(), g_cpsCaches.images.end(), this));
+}
+
 
 cpsCachedClass::cpsCachedClass() : cpsClass(nullptr)
 {
     g_cpsCaches.classes.push_back(this);
+}
+cpsCachedClass::~cpsCachedClass()
+{
+    g_cpsCaches.classes.erase(std::find(g_cpsCaches.classes.begin(), g_cpsCaches.classes.end(), this));
 }
 
 cpsCachedField::cpsCachedField() : cpsField(nullptr)
 {
     g_cpsCaches.fields.push_back(this);
 }
+cpsCachedField::~cpsCachedField()
+{
+    g_cpsCaches.fields.erase(std::find(g_cpsCaches.fields.begin(), g_cpsCaches.fields.end(), this));
+}
 
 cpsCachedMethod::cpsCachedMethod() : cpsMethod(nullptr)
 {
     g_cpsCaches.methods.push_back(this);
 }
+cpsCachedMethod::~cpsCachedMethod()
+{
+    g_cpsCaches.methods.erase(std::find(g_cpsCaches.methods.begin(), g_cpsCaches.methods.end(), this));
+}
 
 cpsCachedProperty::cpsCachedProperty() : cpsProperty(nullptr)
 {
     g_cpsCaches.properties.push_back(this);
+}
+cpsCachedProperty::~cpsCachedProperty()
+{
+    g_cpsCaches.properties.erase(std::find(g_cpsCaches.properties.begin(), g_cpsCaches.properties.end(), this));
 }

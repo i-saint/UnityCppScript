@@ -322,7 +322,13 @@ MonoDomain* cpsObject::getDomain() const
     return mono_object_get_domain(mobj);
 }
 
-void* cpsObject::getDataPtr() const
+/*static*/ cpsObject cpsObject::create(cpsClass mclass)
+{
+    return mono_object_new(mono_domain_get(), mclass);
+}
+
+
+void* cpsObject::getDataPtr()
 {
     return (char*)mobj + sizeof(MonoObject);
 }
@@ -358,6 +364,12 @@ const cps_char16* cpsString::toUTF16()
     return mono_string_to_utf16((MonoString*)mobj);
 }
 
+
+/*static*/ cpsArray cpsArray::create(cpsClass klass, size_t size)
+{
+    MonoArray *ret = mono_array_new(mono_domain_get(), klass, size);
+    return ret;
+}
 
 size_t cpsArray::getSize() const
 {

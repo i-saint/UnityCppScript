@@ -1,6 +1,8 @@
 ﻿#ifndef cpsTypes_h
 #define cpsTypes_h
 
+#define _ITERATOR_DEBUG_LEVEL 0
+
 #include <functional>
 #include <cstdio>
 #include <cstdarg>
@@ -78,6 +80,7 @@ public:
     int getOffset() const;
     template<class T> void getValue(cpsObject obj, T &o) const { getValueImpl(obj, &o); }
     template<class T> void setValue(cpsObject obj, const T &o) { setValueImpl(obj, &o); }
+    template<class T> void setValueRef(cpsObject obj, T *o) { setValueImpl(obj, o); }
 
     void getValueImpl(cpsObject obj, void *p) const;
     void setValueImpl(cpsObject obj, const void *p);
@@ -160,14 +163,16 @@ public:
 class cpsAPI cpsObject
 {
 public:
+    static cpsObject create(cpsClass mclass);
+
     cpsObject(MonoObject *o) : mobj(o) {}
     operator MonoObject*() const { return mobj; }
     operator bool() const { return mobj != nullptr; }
 
     MonoDomain* getDomain() const;
     cpsClass    getClass() const;
-    void*       getDataPtr() const;
-    template<class T> const T& getData() const { return *(T*)getDataPtr(); }
+    void*       getDataPtr();
+    template<class T> T& getData(int offset=0) { return *(T*)((size_t)getDataPtr()+offset); }
 
 public:
     MonoObject *mobj;
@@ -190,6 +195,8 @@ public:
 class cpsAPI cpsArray : public cpsObject
 {
 public:
+    static cpsArray create(cpsClass klass, size_t size);
+
     cpsArray(MonoObject *o) : cpsObject(o) {}
     cpsArray(MonoArray *o) : cpsObject((MonoObject*)o) {}
 

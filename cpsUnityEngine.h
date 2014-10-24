@@ -7,6 +7,8 @@
 namespace cpsUnityEngine
 {
 
+cpsAPI cpsImage& GetImage();
+
 enum Space {
     World = 0,
     Self = 1,

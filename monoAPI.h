@@ -397,9 +397,11 @@ MONO_API MonoClass*             mono_class_get_interfaces(MonoClass* klass, gpoi
 MONO_API MonoClass*             mono_class_get_nested_types(MonoClass* klass, gpointer *iter);
 MONO_API MonoGenericContext*    mono_class_get_context(MonoClass *klass);
 
+MONO_API MonoObject*        mono_object_new(MonoDomain *domain, MonoClass *klass);
 MONO_API MonoDomain*        mono_object_get_domain(MonoObject *obj);
 MONO_API MonoClass*         mono_object_get_class(MonoObject *obj);
 
+MONO_API MonoArray*         mono_array_new(MonoDomain *domain, MonoClass *eclass, mono_array_size_t n);
 
 MONO_API MonoClass* mono_get_object_class();
 MONO_API MonoClass* mono_get_byte_class();
