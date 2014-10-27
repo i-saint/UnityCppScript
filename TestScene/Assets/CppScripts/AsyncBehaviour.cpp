@@ -10,8 +10,6 @@ cpsExportMethod(Update)
 
 #define cpsCurrentClass AsyncBehaviour
 cpsExportClass()
-cpsExportMethod(Awake)
-cpsExportMethod(OnDestroy)
 cpsExportMethod(BeforeAsyncUpdate)
 cpsExportMethod(AsyncUpdate)
 cpsExportMethod(AfterAsyncUpdate)
@@ -57,14 +55,6 @@ void AsyncBehaviourManager::Update()
 }
 
 
-
-void AsyncBehaviour::Awake()
-{
-}
-
-void AsyncBehaviour::OnDestroy()
-{
-}
 
 void AsyncBehaviour::BeforeAsyncUpdate()
 {

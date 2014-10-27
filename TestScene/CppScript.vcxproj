@@ -31,6 +31,7 @@
     </ClCompile>
     <ClCompile Include="Assets\CppScripts\CppBehaviour.cpp" />
     <ClCompile Include="Assets\CppScripts\CubeDrawer.cpp" />
+    <ClCompile Include="Assets\CppScripts\TestAsyncBehaviour.cpp" />
     <ClCompile Include="Assets\CppScripts\TestCppBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>

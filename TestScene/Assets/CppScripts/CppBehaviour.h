@@ -13,8 +13,6 @@ typedef Behaviour super;
 public:
     CppBehaviour(cpsObject o=nullptr) : super(o) {}
     virtual ~CppBehaviour() {}
-    virtual void OnBeforeSerialize();
-    virtual void OnAfterDeserialize();
 };
 
 #endif // CppBehaviour_h

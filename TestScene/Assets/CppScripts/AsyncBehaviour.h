@@ -37,8 +37,6 @@ typedef CppBehaviour super;
 friend class AsyncBehaviourManager;
 public:
     AsyncBehaviour(cpsObject o) : super(o) {}
-    virtual void Awake();
-    virtual void OnDestroy();
     virtual void BeforeAsyncUpdate();
     virtual void AsyncUpdate();
     virtual void AfterAsyncUpdate();

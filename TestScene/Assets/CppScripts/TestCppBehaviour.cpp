@@ -11,10 +11,6 @@ public:
     TestCppBehaviour(cpsObject o);
     virtual ~TestCppBehaviour();
 
-    void OnBeforeSerialize();
-    void OnAfterDeserialize();
-
-
     void Start();
     void Update();
 
@@ -46,8 +42,6 @@ cpsDefineEntryPoint()
 
 #define cpsCurrentClass TestCppBehaviour
 cpsExportClass()
-cpsExportMethod(OnBeforeSerialize)
-cpsExportMethod(OnAfterDeserialize)
 cpsExportMethod(Start)
 cpsExportMethod(Update)
 cpsExportMethod(test1)
@@ -80,17 +74,6 @@ TestCppBehaviour::TestCppBehaviour(cpsObject o)
 TestCppBehaviour::~TestCppBehaviour()
 {
     cpsDebugPrint("TestCppBehaviour:~TestCppBehaviour()\n");
-}
-
-
-void TestCppBehaviour::OnBeforeSerialize()
-{
-    super::OnBeforeSerialize();
-}
-
-void TestCppBehaviour::OnAfterDeserialize()
-{
-    super::OnAfterDeserialize();
 }
 
 

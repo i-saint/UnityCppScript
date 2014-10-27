@@ -1,52 +1,53 @@
 ﻿#include "CubeDrawer.h"
 
-#define cpsCurrentClass CubeDrawerManager
-cpsExportClass()
-cpsExportMethod(Awake)
-cpsExportMethod(OnDestroy)
-cpsExportMethod(OnPreRender)
-cpsExportMethod(OnPostRender)
-#undef cpsCurrentClass
-
 #define cpsCurrentClass CubeDrawer
 cpsExportClass()
-cpsExportMethod(Awake)
-cpsExportMethod(OnDestroy)
 cpsExportMethod(OnPreRender)
 cpsExportMethod(OnPostRender)
 #undef cpsCurrentClass
 
 
-void CubeDrawerManager::Awake()
+CubeDrawer* CubeDrawer::s_inst;
+
+
+CubeDrawer* CubeDrawer::getInstance()
 {
+    return s_inst;
 }
 
-void CubeDrawerManager::OnDestroy()
+CubeDrawer::CubeDrawer(cpsObject o)
+    : super(o)
 {
+    if (s_inst != nullptr) {
+        cpsDebugPrint("CubeDrawer::s_inst is not null!\n");
+    }
+    s_inst = this;
+
+    m_data.reserve(1024 * 16);
+    findField("instance_buffer").getValue(*this, m_buffer);
 }
 
-void CubeDrawerManager::OnPreRender()
+CubeDrawer::~CubeDrawer()
 {
-}
-
-void CubeDrawerManager::OnPostRender()
-{
-}
-
-
-
-void CubeDrawer::Awake()
-{
-}
-
-void CubeDrawer::OnDestroy()
-{
+    if (s_inst != this) {
+        cpsDebugPrint("CubeDrawer::s_inst is not this!\n");
+    }
+    s_inst = nullptr;
 }
 
 void CubeDrawer::OnPreRender()
 {
+    // todo
+    //m_buffer.SetData(m_data);
+    m_data.clear();
+
 }
 
 void CubeDrawer::OnPostRender()
 {
+}
+
+CubeCont& CubeDrawer::getInstanceBuffer()
+{
+    return m_data;
 }

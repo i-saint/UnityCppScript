@@ -1,6 +1,7 @@
 ﻿#ifndef CubeDrawer_h
 #define CubeDrawer_h
 #include "CppBehaviour.h"
+#include "AsyncBehaviour.h"
 
 struct CubeInstanceData
 {
@@ -9,28 +10,26 @@ struct CubeInstanceData
     Vector4 diffuse;
     Vector4 emission;
 };
-
-class CubeDrawerManager : public CppBehaviour
-{
-typedef CppBehaviour super;
-public:
-    CubeDrawerManager(cpsObject o) : super(o) {}
-    void Awake();
-    void OnDestroy();
-    void OnPreRender();
-    void OnPostRender();
-};
+typedef std::vector<CubeInstanceData> CubeCont;
 
 
 class CubeDrawer : public CppBehaviour
 {
 typedef CppBehaviour super;
 public:
-    CubeDrawer(cpsObject o) : super(o) {}
-    void Awake();
-    void OnDestroy();
+    static CubeDrawer* getInstance();
+
+    CubeDrawer(cpsObject o);
+    ~CubeDrawer();
     void OnPreRender();
     void OnPostRender();
+
+    CubeCont& getInstanceBuffer();
+
+private:
+    static CubeDrawer *s_inst;
+    ComputeBuffer m_buffer;
+    std::vector<CubeInstanceData> m_data;
 };
 
 #endif // CubeDrawer_h
