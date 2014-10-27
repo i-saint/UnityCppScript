@@ -329,7 +329,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponent", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponent", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return ComponentT(s_method.invoke(mobj));
@@ -342,7 +342,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponents", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponents", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return cpsTArray<ComponentT>(s_method.invoke(mobj));
@@ -355,7 +355,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponentInChildren", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentInChildren", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return ComponentT(s_method.invoke(mobj));
@@ -368,7 +368,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponentsInChildren", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentsInChildren", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return cpsTArray<ComponentT>(s_method.invoke(mobj));
@@ -381,7 +381,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponentInParent", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentInParent", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return ComponentT(s_method.invoke(mobj));
@@ -394,7 +394,7 @@ public:
         static cpsCachedMethod s_method;
         if (!s_generics) {
             cpsClass tparams[] = { ComponentT::getClass() };
-            s_generics = mobj.getClass().findMethod("GetComponentsInParent", 0);
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentsInParent", 0);
             s_method = s_generics.instantiate(tparams, 1);
         }
         return cpsTArray<ComponentT>(s_method.invoke(mobj));

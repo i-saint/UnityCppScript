@@ -174,6 +174,11 @@ public:
     void*       getDataPtr();
     template<class T> T& getData(int offset=0) { return *(T*)((size_t)getDataPtr()+offset); }
 
+    // redirect to cpsClass
+    cpsField    findField(const char *name) const;
+    cpsProperty findProperty(const char *name) const;
+    cpsMethod   findMethod(const char *name, int num_args = -1, const char **arg_typenames = nullptr) const;
+
 public:
     MonoObject *mobj;
 };

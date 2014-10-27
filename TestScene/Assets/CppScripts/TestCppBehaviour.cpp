@@ -10,6 +10,11 @@ typedef CppBehaviour super;
 public:
     TestCppBehaviour(cpsObject o);
     virtual ~TestCppBehaviour();
+
+    void OnBeforeSerialize();
+    void OnAfterDeserialize();
+
+
     void Start();
     void Update();
 
@@ -41,6 +46,8 @@ cpsDefineEntryPoint()
 
 #define cpsCurrentClass TestCppBehaviour
 cpsExportClass()
+cpsExportMethod(OnBeforeSerialize)
+cpsExportMethod(OnAfterDeserialize)
 cpsExportMethod(Start)
 cpsExportMethod(Update)
 cpsExportMethod(test1)
@@ -75,6 +82,18 @@ TestCppBehaviour::~TestCppBehaviour()
     cpsDebugPrint("TestCppBehaviour:~TestCppBehaviour()\n");
 }
 
+
+void TestCppBehaviour::OnBeforeSerialize()
+{
+    super::OnBeforeSerialize();
+}
+
+void TestCppBehaviour::OnAfterDeserialize()
+{
+    super::OnAfterDeserialize();
+}
+
+
 void TestCppBehaviour::Start()
 {
     cpsDebugPrint("TestCppBehaviour::Start()\n");
@@ -95,7 +114,7 @@ void TestCppBehaviour::Update()
         cpsDebugPrint("TestCppBehaviour::Update()\n");
         cpsDebugPrint("name: %s\n", trans.get_name().toUTF8());
         if (cpsMethod method = findMethod("ThisFunctionWillBeCalledFromCpp")) {
-            method.invoke(this_cs, nullptr);
+            method.invoke(*this, nullptr);
         }
 
         {

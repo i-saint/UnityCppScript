@@ -333,6 +333,19 @@ void* cpsObject::getDataPtr()
     return (char*)mobj + sizeof(MonoObject);
 }
 
+cpsField cpsObject::findField(const char *name) const
+{
+    return getClass().findField(name);
+}
+cpsProperty cpsObject::findProperty(const char *name) const
+{
+    return getClass().findProperty(name);
+}
+cpsMethod cpsObject::findMethod(const char *name, int num_args, const char **arg_typenames) const
+{
+    return getClass().findMethod(name, num_args, arg_typenames);
+}
+
 
 cpsAPI void cpsAddMethod(const char *name, void *addr)
 {
@@ -415,6 +428,16 @@ cpsCLinkage cpsExport void cpsCoreInitialize()
         path += ";";
         path += path_to_this_module;
         ::SetEnvironmentVariableA("PATH", path.c_str());
+
+        std::string cppscript_dll = path_to_this_module;
+        cppscript_dll += "\\CppScript.dll";
+        HMODULE cppscript = ::LoadLibraryA(cppscript_dll.c_str());
+        if (cppscript) {
+            typedef void(*proc_t)();
+            if (proc_t p = (proc_t)::GetProcAddress(cppscript, "cpsInitialize()")) {
+                p();
+            }
+        }
 
 #if !defined(cpsWithoutDbgHelp)
         ::SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_DEBUG);

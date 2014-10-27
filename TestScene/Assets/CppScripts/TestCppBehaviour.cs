@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 
 public class CppBehaviour : MonoBehaviour
@@ -10,22 +12,25 @@ public class CppBehaviour : MonoBehaviour
     [DllImport("CppScriptCore")]
     public static extern void cpsCoreInitialize();
 
-    [DllImport("CppScript")]
-    public static extern void cpsInitialize();
-
     internal IntPtr this_cpp;
-
-    [SerializeField]
-    internal byte[] serialize_data;
 
     public CppBehaviour()
     {
         cpsCoreInitialize();
-        cpsInitialize();
     }
 
-    ~CppBehaviour()
-    {}
+
+#if UNITY_EDITOR
+    [MenuItem ("Assets/Reload DLL")]
+    static void ReloadDll()
+    {
+#if UNITY_EDITOR_WIN
+        System.Diagnostics.Process p = new Process();
+        p.StartInfo.FileName = "build.bat";
+        p.Start();
+#endif
+    }
+#endif // UNITY_EDITOR
 }
 
 
@@ -44,8 +49,8 @@ public class TestCppBehaviour : CppBehaviour
 
     void Awake()
     {
-        ctor();
         v3value = new Vector3(1.0f, 2.0f, 3.0f);
+        ctor();
     }
 
     void OnDestroy()
@@ -60,6 +65,15 @@ public class TestCppBehaviour : CppBehaviour
     [MethodImplAttribute(MethodImplOptions.InternalCall)]
     public extern void Update();
 
+
+    //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+    //public extern void BeforeAsyncUpdate();
+
+    //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+    //public extern void AsyncUpdate();
+
+    //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+    //public extern void AfterAsyncUpdate();
 
 
 
@@ -110,13 +124,13 @@ public class TestCppBehaviour : CppBehaviour
 
     T TestTemplateMethod<T>() where T : struct
     {
-        Debug.Log("TestTemplateMethod()");
+        UnityEngine.Debug.Log("TestTemplateMethod()");
         return new T();
     }
 
     void ThisFunctionWillBeCalledFromCpp()
     {
-        Debug.Log("ThisFunctionWillBeCalledFromCpp()");
+        UnityEngine.Debug.Log("ThisFunctionWillBeCalledFromCpp()");
 
         Vector3[] v3array = new Vector3[] {
             Vector3.one * 1.0f,
@@ -127,7 +141,7 @@ public class TestCppBehaviour : CppBehaviour
         test2("hogehoge");
 
         //Vector3 v3 = ReturnVector3();
-        //Debug.Log("v3: "+v3.x+", "+v3.y+", "+v3.z);
+        //UnityEngine.Debug.Log("v3: "+v3.x+", "+v3.y+", "+v3.z);
 
         float f = 1.0f;
         Vector2 v2 = new Vector2(0.0f, 1.0f);
@@ -138,30 +152,30 @@ public class TestCppBehaviour : CppBehaviour
         //test2(1.0f, v2);
 
         memfn1(f);
-        //Debug.Log("memfn1: " + f);
+        //UnityEngine.Debug.Log("memfn1: " + f);
         memfn2(f, v2);
-        //Debug.Log("memfn2: " + v2.x + ", " + v2.y);
+        //UnityEngine.Debug.Log("memfn2: " + v2.x + ", " + v2.y);
         memfn3(f, v2, v3);
-        //Debug.Log("memfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        //UnityEngine.Debug.Log("memfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
         memfn4(f, v2, v3, v4);
-        //Debug.Log("memfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+        //UnityEngine.Debug.Log("memfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
 
         cmemfn1(f);
-        //Debug.Log("cmemfn1: " + f);
+        //UnityEngine.Debug.Log("cmemfn1: " + f);
         cmemfn2(f, v2);
-        //Debug.Log("cmemfn2: " + v2.x + ", " + v2.y);
+        //UnityEngine.Debug.Log("cmemfn2: " + v2.x + ", " + v2.y);
         cmemfn3(f, v2, v3);
-        //Debug.Log("cmemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        //UnityEngine.Debug.Log("cmemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
         cmemfn4(f, v2, v3, v4);
-        //Debug.Log("cmemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+        //UnityEngine.Debug.Log("cmemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
 
         smemfn1(f);
-        //Debug.Log("smemfn1: " + f);
+        //UnityEngine.Debug.Log("smemfn1: " + f);
         smemfn2(f, v2);
-        //Debug.Log("smemfn2: " + v2.x + ", " + v2.y);
+        //UnityEngine.Debug.Log("smemfn2: " + v2.x + ", " + v2.y);
         smemfn3(f, v2, v3);
-        //Debug.Log("smemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
+        //UnityEngine.Debug.Log("smemfn3: " + v3.x + ", " + v3.y + ", " + v3.z);
         smemfn4(f, v2, v3, v4);
-        //Debug.Log("smemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
+        //UnityEngine.Debug.Log("smemfn4: " + v4.x + ", " + v4.y + ", " + v4.z + ", " + v4.w);
     }
 }

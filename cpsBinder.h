@@ -561,6 +561,11 @@ inline void cpsDeleteCppThis(cpsObject o)
     delete cpsGetCppThis<T>(o);
     cpsGetCppThisField<T>(o).setValue<T*>(o, nullptr);
 }
+template<class T>
+inline void cpsSetCppThisSingleton(cpsObject o)
+{
+    cpsGetCppThisField<T>(o).setValue<T*>(o, T::getInstance());
+}
 
 
 
@@ -583,14 +588,14 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
 
 #if defined(_WIN32) && !defined(cpsWithoutDbgHelp)
 
-    #define _CRT_SECURE_NO_WARNINGS
-    #include <windows.h>
-    cpsAPI DWORD cpsSEHHandler(EXCEPTION_POINTERS *ep);
-    #define cpsGuard(...)     __try { __VA_ARGS__ } __except( cpsSEHHandler(GetExceptionInformation()) ) {  }
+#define _CRT_SECURE_NO_WARNINGS
+#include <windows.h>
+cpsAPI DWORD cpsSEHHandler(EXCEPTION_POINTERS *ep);
+#define cpsGuard(...)     __try { __VA_ARGS__ } __except( cpsSEHHandler(GetExceptionInformation()) ) {  }
 
 #else 
 
-    #define cpsGuard(...)     { __VA_ARGS__ }
+#define cpsGuard(...)     { __VA_ARGS__ }
 
 #endif // 
 
@@ -617,6 +622,21 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
     cpsAddMethodHelper cpsP(cpsCurrentClass)##_ctor_(cpsS(cpsCurrentClass) "::ctor", &cpsP(cpsCurrentClass)##_ctor);\
     cpsAddMethodHelper cpsP(cpsCurrentClass)##_dtor_(cpsS(cpsCurrentClass) "::dtor", &cpsP(cpsCurrentClass)##_dtor);
 
+#define cpsExportSingletonClass()\
+    cpsExport void cpsP(cpsCurrentClass)##_ctor(MonoObject *o)\
+    {\
+        typedef cpsP(cpsCurrentClass) this_t;\
+        cpsGuard(\
+            cpsSetCppThisSingleton<this_t>(o); \
+        )\
+    }\
+    cpsExport void cpsP(cpsCurrentClass)##_dtor(MonoObject *o)\
+    {\
+    }\
+    cpsAddMethodHelper cpsP(cpsCurrentClass)##_ctor_(cpsS(cpsCurrentClass) "::ctor", &cpsP(cpsCurrentClass)##_ctor);\
+    cpsAddMethodHelper cpsP(cpsCurrentClass)##_dtor_(cpsS(cpsCurrentClass) "::dtor", &cpsP(cpsCurrentClass)##_dtor);
+
+
 #define cpsExportMethod(MethodName)\
     cpsExport auto cpsP(cpsCurrentClass)##_##MethodName(MonoObject *o, ...) -> decltype(cpsCSCall(&cpsP(cpsCurrentClass)::##MethodName, (cpsP(cpsCurrentClass)*)nullptr, nullptr))\
     {\
@@ -626,7 +646,13 @@ inline T* cpsGetFieldValuePtr(cpsObject parent, cpsField field)
         va_list args;\
         va_start(args, o);\
         cpsGuard(\
-            ret = cpsCSCall(&this_t::##MethodName, cpsGetCppThis<this_t>(o), args);\
+            this_t *this_cpp = cpsGetCppThis<this_t>(o);\
+            if(this_cpp) {\
+                ret = cpsCSCall(&this_t::##MethodName, this_cpp, args);\
+            }\
+            else{\
+                cpsDebugPrint("%p " cpsS(cpsCurrentClass) "::" #MethodName "(): this_cpp is null\n", o);\
+            }\
         )\
         va_end(args);\
         return ret;\
