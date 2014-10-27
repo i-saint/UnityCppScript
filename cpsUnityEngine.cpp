@@ -13,7 +13,7 @@
     if (!s_method) { s_method = getClass().findMethod(__VA_ARGS__); }
 
 
-namespace cpsUnityEngine
+namespace UnityEngine
 {
 
 const Vector2 Vector2::zero = Vector2(0.0f, 0.0f);
@@ -36,11 +36,13 @@ cpsAPI cpsImage& GetImage()
 }
 
 
+cpsImplTraits(UnityEngine, Vector2);
+cpsImplTraits(UnityEngine, Vector3);
+cpsImplTraits(UnityEngine, Vector4);
+cpsImplTraits(UnityEngine, Quaternion);
+cpsImplTraits(UnityEngine, Matrix4x4);
 
-/*static*/ cpsClass Application::getClass()
-{
-    cpsBindClass("UnityEngine", "Application");
-}
+cpsImplTraits(UnityEngine, Application);
 
 /*static*/ cpsString Application::get_dataPath()
 {
@@ -57,10 +59,7 @@ cpsAPI cpsImage& GetImage()
 
 
 
-/*static*/ cpsClass Debug::getClass()
-{
-    cpsBindClass("UnityEngine", "Debug");
-}
+cpsImplTraits(UnityEngine, Debug);
 
 /*static*/ void Debug::Log(cpsString message)
 {
@@ -78,13 +77,12 @@ cpsAPI cpsImage& GetImage()
     s_method.invoke(nullptr, args);
 }
 
-/*static*/ cpsClass Graphics::getClass()
-{
-    cpsBindClass("UnityEngine", "Graphics");
-}
+
+cpsImplTraits(UnityEngine, Graphics);
 
 
-/*static*/ cpsClass Object::getClass() { cpsBindClass("UnityEngine", "Object"); }
+cpsImplTraits(UnityEngine, Object);
+
 Object::Object(cpsObject v) : super(v) {}
 
 cpsString Object::get_name() const
@@ -166,37 +164,38 @@ cpsString Object::ToString() const
 
 
 
-/*static*/ cpsClass Texture::getClass() { cpsBindClass("UnityEngine", "Texture"); }
+cpsImplTraits(UnityEngine, Texture);
 Texture::Texture(cpsObject v) : super(v) {}
 
+cpsImplTraits(UnityEngine, Texture2D);
+Texture2D::Texture2D(cpsObject v) : super(v) {}
 
-
-/*static*/ cpsClass RenderTexture::getClass() { cpsBindClass("UnityEngine", "RenderTexture"); }
+cpsImplTraits(UnityEngine, RenderTexture);
 RenderTexture::RenderTexture(cpsObject v) : super(v) {}
 
 
 
-/*static*/ cpsClass ComputeBuffer::getClass() { cpsBindClass("UnityEngine", "ComputeBuffer"); }
+cpsImplTraits(UnityEngine, ComputeBuffer);
 ComputeBuffer::ComputeBuffer(cpsObject v) : super(v) {}
 
 
 
-/*static*/ cpsClass PhysicMaterial::getClass() { cpsBindClass("UnityEngine", "PhysicMaterial"); }
+cpsImplTraits(UnityEngine, PhysicMaterial);
 PhysicMaterial::PhysicMaterial(cpsObject v) : super(v) {}
 
 
 
-/*static*/ cpsClass PhysicMaterial2D::getClass() { cpsBindClass("UnityEngine", "PhysicMaterial2D"); }
+cpsImplTraits(UnityEngine, PhysicMaterial2D);
 PhysicMaterial2D::PhysicMaterial2D(cpsObject v) : super(v) {}
 
 
 
-/*static*/ cpsClass GameObject::getClass() { cpsBindClass("UnityEngine", "GameObject"); }
+cpsImplTraits(UnityEngine, GameObject);
 GameObject::GameObject(cpsObject v) : super(v) {}
 
 
 
-/*static*/ cpsClass Behaviour::getClass() { cpsBindClass("UnityEngine", "Behaviour"); }
+cpsImplTraits(UnityEngine, Behaviour);
 Behaviour::Behaviour(cpsObject obj) : super(obj) {}
 
 bool Behaviour::get_enabled() const
@@ -214,7 +213,7 @@ void Behaviour::set_enabled(bool v)
 
 
 
-/*static*/ cpsClass Component::getClass() { cpsBindClass("UnityEngine", "Component"); }
+cpsImplTraits(UnityEngine, Component);
 Component::Component(cpsObject obj) : super(obj) {}
 
 GameObject Component::get_gameObject() const
@@ -277,8 +276,7 @@ void Component::BroadcastMessage(cpsString method_name, cpsObject obj, SendMessa
 
 
 
-
-/*static*/ cpsClass Transform::getClass() { cpsBindClass("UnityEngine", "Transform"); }
+cpsImplTraits(UnityEngine, Transform);
 Transform::Transform(cpsObject obj) : super(obj) {}
 
 Vector3 Transform::get_position() const
@@ -444,14 +442,14 @@ void Transform::set_hasChanged(bool v)
 
 void Transform::Translate(const Vector3& v, Space s)
 {
-    static const char *typenames[] = {"UnityEngine.Vector3", "UnityEngine.Space"};
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<Space>() };
     cpsBindMethod("Translate", 2, typenames);
     void *args[] = { (void*)&v, &s };
     s_method.invoke(mobj, args);
 }
 void Transform::Translate(const Vector3& v, Transform relative)
 {
-    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Transform" };
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<Transform>() };
     cpsBindMethod("Translate", 2, typenames);
     void *args[] = { (void*)&v, relative.mobj };
     s_method.invoke(mobj, args);
@@ -459,21 +457,21 @@ void Transform::Translate(const Vector3& v, Transform relative)
 
 void Transform::Rotate(const Vector3& eulerAngles, Space s)
 {
-    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Space" };
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<Space>() };
     cpsBindMethod("Rotate", 2, typenames);
     void *args[] = { (void*)&eulerAngles, &s };
     s_method.invoke(mobj, args);
 }
 void Transform::Rotate(const Vector3& axis, float angle, Space s)
 {
-    static const char *typenames[] = { "UnityEngine.Vector3", "System.Single", "UnityEngine.Space" };
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Space>() };
     cpsBindMethod("Rotate", 3, typenames);
     void *args[] = { (void*)&axis, &angle, &s };
     s_method.invoke(mobj, args);
 }
 void Transform::RotateAround(const Vector3& point, const Vector3& axis, float angle)
 {
-    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Vector3", "System.Single" };
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>() };
     cpsBindMethod("RotateAround", 3, typenames);
     void *args[] = { (void*)&point, (void*)&axis, &angle };
     s_method.invoke(mobj, args);
@@ -481,14 +479,14 @@ void Transform::RotateAround(const Vector3& point, const Vector3& axis, float an
 
 void Transform::LookAt(Transform t, const Vector3& up)
 {
-    static const char *typenames[] = { "UnityEngine.Transform", "UnityEngine.Vector3" };
+    static const char *typenames[] = { cpsTypename<Transform>(), cpsTypename<Vector3>() };
     cpsBindMethod("LookAt", 2, typenames);
     void *args[] = { t.mobj, (void*)&up };
     s_method.invoke(mobj, args);
 }
 void Transform::LookAt(const Vector3& worldPos, const Vector3&up)
 {
-    static const char *typenames[] = { "UnityEngine.Vector3", "UnityEngine.Vector3" };
+    static const char *typenames[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>() };
     cpsBindMethod("LookAt", 2, typenames);
     void *args[] = { (void*)&worldPos, (void*)&up };
     s_method.invoke(mobj, args);
@@ -615,17 +613,17 @@ bool Transform::IsNonUniformScaleTransform()
 
 
 
-/*static*/ cpsClass Rigidbody::getClass() { cpsBindClass("UnityEngine", "Rigidbody"); }
+cpsImplTraits(UnityEngine, Rigidbody);
 Rigidbody::Rigidbody(cpsObject obj) : super(obj) {}
 
 
 
-/*static*/ cpsClass Rigidbody2D::getClass() { cpsBindClass("UnityEngine", "Rigidbody2D"); }
+cpsImplTraits(UnityEngine, Rigidbody2D);
 Rigidbody2D::Rigidbody2D(cpsObject obj) : super(obj) {}
 
 
 
-/*static*/ cpsClass Collider::getClass() { cpsBindClass("UnityEngine", "Collider"); }
+cpsImplTraits(UnityEngine, Collider);
 Collider::Collider(cpsObject obj) : super(obj) {}
 
 bool Collider::get_enabled()
@@ -703,21 +701,24 @@ bool Collider::Raycast(const Ray &ray, RaycastHit &hit, float dist)
 
 
 
-/*static*/ cpsClass Collider2D::getClass() { cpsBindClass("UnityEngine", "Collider2D"); }
+cpsImplTraits(UnityEngine, Collider2D);
 Collider2D::Collider2D(cpsObject obj) : super(obj) {}
 
 
 
-/*static*/ cpsClass Camera::getClass() { cpsBindClass("UnityEngine", "Camera"); }
+cpsImplTraits(UnityEngine, Camera);
 Camera::Camera(cpsObject obj) : super(obj) {}
 
 
 
-/*static*/ cpsClass Light::getClass() { cpsBindClass("UnityEngine", "Light"); }
+cpsImplTraits(UnityEngine, Light);
 Light::Light(cpsObject obj) : super(obj) {}
 
 
 
-
-
 } // namespace cpsUnityEngine
+
+
+cpsImplTraitsF(UnityEngine, Space)
+cpsImplTraitsF(UnityEngine, SendMessageOptions)
+cpsImplTraitsF(UnityEngine, HideFlags)

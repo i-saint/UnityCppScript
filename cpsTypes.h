@@ -236,8 +236,45 @@ private:
 };
 
 
-//template<class T> const char* cpsGetTypename();
-//template<class T> cpsClass    cpsGetClass();
+template<class T> const char* cpsTypename() { return T::getTypename(); }
+template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
+
+template<> cpsAPI const char* cpsTypename<float>();
+template<> cpsAPI cpsClass    cpsTypeinfo<float>();
+
+
+#define cpsDeclTraits()\
+    static cpsClass getClass();\
+    static const char* getTypename();
+
+
+#define cpsImplTraits(Namespace, Type)\
+    cpsClass Type::getClass()\
+    {\
+        static cpsCachedClass s_class;\
+        if (!s_class) { s_class = GetImage().findClass(#Namespace, #Type); }\
+        return s_class;\
+    }\
+    const char* Type::getTypename()\
+    {\
+        return #Namespace "." #Type;\
+    }
+
+#define cpsDeclTraitsF(Namespace, Type)\
+    template<> cpsAPI const char* cpsTypename<Namespace##::##Type>();\
+    template<> cpsAPI cpsClass    cpsTypeinfo<Namespace##::##Type>();
+
+#define cpsImplTraitsF(Namespace, Type)\
+    template<> cpsAPI cpsClass cpsTypeinfo<Namespace##::##Type>()\
+    {\
+        static cpsCachedClass s_class;\
+        if (!s_class) { s_class = Namespace::GetImage().findClass(#Namespace, #Type); }\
+        return s_class;\
+    }\
+    template<> cpsAPI const char* cpsTypename<Namespace##::##Type>()\
+    {\
+        return #Namespace "." #Type;\
+    }\
 
 #endif // cpsTypes_h

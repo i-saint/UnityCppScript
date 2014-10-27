@@ -4,7 +4,7 @@
 #include "cpsTypes.h"
 #include <vector>
 
-namespace cpsUnityEngine
+namespace UnityEngine
 {
 
 cpsAPI cpsImage& GetImage();
@@ -37,6 +37,7 @@ enum HideFlags
 
 struct cpsAPI Vector2
 {
+    cpsDeclTraits();
     static const Vector2 zero;
     static const Vector2 one;
 
@@ -49,6 +50,7 @@ struct cpsAPI Vector2
 
 struct cpsAPI Vector3
 {
+    cpsDeclTraits();
     static const Vector3 zero;
     static const Vector3 one;
     static const Vector3 up;
@@ -62,6 +64,7 @@ struct cpsAPI Vector3
 
 struct cpsAPI Vector4
 {
+    cpsDeclTraits();
     static const Vector4 zero;
     static const Vector4 one;
 
@@ -74,6 +77,7 @@ struct cpsAPI Vector4
 
 struct cpsAPI Quaternion
 {
+    cpsDeclTraits();
     static const Quaternion identity;
 
     union {
@@ -85,6 +89,7 @@ struct cpsAPI Quaternion
 
 struct cpsAPI Matrix4x4
 {
+    cpsDeclTraits();
     static const Matrix4x4 identity;
 
     union {
@@ -97,24 +102,32 @@ struct cpsAPI Matrix4x4
 
 struct cpsAPI Bounds
 {
+    cpsDeclTraits();
+
     Vector3 center;
     Vector3 extents;
 };
 
 struct cpsAPI Ray
 {
+    cpsDeclTraits();
+
     Vector3 direction;
     Vector3 origin;
 };
 
 struct cpsAPI Ray2D
 {
+    cpsDeclTraits();
+
     Vector2 direction;
     Vector2 origin;
 };
 
 struct cpsAPI RaycastHit
 {
+    cpsDeclTraits();
+
     float       distance;
     Vector2     uv;
     cpsObject   collider; // Collider
@@ -125,6 +138,8 @@ struct cpsAPI RaycastHit
 
 struct cpsAPI RaycastHit2D
 {
+    cpsDeclTraits();
+
     float       distance;
     float       fraction;
     cpsObject   collider; // Collider2D
@@ -139,7 +154,7 @@ struct cpsAPI RaycastHit2D
 class cpsAPI Application
 {
 public:
-    static cpsClass     getClass();
+    cpsDeclTraits();
     static cpsString    get_dataPath();
     static bool         get_isEditor();
 };
@@ -148,7 +163,7 @@ public:
 class cpsAPI Debug
 {
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     static void Log(cpsString message);
     static void Log(cpsString message, cpsObject obj);
 };
@@ -157,27 +172,27 @@ public:
 class cpsAPI GL
 {
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 };
 
 
 class cpsAPI GUI
 {
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 };
 
 
 class cpsAPI Graphics
 {
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 };
 
 class cpsAPI Physics
 {
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 };
 
 
@@ -187,7 +202,7 @@ class cpsAPI Object : public cpsObject
 {
 typedef cpsObject super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 
     Object(cpsObject = nullptr);
     cpsString   get_name() const;
@@ -238,16 +253,21 @@ class cpsAPI Texture : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Texture(cpsObject v = nullptr);
 };
-
-
-class cpsAPI RenderTexture : public Object
+class cpsAPI Texture2D : public Texture
 {
-typedef Object super;
+typedef Texture super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
+    Texture2D(cpsObject v = nullptr);
+};
+class cpsAPI RenderTexture : public Texture
+{
+typedef Texture super;
+public:
+    cpsDeclTraits();
     RenderTexture(cpsObject = nullptr);
 };
 
@@ -256,7 +276,7 @@ class cpsAPI ComputeBuffer : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     ComputeBuffer(cpsObject = nullptr);
 };
 
@@ -264,7 +284,7 @@ class cpsAPI PhysicMaterial : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     PhysicMaterial(cpsObject v = nullptr);
 };
 
@@ -272,7 +292,7 @@ class cpsAPI PhysicMaterial2D : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     PhysicMaterial2D(cpsObject v = nullptr);
 };
 
@@ -284,7 +304,7 @@ class cpsAPI GameObject : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     GameObject(cpsObject v = nullptr);
 };
 
@@ -292,7 +312,7 @@ class cpsAPI Component : public Object
 {
 typedef Object super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Component(cpsObject obj=nullptr);
 
     //// obsolete in Unity5. use GetComponent<T>() instead
@@ -410,7 +430,7 @@ class cpsAPI Behaviour : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Behaviour(cpsObject obj = nullptr);
     bool get_enabled() const;
     void set_enabled(bool v);
@@ -421,10 +441,9 @@ class cpsAPI Transform : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
 
     Transform(cpsObject obj=nullptr);
-
     Vector3     get_position() const;
     void        set_position(const Vector3& v);
     Vector3     get_localPosition() const;
@@ -486,7 +505,7 @@ class cpsAPI Rigidbody : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Rigidbody(cpsObject obj = nullptr);
 };
 
@@ -495,7 +514,7 @@ class cpsAPI Rigidbody2D : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Rigidbody2D(cpsObject obj = nullptr);
 };
 
@@ -504,7 +523,7 @@ class cpsAPI Collider : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Collider(cpsObject obj = nullptr);
 
     bool            get_enabled();
@@ -527,7 +546,7 @@ class cpsAPI Collider2D : public Behaviour
 {
 typedef Behaviour super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Collider2D(cpsObject obj = nullptr);
 };
 
@@ -536,7 +555,7 @@ class cpsAPI Camera : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Camera(cpsObject obj = nullptr);
 };
 
@@ -545,10 +564,16 @@ class cpsAPI Light : public Component
 {
 typedef Component super;
 public:
-    static cpsClass getClass();
+    cpsDeclTraits();
     Light(cpsObject obj = nullptr);
 };
 
 
 } // namespace cpsUnityEngine
+
+
+cpsDeclTraitsF(UnityEngine, Space)
+cpsDeclTraitsF(UnityEngine, SendMessageOptions)
+cpsDeclTraitsF(UnityEngine, HideFlags)
+
 #endif // cpsUnityEngine_h

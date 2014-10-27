@@ -168,7 +168,7 @@ cpsAPI void cpsDebugPrint(const char *format, ...)
     char buf[1024 * 8];
     vsprintf(buf, format, args);
 
-    cpsUnityEngine::Debug::Log(cpsString::create(buf));
+    UnityEngine::Debug::Log(cpsString::create(buf));
 
 #ifdef WIN32
     ::OutputDebugStringA(buf);

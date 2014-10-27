@@ -394,6 +394,18 @@ void* cpsArray::getData()
 }
 
 
+template<> cpsAPI cpsClass cpsTypeinfo<float>()
+{
+    static cpsCachedClass s_class;
+    if (!s_class) { s_class = mono_get_single_class(); }
+    return s_class;
+}
+template<> cpsAPI const char* cpsTypename<float>()
+{
+    return "System.Single";
+}
+
+
 
 void cpsClearCache();
 
