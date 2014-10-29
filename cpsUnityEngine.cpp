@@ -39,6 +39,8 @@ cpsAPI cpsImage& GetImage()
 cpsImplTraits(UnityEngine, Vector2);
 cpsImplTraits(UnityEngine, Vector3);
 cpsImplTraits(UnityEngine, Vector4);
+cpsImplTraits(UnityEngine, Color);
+cpsImplTraits(UnityEngine, Color32);
 cpsImplTraits(UnityEngine, Quaternion);
 cpsImplTraits(UnityEngine, Matrix4x4);
 
@@ -48,244 +50,7 @@ cpsImplTraits(UnityEngine, Ray2D);
 cpsImplTraits(UnityEngine, RaycastHit);
 cpsImplTraits(UnityEngine, RaycastHit2D);
 
-cpsImplTraits(UnityEngine, Application);
-
-/*static*/ cpsString Application::get_dataPath()
-{
-    cpsBindMethod("get_dataPath");
-    return cpsString(s_method.invoke(nullptr, nullptr));
-}
-
-/*static*/ bool Application::get_isEditor()
-{
-    cpsBindMethod("get_isEditor");
-    cpsObject ret = s_method.invoke(nullptr, nullptr);
-    return *((gboolean*)ret.getDataPtr()) != 0;
-}
-
-
-
-cpsImplTraits(UnityEngine, Debug);
-
-/*static*/ void Debug::Log(cpsString message)
-{
-    cpsBindMethod("Log", 1);
-
-    void *args[] = { message };
-    s_method.invoke(nullptr, args);
-}
-
-/*static*/ void Debug::Log(cpsString message, cpsObject obj)
-{
-    cpsBindMethod("Log", 2);
-
-    void *args[] = { message, obj };
-    s_method.invoke(nullptr, args);
-}
-
-
-cpsImplTraits(UnityEngine, GL);
-
-
-cpsImplTraits(UnityEngine, GUI);
-
-
-cpsImplTraits(UnityEngine, Graphics);
-
-
-cpsImplTraits(UnityEngine, Physics);
-/*static*/ Vector3 Physics::get_gravity()
-{
-    cpsBindMethod("get_gravity");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<Vector3>();
-}
-/*static*/ void Physics::set_gravity(const Vector3 v)
-{
-    cpsBindMethod("set_gravity");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ float Physics::get_minPenetrationForPenalty()
-{
-    cpsBindMethod("get_minPenetrationForPenalty");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
-}
-/*static*/ void Physics::set_minPenetrationForPenalty(float v)
-{
-    cpsBindMethod("set_minPenetrationForPenalty");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ float Physics::get_bounceThreshold()
-{
-    cpsBindMethod("get_bounceThreshold");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
-}
-/*static*/ void Physics::set_bounceThreshold(float v)
-{
-    cpsBindMethod("set_bounceThreshold");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ float Physics::get_sleepVelocity()
-{
-    cpsBindMethod("get_sleepVelocity");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
-}
-/*static*/ void Physics::set_sleepVelocity(float v)
-{
-    cpsBindMethod("set_sleepVelocity");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ float Physics::get_sleepAngularVelocity()
-{
-    cpsBindMethod("get_sleepAngularVelocity");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
-}
-/*static*/ void Physics::set_sleepAngularVelocity(float v)
-{
-    cpsBindMethod("set_sleepAngularVelocity");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ float Physics::get_maxAngularVelocity()
-{
-    cpsBindMethod("get_maxAngularVelocity");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
-}
-/*static*/ void Physics::set_maxAngularVelocity(float v)
-{
-    cpsBindMethod("set_maxAngularVelocity");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-/*static*/ int Physics::get_solverIterationCount()
-{
-    cpsBindMethod("get_solverIterationCount");
-    cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<int>();
-}
-/*static*/ void Physics::set_solverIterationCount(int v)
-{
-    cpsBindMethod("set_solverIterationCount");
-    void *args[] = { (void*)&v };
-    s_method.invoke(nullptr, args);
-}
-
-/*static*/ bool Physics::CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CheckCapsule", 4, names);
-    void *args[] = { (void*)&start, (void*)&end, &radius, &layermask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ bool Physics::CheckSphere(const Vector3 &position, float radius, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>()};
-    cpsBindMethod("CheckSphere", 3, names);
-    void *args[] = {(void*)&position, &radius, &layerMask};
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ bool Physics::Raycast(const Ray &ray, RaycastHit &hitInfo, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Ray>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("Raycast", 4, names);
-    void *args[] = {(void*)&ray, &hitInfo, &distance, &layerMask};
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ bool Physics::CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CapsuleCast", 7, names);
-    void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ bool Physics::Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<int>() };
-    cpsBindMethod("Linecast", 4, names);
-    void *args[] = { (void*)&start, (void*)&end, (void*)&hitInfo, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ bool Physics::SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("SphereCast", 5, names);
-    void *args[] = { (void*)&ray, (void*)&radius, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ cpsTArray<Collider> Physics::OverlapSphere(const Vector3 &position, float radius, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("OverlapSphere", 3, names);
-    void *args[] = { (void*)&position, (void*)&radius, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return cpsTArray<Collider>(ret);
-}
-/*static*/ cpsTArray<RaycastHit> Physics::RaycastAll(const Ray &ray, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("RaycastAll", 3, names);
-    void *args[] = { (void*)&ray, (void*)&distance, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return cpsTArray<RaycastHit>(ret);
-}
-/*static*/ cpsTArray<RaycastHit> Physics::SphereCastAll(const Ray &ray, float radius, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("SphereCastAll", 4, names);
-    void *args[] = { (void*)&ray, (void*)&radius, (void*)&distance, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return cpsTArray<RaycastHit>(ret);
-}
-/*static*/ cpsTArray<RaycastHit> Physics::CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance, int layerMask)
-{
-    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CapsuleCastAll", 6, names);
-    void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&distance, (void*)&layerMask };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return cpsTArray<RaycastHit>(ret);
-}
-/*static*/ bool Physics::GetIgnoreLayerCollision(int layer1, int layer2)
-{
-    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>() };
-    cpsBindMethod("GetIgnoreLayerCollision", 2, names);
-    void *args[] = { &layer1, &layer2 };
-    cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
-}
-/*static*/ void Physics::IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
-{
-    static const char *names[] = { cpsTypename<Collider>(), cpsTypename<Collider>(), cpsTypename<bool>() };
-    cpsBindMethod("IgnoreCollision", 3, names);
-    gboolean ignore_ = ignore;
-    void *args[] = { collider1, collider2, &ignore_ };
-    cpsObject ret = s_method.invoke(nullptr, args);
-}
-/*static*/ void Physics::IgnoreLayerCollision(int layer1, int layer2, bool ignore)
-{
-    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>(), cpsTypename<bool>() };
-    cpsBindMethod("IgnoreLayerCollision", 3, names);
-    gboolean ignore_ = ignore;
-    void *args[] = { &layer1, &layer2, &ignore_ };
-    cpsObject ret = s_method.invoke(nullptr, args);
-}
-
-
-cpsImplTraits(UnityEngine, Physics2D);
+cpsImplTraits(UnityEngine, RenderBuffer);
 
 
 
@@ -371,6 +136,18 @@ cpsString Object::ToString() const
 }
 
 
+
+cpsImplTraits(UnityEngine, Mesh);
+Mesh::Mesh(cpsObject v) : super(v) {}
+
+cpsImplTraits(UnityEngine, Material);
+Material::Material(cpsObject v) : super(v) {}
+
+cpsImplTraits(UnityEngine, MaterialPropertyBlock);
+MaterialPropertyBlock::MaterialPropertyBlock(cpsObject v) : super(v) {}
+
+cpsImplTraits(UnityEngine, Shader);
+Shader::Shader(cpsObject v) : super(v) {}
 
 cpsImplTraits(UnityEngine, Texture);
 Texture::Texture(cpsObject v) : super(v) {}
@@ -984,10 +761,258 @@ Light::Light(cpsObject obj) : super(obj) {}
 
 
 
+
+
+
+
+cpsImplTraits(UnityEngine, Application);
+
+/*static*/ cpsString Application::get_dataPath()
+{
+    cpsBindMethod("get_dataPath");
+    return cpsString(s_method.invoke(nullptr, nullptr));
+}
+
+/*static*/ bool Application::get_isEditor()
+{
+    cpsBindMethod("get_isEditor");
+    cpsObject ret = s_method.invoke(nullptr, nullptr);
+    return *((gboolean*)ret.getDataPtr()) != 0;
+}
+
+
+
+cpsImplTraits(UnityEngine, Debug);
+
+/*static*/ void Debug::Log(cpsString message)
+{
+    cpsBindMethod("Log", 1);
+
+    void *args[] = { message };
+    s_method.invoke(nullptr, args);
+}
+
+/*static*/ void Debug::Log(cpsString message, cpsObject obj)
+{
+    cpsBindMethod("Log", 2);
+
+    void *args[] = { message, obj };
+    s_method.invoke(nullptr, args);
+}
+
+
+cpsImplTraits(UnityEngine, GL);
+
+
+cpsImplTraits(UnityEngine, GUI);
+
+
+cpsImplTraits(UnityEngine, Graphics);
+
+
+cpsImplTraits(UnityEngine, Physics);
+/*static*/ Vector3 Physics::get_gravity()
+{
+    cpsBindMethod("get_gravity");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<Vector3>();
+}
+/*static*/ void Physics::set_gravity(const Vector3 v)
+{
+    cpsBindMethod("set_gravity");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Physics::get_minPenetrationForPenalty()
+{
+    cpsBindMethod("get_minPenetrationForPenalty");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<float>();
+}
+/*static*/ void Physics::set_minPenetrationForPenalty(float v)
+{
+    cpsBindMethod("set_minPenetrationForPenalty");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Physics::get_bounceThreshold()
+{
+    cpsBindMethod("get_bounceThreshold");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<float>();
+}
+/*static*/ void Physics::set_bounceThreshold(float v)
+{
+    cpsBindMethod("set_bounceThreshold");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Physics::get_sleepVelocity()
+{
+    cpsBindMethod("get_sleepVelocity");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<float>();
+}
+/*static*/ void Physics::set_sleepVelocity(float v)
+{
+    cpsBindMethod("set_sleepVelocity");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Physics::get_sleepAngularVelocity()
+{
+    cpsBindMethod("get_sleepAngularVelocity");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<float>();
+}
+/*static*/ void Physics::set_sleepAngularVelocity(float v)
+{
+    cpsBindMethod("set_sleepAngularVelocity");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Physics::get_maxAngularVelocity()
+{
+    cpsBindMethod("get_maxAngularVelocity");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<float>();
+}
+/*static*/ void Physics::set_maxAngularVelocity(float v)
+{
+    cpsBindMethod("set_maxAngularVelocity");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ int Physics::get_solverIterationCount()
+{
+    cpsBindMethod("get_solverIterationCount");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<int>();
+}
+/*static*/ void Physics::set_solverIterationCount(int v)
+{
+    cpsBindMethod("set_solverIterationCount");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+
+/*static*/ bool Physics::CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("CheckCapsule", 4, names);
+    void *args[] = { (void*)&start, (void*)&end, &radius, &layermask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ bool Physics::CheckSphere(const Vector3 &position, float radius, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("CheckSphere", 3, names);
+    void *args[] = { (void*)&position, &radius, &layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ bool Physics::Raycast(const Ray &ray, RaycastHit &hitInfo, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Ray>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("Raycast", 4, names);
+    void *args[] = { (void*)&ray, &hitInfo, &distance, &layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ bool Physics::CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("CapsuleCast", 7, names);
+    void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ bool Physics::Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<int>() };
+    cpsBindMethod("Linecast", 4, names);
+    void *args[] = { (void*)&start, (void*)&end, (void*)&hitInfo, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ bool Physics::SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("SphereCast", 5, names);
+    void *args[] = { (void*)&ray, (void*)&radius, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ cpsTArray<Collider> Physics::OverlapSphere(const Vector3 &position, float radius, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("OverlapSphere", 3, names);
+    void *args[] = { (void*)&position, (void*)&radius, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return cpsTArray<Collider>(ret);
+}
+/*static*/ cpsTArray<RaycastHit> Physics::RaycastAll(const Ray &ray, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("RaycastAll", 3, names);
+    void *args[] = { (void*)&ray, (void*)&distance, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return cpsTArray<RaycastHit>(ret);
+}
+/*static*/ cpsTArray<RaycastHit> Physics::SphereCastAll(const Ray &ray, float radius, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("SphereCastAll", 4, names);
+    void *args[] = { (void*)&ray, (void*)&radius, (void*)&distance, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return cpsTArray<RaycastHit>(ret);
+}
+/*static*/ cpsTArray<RaycastHit> Physics::CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance, int layerMask)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
+    cpsBindMethod("CapsuleCastAll", 6, names);
+    void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&distance, (void*)&layerMask };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return cpsTArray<RaycastHit>(ret);
+}
+/*static*/ bool Physics::GetIgnoreLayerCollision(int layer1, int layer2)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>() };
+    cpsBindMethod("GetIgnoreLayerCollision", 2, names);
+    void *args[] = { &layer1, &layer2 };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return ret.getData<gboolean>() != 0;
+}
+/*static*/ void Physics::IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
+{
+    static const char *names[] = { cpsTypename<Collider>(), cpsTypename<Collider>(), cpsTypename<bool>() };
+    cpsBindMethod("IgnoreCollision", 3, names);
+    gboolean ignore_ = ignore;
+    void *args[] = { collider1, collider2, &ignore_ };
+    cpsObject ret = s_method.invoke(nullptr, args);
+}
+/*static*/ void Physics::IgnoreLayerCollision(int layer1, int layer2, bool ignore)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>(), cpsTypename<bool>() };
+    cpsBindMethod("IgnoreLayerCollision", 3, names);
+    gboolean ignore_ = ignore;
+    void *args[] = { &layer1, &layer2, &ignore_ };
+    cpsObject ret = s_method.invoke(nullptr, args);
+}
+
+
+cpsImplTraits(UnityEngine, Physics2D);
+
+
+
+
 } // namespace cpsUnityEngine
 
 
 cpsImplTraitsF(UnityEngine, Space)
 cpsImplTraitsF(UnityEngine, SendMessageOptions)
 cpsImplTraitsF(UnityEngine, HideFlags)
+cpsImplTraitsF(UnityEngine, MeshTopology)
+cpsImplTraitsF(UnityEngine, CubemapFace)
 cpsImplTraitsF(UnityEngine, ComputeBufferType)

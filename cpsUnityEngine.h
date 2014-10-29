@@ -7,8 +7,17 @@
 namespace UnityEngine
 {
 
-    class cpsAPI Collider;
-    class cpsAPI Collider2D;
+class cpsAPI Collider;
+class cpsAPI Collider2D;
+class cpsAPI Shader;
+class cpsAPI Material;
+class cpsAPI MaterialPropertyBlock;
+class cpsAPI Texture;
+class cpsAPI Texture2D;
+class cpsAPI RenderTexture;
+class cpsAPI ComputeBuffer;
+class cpsAPI Mesh;
+class cpsAPI Camera;
 
 
 
@@ -36,6 +45,25 @@ enum HideFlags
     DontSaveInBuild = 32,
     DontSave = 52,
     HideAndDontSave = 61
+};
+
+enum MeshTopology
+{
+    Triangles,
+    Quads = 2,
+    Lines,
+    LineStrip,
+    Points
+};
+
+enum CubemapFace
+{
+    PositiveX,
+    NegativeX,
+    PositiveY,
+    NegativeY,
+    PositiveZ,
+    NegativeZ
 };
 
 enum ComputeBufferType
@@ -89,6 +117,36 @@ struct cpsAPI Vector4
     Vector4(float a = 0.0f, float b = 0.0f, float c = 0.0f, float d = 0.0f) : x(a), y(b), z(c), w(d){}
 };
 
+struct Color
+{
+    cpsDeclTraits();
+    static const Color black;
+    static const Color blue;
+    static const Color clear;
+    static const Color cyan;
+    static const Color gray;
+    static const Color green;
+    static const Color grey;
+    static const Color magenta;
+    static const Color red;
+    static const Color white;
+    static const Color yellow;
+
+    union {
+        struct { float b,a,r,g; };
+        float v[4];
+    };
+};
+
+struct Color32
+{
+    cpsDeclTraits();
+    union {
+        struct { uint8_t b, a, r, g; };
+        uint8_t v[4];
+    };
+};
+
 struct cpsAPI Quaternion
 {
     cpsDeclTraits();
@@ -109,10 +167,20 @@ struct cpsAPI Matrix4x4
     union {
         float v[16];
     };
-    Matrix4x4() {}
+    Matrix4x4();
 };
 
 
+
+struct Rect
+{
+    cpsDeclTraits();
+
+    float width;
+    float height;
+    float xmin;
+    float ymin;
+};
 
 struct cpsAPI Bounds
 {
@@ -162,95 +230,15 @@ struct cpsAPI RaycastHit2D
     Vector2     normal;
 };
 
-
-
-
-class cpsAPI Application
+struct cpsAPI RenderBuffer
 {
-public:
     cpsDeclTraits();
-    static cpsString    get_dataPath();
-    static bool         get_isEditor();
+
+    void *buffer_ptr;
+    int rendertexture_instanceID;
 };
 
 
-class cpsAPI Debug
-{
-public:
-    cpsDeclTraits();
-    static void Log(cpsString message);
-    static void Log(cpsString message, cpsObject obj);
-};
-
-
-class cpsAPI GL
-{
-public:
-    cpsDeclTraits();
-};
-
-
-class cpsAPI GUI
-{
-public:
-    cpsDeclTraits();
-};
-
-
-class cpsAPI Graphics
-{
-public:
-    cpsDeclTraits();
-
-};
-
-class cpsAPI Physics
-{
-public:
-    cpsDeclTraits();
-
-    static const int IgnoreRaycastLayer = 4;
-    static const int DefaultRaycastLayers = -5;
-    static const int AllLayers = -1;
-    static const int kIgnoreRaycastLayer = 4;
-    static const int kDefaultRaycastLayers = -5;
-    static const int kAllLayers = -1;
-
-    static Vector3  get_gravity();
-    static void     set_gravity(const Vector3 v);
-    static float    get_minPenetrationForPenalty();
-    static void     set_minPenetrationForPenalty(float v);
-    static float    get_bounceThreshold();
-    static void     set_bounceThreshold(float v);
-    static float    get_sleepVelocity();
-    static void     set_sleepVelocity(float v);
-    static float    get_sleepAngularVelocity();
-    static void     set_sleepAngularVelocity(float v);
-    static float    get_maxAngularVelocity();
-    static void     set_maxAngularVelocity(float v);
-    static int      get_solverIterationCount();
-    static void     set_solverIterationCount(int v);
-
-    static bool CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask = DefaultRaycastLayers);
-    static bool CheckSphere(const Vector3 &position, float radius, int layerMask = DefaultRaycastLayers);
-    static bool Raycast(const Ray &ray, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
-    static bool CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
-    static bool Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask = DefaultRaycastLayers);
-    static bool SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
-    static cpsTArray<Collider>   OverlapSphere(const Vector3 &position, float radius, int layerMask = AllLayers);
-    static cpsTArray<RaycastHit> RaycastAll(const Ray &ray, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
-    static cpsTArray<RaycastHit> SphereCastAll(const Ray &ray, float radius, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
-    static cpsTArray<RaycastHit> CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance = FLT_MAX, int layermask = DefaultRaycastLayers);
-    static bool GetIgnoreLayerCollision(int layer1, int layer2);
-    static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore = true);
-    static void IgnoreLayerCollision(int layer1, int layer2, bool ignore = true);
-};
-
-class cpsAPI Physics2D
-{
-public:
-    cpsDeclTraits();
-};
 
 
 
@@ -304,6 +292,37 @@ public:
     static void     DestroyObject(Object obj, float delay = 0.0f);
 };
 
+class cpsAPI Mesh : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    Mesh(cpsObject v = nullptr);
+};
+
+class cpsAPI Material : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    Material(cpsObject v = nullptr);
+};
+
+class cpsAPI MaterialPropertyBlock : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    MaterialPropertyBlock(cpsObject v = nullptr);
+};
+
+class cpsAPI Shader : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    Shader(cpsObject v = nullptr);
+};
 
 class cpsAPI Texture : public Object
 {
@@ -636,12 +655,141 @@ public:
 };
 
 
+
+
+
+
+
+class cpsAPI Application
+{
+public:
+    cpsDeclTraits();
+    static cpsString    get_dataPath();
+    static bool         get_isEditor();
+};
+
+
+class cpsAPI Debug
+{
+public:
+    cpsDeclTraits();
+    static void Log(cpsString message);
+    static void Log(cpsString message, cpsObject obj);
+};
+
+
+class cpsAPI GL
+{
+public:
+    cpsDeclTraits();
+};
+
+
+class cpsAPI GUI
+{
+public:
+    cpsDeclTraits();
+};
+
+
+class cpsAPI Graphics
+{
+public:
+    cpsDeclTraits();
+    static RenderBuffer get_activeColorBuffer();
+    static RenderBuffer get_activeDepthBuffer();
+    static cpsString get_deviceName();
+    static cpsString get_deviceVendor();
+    static cpsString get_deviceVersion();
+    static bool get_supportsVertexProgram();
+
+
+    static void Blit(Texture source, RenderTexture dest);
+    static void Blit(Texture source, RenderTexture dest, Material mat, int pass = -1);
+    static void Blit(Texture source, Material mat, int pass = -1);
+    static void BlitMultiTap(Texture source, RenderTexture dest, Material mat, cpsTArray<Vector2> offsets);
+    static void ClearRandomWriteTargets();
+    static void DrawMesh(Mesh mesh, Vector3 position, Quaternion rotation, Material material, int layer, Camera camera = Camera(), int submeshIndex = 0, MaterialPropertyBlock properties = MaterialPropertyBlock());
+    static void DrawMesh(Mesh mesh, Vector3 position, Quaternion rotation, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties, bool castShadows, bool receiveShadows);
+    static void DrawMesh(Mesh mesh, Matrix4x4 matrix, Material material, int layer, Camera camera = Camera(), int submeshIndex = 0, MaterialPropertyBlock properties = MaterialPropertyBlock());
+    static void DrawMesh(Mesh mesh, Matrix4x4 matrix, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties, bool castShadows, bool receiveShadows);
+    static void DrawMeshNow(Mesh mesh, Vector3 position, Quaternion rotation);
+    static void DrawMeshNow(Mesh mesh, Vector3 position, Quaternion rotation, int materialIndex);
+    static void DrawMeshNow(Mesh mesh, Matrix4x4 matrix);
+    static void DrawMeshNow(Mesh mesh, Matrix4x4 matrix, int materialIndex);
+    static void DrawProcedural(MeshTopology topology, int vertexCount, int instanceCount = 1);
+    static void DrawProceduralIndirect(MeshTopology topology, ComputeBuffer bufferWithArgs, int argsOffset = 0);
+    static void DrawTexture(Rect screenRect, Texture texture, Material mat = Material());
+    static void DrawTexture(Rect screenRect, Texture texture, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material mat = Material());
+    static void DrawTexture(Rect screenRect, Texture texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material mat = Material());
+    static void DrawTexture(Rect screenRect, Texture texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material mat = Material());
+    static void SetRandomWriteTarget(int index, RenderTexture uav);
+    static void SetRandomWriteTarget(int index, ComputeBuffer uav);
+    static void SetRenderTarget(RenderTexture rt);
+    static void SetRenderTarget(RenderTexture rt, int mipLevel);
+    static void SetRenderTarget(RenderTexture rt, int mipLevel, CubemapFace face);
+    static void SetRenderTarget(RenderBuffer colorBuffer, RenderBuffer depthBuffer);
+    static void SetRenderTarget(cpsTArray<RenderBuffer> colorBuffers, RenderBuffer depthBuffer);
+
+};
+
+class cpsAPI Physics
+{
+public:
+    cpsDeclTraits();
+
+    static const int IgnoreRaycastLayer = 4;
+    static const int DefaultRaycastLayers = -5;
+    static const int AllLayers = -1;
+    static const int kIgnoreRaycastLayer = 4;
+    static const int kDefaultRaycastLayers = -5;
+    static const int kAllLayers = -1;
+
+    static Vector3  get_gravity();
+    static void     set_gravity(const Vector3 v);
+    static float    get_minPenetrationForPenalty();
+    static void     set_minPenetrationForPenalty(float v);
+    static float    get_bounceThreshold();
+    static void     set_bounceThreshold(float v);
+    static float    get_sleepVelocity();
+    static void     set_sleepVelocity(float v);
+    static float    get_sleepAngularVelocity();
+    static void     set_sleepAngularVelocity(float v);
+    static float    get_maxAngularVelocity();
+    static void     set_maxAngularVelocity(float v);
+    static int      get_solverIterationCount();
+    static void     set_solverIterationCount(int v);
+
+    static bool CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask = DefaultRaycastLayers);
+    static bool CheckSphere(const Vector3 &position, float radius, int layerMask = DefaultRaycastLayers);
+    static bool Raycast(const Ray &ray, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static bool CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static bool Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask = DefaultRaycastLayers);
+    static bool SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<Collider>   OverlapSphere(const Vector3 &position, float radius, int layerMask = AllLayers);
+    static cpsTArray<RaycastHit> RaycastAll(const Ray &ray, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<RaycastHit> SphereCastAll(const Ray &ray, float radius, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<RaycastHit> CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance = FLT_MAX, int layermask = DefaultRaycastLayers);
+    static bool GetIgnoreLayerCollision(int layer1, int layer2);
+    static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore = true);
+    static void IgnoreLayerCollision(int layer1, int layer2, bool ignore = true);
+};
+
+class cpsAPI Physics2D
+{
+public:
+    cpsDeclTraits();
+};
+
+
 } // namespace cpsUnityEngine
 
 
 cpsDeclTraitsF(UnityEngine, Space)
 cpsDeclTraitsF(UnityEngine, SendMessageOptions)
 cpsDeclTraitsF(UnityEngine, HideFlags)
+cpsDeclTraitsF(UnityEngine, MeshTopology)
+cpsDeclTraitsF(UnityEngine, CubemapFace)
 cpsDeclTraitsF(UnityEngine, ComputeBufferType)
 
 #endif // cpsUnityEngine_h
