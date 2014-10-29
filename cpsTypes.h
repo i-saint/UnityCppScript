@@ -221,7 +221,8 @@ public:
     typedef T*          iterator;
     typedef const T*    const_iterator;
 
-    cpsTArray(cpsArray cs_array) : m_size(cs_array.getSize()), m_data((pointer)cs_array.getData()) {}
+    cpsTArray(cpsObject cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getData()) {}
+    cpsTArray(cpsArray cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getData()) {}
     size_t          size() const                { return m_size; }
     reference       operator[](size_t i)        { return m_data[i]; }
     const_reference operator[](size_t i) const  { return m_data[i]; }
@@ -229,24 +230,34 @@ public:
     iterator        end()                       { return m_data + m_size; }
     const_iterator  begin() const               { return m_data; }
     const_iterator  end() const                 { return m_data + m_size; }
+    operator cpsArray() const { return m_array; }
 
 private:
+    cpsArray m_array;
     size_t m_size;
     pointer m_data;
 };
 
 
-template<class T> const char* cpsTypename() { return T::getTypename(); }
+template<class T> const char* cpsTypename()     { return T::getTypename(); }
+template<class T> const char* cpsTypenameRef()  { return T::getTypenameRef(); }
+template<class T> const char* cpsTypenameArray(){ return T::getTypenameArray(); }
 template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 
-template<> cpsAPI const char* cpsTypename<float>();
+template<> cpsAPI cpsClass    cpsTypeinfo<bool>();
+template<> cpsAPI const char* cpsTypename<bool>();
+template<> cpsAPI cpsClass    cpsTypeinfo<int>();
+template<> cpsAPI const char* cpsTypename<int>();
 template<> cpsAPI cpsClass    cpsTypeinfo<float>();
+template<> cpsAPI const char* cpsTypename<float>();
 
 
 #define cpsDeclTraits()\
     static cpsClass getClass();\
-    static const char* getTypename();
+    static const char* getTypename();\
+    static const char* getTypenameRef();\
+    static const char* getTypenameArray();
 
 
 #define cpsImplTraits(Namespace, Type)\
@@ -259,11 +270,21 @@ template<> cpsAPI cpsClass    cpsTypeinfo<float>();
     const char* Type::getTypename()\
     {\
         return #Namespace "." #Type;\
+    }\
+    const char* Type::getTypenameRef()\
+    {\
+        return #Namespace "." #Type "&";\
+    }\
+    const char* Type::getTypenameArray()\
+    {\
+        return #Namespace "." #Type "[]";\
     }
 
 #define cpsDeclTraitsF(Namespace, Type)\
+    template<> cpsAPI cpsClass    cpsTypeinfo<Namespace##::##Type>();\
     template<> cpsAPI const char* cpsTypename<Namespace##::##Type>();\
-    template<> cpsAPI cpsClass    cpsTypeinfo<Namespace##::##Type>();
+    template<> cpsAPI const char* cpsTypenameRef<Namespace##::##Type>();\
+    template<> cpsAPI const char* cpsTypenameArray<Namespace##::##Type>();
 
 #define cpsImplTraitsF(Namespace, Type)\
     template<> cpsAPI cpsClass cpsTypeinfo<Namespace##::##Type>()\
@@ -276,5 +297,13 @@ template<> cpsAPI cpsClass    cpsTypeinfo<float>();
     {\
         return #Namespace "." #Type;\
     }\
+    template<> cpsAPI const char* cpsTypenameRef<Namespace##::##Type>()\
+    {\
+        return #Namespace "." #Type "&";\
+    }\
+    template<> cpsAPI const char* cpsTypenameArray<Namespace##::##Type&>()\
+    {\
+        return #Namespace "." #Type "[]";\
+    }
 
 #endif // cpsTypes_h

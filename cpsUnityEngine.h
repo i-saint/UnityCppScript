@@ -7,6 +7,11 @@
 namespace UnityEngine
 {
 
+    class cpsAPI Collider;
+    class cpsAPI Collider2D;
+
+
+
 cpsAPI cpsImage& GetImage();
 
 enum Space {
@@ -31,6 +36,15 @@ enum HideFlags
     DontSaveInBuild = 32,
     DontSave = 52,
     HideAndDontSave = 61
+};
+
+enum ComputeBufferType
+{
+    Default = 0,
+    Raw = 1,
+    Append = 2,
+    Counter = 4,
+    DrawIndirect = 256
 };
 
 
@@ -187,14 +201,56 @@ class cpsAPI Graphics
 {
 public:
     cpsDeclTraits();
+
 };
 
 class cpsAPI Physics
 {
 public:
     cpsDeclTraits();
+
+    static const int IgnoreRaycastLayer = 4;
+    static const int DefaultRaycastLayers = -5;
+    static const int AllLayers = -1;
+    static const int kIgnoreRaycastLayer = 4;
+    static const int kDefaultRaycastLayers = -5;
+    static const int kAllLayers = -1;
+
+    static Vector3  get_gravity();
+    static void     set_gravity(const Vector3 v);
+    static float    get_minPenetrationForPenalty();
+    static void     set_minPenetrationForPenalty(float v);
+    static float    get_bounceThreshold();
+    static void     set_bounceThreshold(float v);
+    static float    get_sleepVelocity();
+    static void     set_sleepVelocity(float v);
+    static float    get_sleepAngularVelocity();
+    static void     set_sleepAngularVelocity(float v);
+    static float    get_maxAngularVelocity();
+    static void     set_maxAngularVelocity(float v);
+    static int      get_solverIterationCount();
+    static void     set_solverIterationCount(int v);
+
+    static bool CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask = DefaultRaycastLayers);
+    static bool CheckSphere(const Vector3 &position, float radius, int layerMask = DefaultRaycastLayers);
+    static bool Raycast(const Ray &ray, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static bool CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static bool Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask = DefaultRaycastLayers);
+    static bool SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<Collider>   OverlapSphere(const Vector3 &position, float radius, int layerMask = AllLayers);
+    static cpsTArray<RaycastHit> RaycastAll(const Ray &ray, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<RaycastHit> SphereCastAll(const Ray &ray, float radius, float distance = FLT_MAX, int layerMask = DefaultRaycastLayers);
+    static cpsTArray<RaycastHit> CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance = FLT_MAX, int layermask = DefaultRaycastLayers);
+    static bool GetIgnoreLayerCollision(int layer1, int layer2);
+    static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore = true);
+    static void IgnoreLayerCollision(int layer1, int layer2, bool ignore = true);
 };
 
+class cpsAPI Physics2D
+{
+public:
+    cpsDeclTraits();
+};
 
 
 
@@ -277,7 +333,18 @@ class cpsAPI ComputeBuffer : public Object
 typedef Object super;
 public:
     cpsDeclTraits();
+    static ComputeBuffer create(int count, int stride);
+    static ComputeBuffer create(int count, int stride, ComputeBufferType type);
+
     ComputeBuffer(cpsObject = nullptr);
+    int get_count();
+    int get_stride();
+    void Dispose();
+    void Release();
+    void SetData(cpsArray a);
+    void GetData(cpsArray a);
+
+    static void CopyCount(ComputeBuffer src, ComputeBuffer dst, int count);
 };
 
 class cpsAPI PhysicMaterial : public Object
@@ -575,5 +642,6 @@ public:
 cpsDeclTraitsF(UnityEngine, Space)
 cpsDeclTraitsF(UnityEngine, SendMessageOptions)
 cpsDeclTraitsF(UnityEngine, HideFlags)
+cpsDeclTraitsF(UnityEngine, ComputeBufferType)
 
 #endif // cpsUnityEngine_h

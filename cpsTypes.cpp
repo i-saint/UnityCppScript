@@ -2,6 +2,7 @@
 #include "cpsTypes.h"
 #include "cpsUtils.h"
 #include <vector>
+#include <map>
 #include <algorithm>
 
 
@@ -347,6 +348,49 @@ cpsMethod cpsObject::findMethod(const char *name, int num_args, const char **arg
 }
 
 
+struct cpsLessCString
+{
+    bool operator()(const char *a, const char *b) const
+    {
+        return strcmp(a,b)<0;
+    }
+};
+
+class cpsMethodManager
+{
+public:
+    typedef std::map<const char*, void*, cpsLessCString> MethodTable;
+    static cpsMethodManager* getInstance();
+    void addMethod(const char * name, void *method);
+    void registerAll();
+
+private:
+    static cpsMethodManager *s_inst;
+    MethodTable m_methods;
+};
+
+/*static*/ cpsMethodManager* cpsMethodManager::s_inst;
+/*static*/ cpsMethodManager* cpsMethodManager::getInstance()
+{
+    if (!s_inst) {
+        s_inst = new cpsMethodManager();
+    }
+    return s_inst;
+}
+
+void cpsMethodManager::addMethod(const char * name, void *method)
+{
+    m_methods[name] = method;
+}
+
+void cpsMethodManager::registerAll()
+{
+    for (auto m : m_methods) {
+        mono_add_internal_call(m.first, m.second);
+    }
+}
+
+
 cpsAPI void cpsAddMethod(const char *name, void *addr)
 {
     mono_add_internal_call(name, addr);
@@ -393,6 +437,28 @@ void* cpsArray::getData()
     return ((MonoArray*)mobj)->vector;
 }
 
+
+template<> cpsAPI cpsClass    cpsTypeinfo<bool>()
+{
+    static cpsCachedClass s_class;
+    if (!s_class) { s_class = mono_get_boolean_class(); }
+    return s_class;
+}
+template<> cpsAPI const char* cpsTypename<bool>()
+{
+    return "System.Boolean";
+}
+
+template<> cpsAPI cpsClass    cpsTypeinfo<int>()
+{
+    static cpsCachedClass s_class;
+    if (!s_class) { s_class = mono_get_int32_class(); }
+    return s_class;
+}
+template<> cpsAPI const char* cpsTypename<int>()
+{
+    return "System.Int32";
+}
 
 template<> cpsAPI cpsClass cpsTypeinfo<float>()
 {

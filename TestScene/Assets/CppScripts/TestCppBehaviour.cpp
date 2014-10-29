@@ -82,6 +82,11 @@ void TestCppBehaviour::Start()
     cpsDebugPrint("TestCppBehaviour::Start()\n");
     trans = GetComponent<Transform>();
 
+    cpsDumpClassStructure(cpsTypeinfo<GL>());
+    cpsDumpClassStructure(cpsTypeinfo<GUI>());
+    cpsDumpClassStructure(cpsTypeinfo<Graphics>());
+    cpsDumpClassStructure(cpsTypeinfo<Physics>());
+    cpsDumpClassStructure(cpsTypeinfo<ComputeBuffer>());
     //cpsDumpClassStructure(Collider::getClass());
     //cpsDumpClassStructure(Collider2D::getClass());
     //cpsDumpClassStructure(Rigidbody::getClass());
