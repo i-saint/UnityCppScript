@@ -44,6 +44,7 @@ cpsImplTraits(UnityEngine, Color32);
 cpsImplTraits(UnityEngine, Quaternion);
 cpsImplTraits(UnityEngine, Matrix4x4);
 
+cpsImplTraits(UnityEngine, Rect);
 cpsImplTraits(UnityEngine, Bounds);
 cpsImplTraits(UnityEngine, Ray);
 cpsImplTraits(UnityEngine, Ray2D);
@@ -807,7 +808,233 @@ cpsImplTraits(UnityEngine, GL);
 cpsImplTraits(UnityEngine, GUI);
 
 
+
 cpsImplTraits(UnityEngine, Graphics);
+
+/*static*/ RenderBuffer Graphics::get_activeColorBuffer()
+{
+    cpsBindMethod("get_activeColorBuffer");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<RenderBuffer>();
+}
+/*static*/ RenderBuffer Graphics::get_activeDepthBuffer()
+{
+    cpsBindMethod("get_activeDepthBuffer");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<RenderBuffer>();
+}
+/*static*/ cpsString Graphics::get_deviceName()
+{
+    cpsBindMethod("get_deviceName");
+    cpsObject ret = s_method.invoke(nullptr);
+    return cpsString(ret);
+}
+/*static*/ cpsString Graphics::get_deviceVendor()
+{
+    cpsBindMethod("get_deviceVendor");
+    cpsObject ret = s_method.invoke(nullptr);
+    return cpsString(ret);
+}
+/*static*/ cpsString Graphics::get_deviceVersion()
+{
+    cpsBindMethod("get_deviceVersion");
+    cpsObject ret = s_method.invoke(nullptr);
+    return cpsString(ret);
+}
+/*static*/ bool Graphics::get_supportsVertexProgram()
+{
+    cpsBindMethod("get_supportsVertexProgram");
+    cpsObject ret = s_method.invoke(nullptr);
+    return ret.getData<gboolean>()!=0;
+}
+
+/*static*/ void Graphics::Blit(Texture source, RenderTexture dest)
+{
+    static const char *names[] = { cpsTypename<Texture>(), cpsTypename<RenderTexture>() };
+    cpsBindMethod("Blit", _countof(names), names);
+    void *args[] = { source, dest };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::Blit(Texture source, RenderTexture dest, Material mat, int pass)
+{
+    static const char *names[] = { cpsTypename<Texture>(), cpsTypename<RenderTexture>(), cpsTypename<Material>(), cpsTypename<int>() };
+    cpsBindMethod("Blit", _countof(names), names);
+    void *args[] = { source, dest, mat, &pass };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::Blit(Texture source, Material mat, int pass)
+{
+    static const char *names[] = { cpsTypename<Texture>(), cpsTypename<Material>(), cpsTypename<int>() };
+    cpsBindMethod("Blit", _countof(names), names);
+    void *args[] = { source, mat, &pass };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::BlitMultiTap(Texture source, RenderTexture dest, Material mat, cpsTArray<Vector2> offsets)
+{
+    static const char *names[] = { cpsTypename<Texture>(), cpsTypename<RenderTexture>(), cpsTypename<Material>(), cpsTypenameArray<Vector2>() };
+    cpsBindMethod("BlitMultiTap", _countof(names), names);
+    void *args[] = { source, dest, mat, (cpsArray)offsets };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::ClearRandomWriteTargets()
+{
+    cpsBindMethod("ClearRandomWriteTargets", 0);
+    s_method.invoke(nullptr);
+}
+/*static*/ void Graphics::DrawMesh(Mesh mesh, const Vector3 &position, const Quaternion &rotation, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Vector3>(), cpsTypename<Quaternion>(), cpsTypename<Material>(), cpsTypename<int>(), cpsTypename<Camera>(), cpsTypename<int>(), cpsTypename<MaterialPropertyBlock>() };
+    cpsBindMethod("DrawMesh", _countof(names), names);
+    void *args[] = { mesh, (void*)&position, (void*)&rotation, material, &layer, camera, &submeshIndex, properties };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMesh(Mesh mesh, const Vector3 &position, const Quaternion &rotation, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties, bool castShadows, bool receiveShadows)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Vector3>(), cpsTypename<Quaternion>(), cpsTypename<Material>(), cpsTypename<int>(), cpsTypename<Camera>(), cpsTypename<int>(), cpsTypename<MaterialPropertyBlock>(), cpsTypename<bool>(), cpsTypename<bool>() };
+    cpsBindMethod("DrawMesh", _countof(names), names);
+    gboolean castShadows_ = castShadows;
+    gboolean receiveShadows_ = receiveShadows;
+    void *args[] = { mesh, (void*)&position, (void*)&rotation, material, &layer, camera, &submeshIndex, properties, &castShadows_, &receiveShadows_ };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMesh(Mesh mesh, const Matrix4x4 &matrix, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Matrix4x4>(), cpsTypename<Material>(), cpsTypename<int>(), cpsTypename<Camera>(), cpsTypename<int>(), cpsTypename<MaterialPropertyBlock>() };
+    cpsBindMethod("DrawMesh", _countof(names), names);
+    void *args[] = { mesh, (void*)&matrix, material, &layer, camera, &submeshIndex, properties };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMesh(Mesh mesh, const Matrix4x4 &matrix, Material material, int layer, Camera camera, int submeshIndex, MaterialPropertyBlock properties, bool castShadows, bool receiveShadows)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Matrix4x4>(), cpsTypename<Material>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<MaterialPropertyBlock>(), cpsTypename<bool>(), cpsTypename<bool>() };
+    cpsBindMethod("DrawMesh", _countof(names), names);
+    gboolean castShadows_ = castShadows;
+    gboolean receiveShadows_ = receiveShadows;
+    void *args[] = { mesh, (void*)&matrix, material, &layer, camera, &submeshIndex, properties, &castShadows_, &receiveShadows_ };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMeshNow(Mesh mesh, const Vector3 &position, const Quaternion &rotation)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Vector3>(), cpsTypename<Quaternion>() };
+    cpsBindMethod("DrawMeshNow", _countof(names), names);
+    void *args[] = { mesh, (void*)&position, (void*)&rotation };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMeshNow(Mesh mesh, const Vector3 &position, const Quaternion &rotation, int materialIndex)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Vector3>(), cpsTypename<Quaternion>(), cpsTypename<int>() };
+    cpsBindMethod("DrawMeshNow", _countof(names), names);
+    void *args[] = { mesh, (void*)&position, (void*)&rotation, (void*)&materialIndex };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMeshNow(Mesh mesh, const Matrix4x4 &matrix)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Matrix4x4>() };
+    cpsBindMethod("DrawMeshNow", _countof(names), names);
+    void *args[] = { mesh, (void*)&matrix };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawMeshNow(Mesh mesh, const Matrix4x4 &matrix, int materialIndex)
+{
+    static const char *names[] = { cpsTypename<Mesh>(), cpsTypename<Matrix4x4>(), cpsTypename<int>() };
+    cpsBindMethod("DrawMeshNow", _countof(names), names);
+    void *args[] = { mesh, (void*)&matrix, (void*)&materialIndex };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawProcedural(MeshTopology topology, int vertexCount, int instanceCount)
+{
+    static const char *names[] = { cpsTypename<MeshTopology>(), cpsTypename<int>(), cpsTypename<int>() };
+    cpsBindMethod("DrawProcedural", _countof(names), names);
+    void *args[] = { (void*)&topology, (void*)&vertexCount, (void*)&instanceCount };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawProceduralIndirect(MeshTopology topology, ComputeBuffer bufferWithArgs, int argsOffset)
+{
+    static const char *names[] = { cpsTypename<MeshTopology>(), cpsTypename<ComputeBuffer>(), cpsTypename<int>() };
+    cpsBindMethod("DrawProceduralIndirect", _countof(names), names);
+    void *args[] = { (void*)&topology, bufferWithArgs, (void*)&argsOffset };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawTexture(const Rect &screenRect, Texture texture, Material mat)
+{
+    static const char *names[] = { cpsTypename<Rect>(), cpsTypename<Texture>(), cpsTypename<Material>() };
+    cpsBindMethod("DrawTexture", _countof(names), names);
+    void *args[] = { (void*)&screenRect, texture, mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawTexture(const Rect &screenRect, Texture texture, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material mat)
+{
+    static const char *names[] = { cpsTypename<Rect>(), cpsTypename<Texture>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<Material>() };
+    cpsBindMethod("DrawTexture", _countof(names), names);
+    void *args[] = { (void*)&screenRect, texture, (void*)&leftBorder, (void*)&rightBorder, (void*)&topBorder, (void*)&bottomBorder, mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawTexture(const Rect &screenRect, Texture texture, const Rect &sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material mat)
+{
+    static const char *names[] = { cpsTypename<Rect>(), cpsTypename<Texture>(), cpsTypename<Rect>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<Material>() };
+    cpsBindMethod("DrawTexture", _countof(names), names);
+    void *args[] = { (void*)&screenRect, texture, (void*)&sourceRect, (void*)&leftBorder, (void*)&rightBorder, (void*)&topBorder, (void*)&bottomBorder, mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::DrawTexture(const Rect &screenRect, Texture texture, const Rect &sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, const Color &color, Material mat)
+{
+    static const char *names[] = { cpsTypename<Rect>(), cpsTypename<Texture>(), cpsTypename<Rect>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<int>(), cpsTypename<Color>(), cpsTypename<Material>() };
+    cpsBindMethod("DrawTexture", _countof(names), names);
+    void *args[] = { (void*)&screenRect, texture, (void*)&sourceRect, (void*)&leftBorder, (void*)&rightBorder, (void*)&topBorder, (void*)&bottomBorder, (void*)&color, mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRandomWriteTarget(int index, RenderTexture uav)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<RenderTexture>() };
+    cpsBindMethod("SetRandomWriteTarget", _countof(names), names);
+    void *args[] = { (void*)&index, uav };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRandomWriteTarget(int index, ComputeBuffer uav)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<ComputeBuffer>() };
+    cpsBindMethod("SetRandomWriteTarget", _countof(names), names);
+    void *args[] = { (void*)&index, uav };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRenderTarget(RenderTexture rt)
+{
+    static const char *names[] = { cpsTypename<RenderTexture>() };
+    cpsBindMethod("SetRenderTarget", _countof(names), names);
+    void *args[] = { rt };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRenderTarget(RenderTexture rt, int mipLevel)
+{
+    static const char *names[] = { cpsTypename<RenderTexture>(), cpsTypename<int>() };
+    cpsBindMethod("SetRenderTarget", _countof(names), names);
+    void *args[] = { rt, (void*)&mipLevel };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRenderTarget(RenderTexture rt, int mipLevel, CubemapFace face)
+{
+    static const char *names[] = { cpsTypename<RenderTexture>(), cpsTypename<int>(), cpsTypename<CubemapFace>() };
+    cpsBindMethod("SetRenderTarget", _countof(names), names);
+    void *args[] = { rt, (void*)&mipLevel, (void*)&face };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRenderTarget(RenderBuffer colorBuffer, RenderBuffer depthBuffer)
+{
+    static const char *names[] = { cpsTypename<RenderBuffer>(), cpsTypename<RenderBuffer>() };
+    cpsBindMethod("SetRenderTarget", _countof(names), names);
+    void *args[] = { &colorBuffer, &depthBuffer };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Graphics::SetRenderTarget(cpsTArray<RenderBuffer> colorBuffers, RenderBuffer depthBuffer)
+{
+    static const char *names[] = { cpsTypenameArray<RenderBuffer>(), cpsTypename<RenderBuffer>() };
+    cpsBindMethod("SetRenderTarget", _countof(names), names);
+    void *args[] = { (cpsArray)colorBuffers, &depthBuffer };
+    s_method.invoke(nullptr, args);
+}
+
+
+
 
 
 cpsImplTraits(UnityEngine, Physics);
@@ -899,7 +1126,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::CheckCapsule(const Vector3 &start, const Vector3 &end, float radius, int layermask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CheckCapsule", 4, names);
+    cpsBindMethod("CheckCapsule", _countof(names), names);
     void *args[] = { (void*)&start, (void*)&end, &radius, &layermask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -907,7 +1134,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::CheckSphere(const Vector3 &position, float radius, int layerMask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CheckSphere", 3, names);
+    cpsBindMethod("CheckSphere", _countof(names), names);
     void *args[] = { (void*)&position, &radius, &layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -915,7 +1142,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::Raycast(const Ray &ray, RaycastHit &hitInfo, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Ray>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("Raycast", 4, names);
+    cpsBindMethod("Raycast", _countof(names), names);
     void *args[] = { (void*)&ray, &hitInfo, &distance, &layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -923,7 +1150,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CapsuleCast", 7, names);
+    cpsBindMethod("CapsuleCast", _countof(names), names);
     void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -931,7 +1158,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<int>() };
-    cpsBindMethod("Linecast", 4, names);
+    cpsBindMethod("Linecast", _countof(names), names);
     void *args[] = { (void*)&start, (void*)&end, (void*)&hitInfo, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -939,7 +1166,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("SphereCast", 5, names);
+    cpsBindMethod("SphereCast", _countof(names), names);
     void *args[] = { (void*)&ray, (void*)&radius, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -947,7 +1174,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ cpsTArray<Collider> Physics::OverlapSphere(const Vector3 &position, float radius, int layerMask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("OverlapSphere", 3, names);
+    cpsBindMethod("OverlapSphere", _countof(names), names);
     void *args[] = { (void*)&position, (void*)&radius, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return cpsTArray<Collider>(ret);
@@ -955,7 +1182,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ cpsTArray<RaycastHit> Physics::RaycastAll(const Ray &ray, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("RaycastAll", 3, names);
+    cpsBindMethod("RaycastAll", _countof(names), names);
     void *args[] = { (void*)&ray, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return cpsTArray<RaycastHit>(ret);
@@ -963,7 +1190,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ cpsTArray<RaycastHit> Physics::SphereCastAll(const Ray &ray, float radius, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Ray>(), cpsTypename<float>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("SphereCastAll", 4, names);
+    cpsBindMethod("SphereCastAll", _countof(names), names);
     void *args[] = { (void*)&ray, (void*)&radius, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return cpsTArray<RaycastHit>(ret);
@@ -971,7 +1198,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ cpsTArray<RaycastHit> Physics::CapsuleCastAll(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, float distance, int layerMask)
 {
     static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<int>() };
-    cpsBindMethod("CapsuleCastAll", 6, names);
+    cpsBindMethod("CapsuleCastAll", _countof(names), names);
     void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
     return cpsTArray<RaycastHit>(ret);
@@ -979,7 +1206,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ bool Physics::GetIgnoreLayerCollision(int layer1, int layer2)
 {
     static const char *names[] = { cpsTypename<int>(), cpsTypename<int>() };
-    cpsBindMethod("GetIgnoreLayerCollision", 2, names);
+    cpsBindMethod("GetIgnoreLayerCollision", _countof(names), names);
     void *args[] = { &layer1, &layer2 };
     cpsObject ret = s_method.invoke(nullptr, args);
     return ret.getData<gboolean>() != 0;
@@ -987,7 +1214,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ void Physics::IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
 {
     static const char *names[] = { cpsTypename<Collider>(), cpsTypename<Collider>(), cpsTypename<bool>() };
-    cpsBindMethod("IgnoreCollision", 3, names);
+    cpsBindMethod("IgnoreCollision", _countof(names), names);
     gboolean ignore_ = ignore;
     void *args[] = { collider1, collider2, &ignore_ };
     cpsObject ret = s_method.invoke(nullptr, args);
@@ -995,7 +1222,7 @@ cpsImplTraits(UnityEngine, Physics);
 /*static*/ void Physics::IgnoreLayerCollision(int layer1, int layer2, bool ignore)
 {
     static const char *names[] = { cpsTypename<int>(), cpsTypename<int>(), cpsTypename<bool>() };
-    cpsBindMethod("IgnoreLayerCollision", 3, names);
+    cpsBindMethod("IgnoreLayerCollision", _countof(names), names);
     gboolean ignore_ = ignore;
     void *args[] = { &layer1, &layer2, &ignore_ };
     cpsObject ret = s_method.invoke(nullptr, args);
