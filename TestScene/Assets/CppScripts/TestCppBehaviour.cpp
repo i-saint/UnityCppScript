@@ -82,7 +82,7 @@ void TestCppBehaviour::Start()
     cpsDebugPrint("TestCppBehaviour::Start()\n");
     trans = GetComponent<Transform>();
 
-    cpsDumpClassStructure(cpsTypeinfo<Rigidbody>());
+    cpsDumpClassStructure(cpsTypeinfo<Rigidbody2D>());
     cpsDumpClassStructure(cpsTypeinfo<Rigidbody2D>());
     cpsDumpClassStructure(cpsTypeinfo<Texture2D>());
     cpsDumpClassStructure(cpsTypeinfo<RenderTexture>());

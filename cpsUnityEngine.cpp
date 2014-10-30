@@ -137,6 +137,12 @@ cpsString Object::ToString() const
 }
 
 
+cpsImplTraits(UnityEngine, AsyncOperation);
+AsyncOperation::AsyncOperation(cpsObject v) : super(v) {}
+
+cpsImplTraits(UnityEngine, ResourceRequest);
+ResourceRequest::ResourceRequest(cpsObject v) : super(v) {}
+
 
 cpsImplTraits(UnityEngine, Mesh);
 Mesh::Mesh(cpsObject v) : super(v) {}
@@ -1132,6 +1138,21 @@ Light::Light(cpsObject obj) : super(obj) {}
 
 
 
+cpsImplTraits(UnityEngine, Renderer);
+Renderer::Renderer(cpsObject obj) : super(obj) {}
+
+
+
+cpsImplTraits(UnityEngine, MeshRenderer);
+MeshRenderer::MeshRenderer(cpsObject obj) : super(obj) {}
+
+
+
+cpsImplTraits(UnityEngine, SpriteRenderer);
+SpriteRenderer::SpriteRenderer(cpsObject obj) : super(obj) {}
+
+
+
 
 
 
@@ -1601,10 +1622,12 @@ cpsImplTraits(UnityEngine, Physics);
 
 cpsImplTraits(UnityEngine, Physics2D);
 
+cpsImplTraits(UnityEngine, Resources);
 
 
 
-} // namespace cpsUnityEngine
+
+} // namespace UnityEngine
 
 
 cpsImplTraitsF(UnityEngine, Space)

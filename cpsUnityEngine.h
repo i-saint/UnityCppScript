@@ -326,6 +326,25 @@ public:
     static void     DestroyObject(Object obj, float delay = 0.0f);
 };
 
+class cpsAPI AsyncOperation : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    AsyncOperation(cpsObject v = nullptr);
+};
+
+class cpsAPI ResourceRequest : public AsyncOperation
+{
+typedef AsyncOperation super;
+public:
+    cpsDeclTraits();
+    ResourceRequest(cpsObject v = nullptr);
+
+    cpsObject get_asset();
+};
+
+
 class cpsAPI Mesh : public Object
 {
 typedef Object super;
@@ -753,7 +772,31 @@ public:
 };
 
 
+class cpsAPI Renderer : public Component
+{
+typedef Component super;
+public:
+    cpsDeclTraits();
+    Renderer(cpsObject obj = nullptr);
+};
 
+
+class cpsAPI MeshRenderer : public Renderer
+{
+typedef Renderer super;
+public:
+    cpsDeclTraits();
+    MeshRenderer(cpsObject obj = nullptr);
+};
+
+
+class cpsAPI SpriteRenderer : public Renderer
+{
+typedef Renderer super;
+public:
+    cpsDeclTraits();
+    SpriteRenderer(cpsObject obj = nullptr);
+};
 
 
 
@@ -879,7 +922,32 @@ public:
 };
 
 
-} // namespace cpsUnityEngine
+class cpsAPI Resources
+{
+public:
+    cpsDeclTraits();
+
+    template<class T>
+    static cpsTArray<T> FindObjectsOfTypeAll()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { cpsTypeinfo<T>() };
+            s_generics = cpsTypeinfo<Resources>().getClass().findMethod("FindObjectsOfTypeAll", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return cpsTArray<T>(s_method.invoke(nullptr));
+    }
+
+    static cpsObject Load(cpsString path);
+    static cpsTArray<cpsObject> LoadAll(cpsString path);
+    //static Object LoadAssetAtPath(cpsString assetPath, Type type);
+    static ResourceRequest LoadAsync(cpsString path);
+};
+
+
+} // namespace UnityEngine
 
 
 cpsDeclTraitsF(UnityEngine, Space)
