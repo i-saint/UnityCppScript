@@ -915,6 +915,122 @@ Vector3 Rigidbody::get_worldCenterOfMass()
     return s_method.invoke(*this).getData<Vector3>();
 }
 
+void Rigidbody::AddExplosionForce(float explosionForce, const Vector3 &explosionPosition, float explosionRadius, float upwardsModifier, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<float>(), cpsTypename<Vector3>(), cpsTypename<float>(), cpsTypename<float>(), cpsTypenameRef<ForceMode>() };
+    cpsBindMethod("AddExplosionForce", _countof(names), names);
+    void *args[] = { (void*)&explosionForce, (void*)&explosionPosition, (void*)&explosionRadius, (void*)&upwardsModifier, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::AddForce(const Vector3 &force, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<ForceMode>() };
+    cpsBindMethod("AddForce", _countof(names), names);
+    void *args[] = { (void*)&force, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::AddForceAtPosition(const Vector3 &force, const Vector3 &position, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<Vector3>(), cpsTypename<ForceMode>() };
+    cpsBindMethod("AddForceAtPosition", _countof(names), names);
+    void *args[] = { (void*)&force, (void*)&position, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::AddRelativeForce(const Vector3 &force, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<ForceMode>() };
+    cpsBindMethod("AddRelativeForce", _countof(names), names);
+    void *args[] = { (void*)&force, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::AddRelativeTorque(const Vector3 &torque, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<ForceMode>() };
+    cpsBindMethod("AddRelativeTorque", _countof(names), names);
+    void *args[] = { (void*)&torque, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::AddTorque(const Vector3 &torque, ForceMode mode)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<ForceMode>() };
+    cpsBindMethod("AddTorque", _countof(names), names);
+    void *args[] = { (void*)&torque, (void*)&mode };
+    s_method.invoke(*this, args);
+}
+Vector3 Rigidbody::ClosestPointOnBounds(const Vector3 &position)
+{
+    static const char *names[] = { cpsTypename<Vector3>() };
+    cpsBindMethod("ClosestPointOnBounds", _countof(names), names);
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getData<Vector3>();
+}
+Vector3 Rigidbody::GetPointVelocity(const Vector3 &worldPoint)
+{
+    static const char *names[] = { cpsTypename<Vector3>() };
+    cpsBindMethod("GetPointVelocity", _countof(names), names);
+    void *args[] = { (void*)&worldPoint };
+    return s_method.invoke(*this, args).getData<Vector3>();
+}
+Vector3 Rigidbody::GetRelativePointVelocity(const Vector3 &relativePoint)
+{
+    static const char *names[] = { cpsTypename<Vector3>() };
+    cpsBindMethod("GetRelativePointVelocity", _countof(names), names);
+    void *args[] = { (void*)&relativePoint };
+    return s_method.invoke(*this, args).getData<Vector3>();
+}
+bool Rigidbody::IsSleeping()
+{
+    cpsBindMethod("IsSleeping", 0);
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+void Rigidbody::MovePosition(const Vector3 &position)
+{
+    static const char *names[] = { cpsTypename<Vector3>() };
+    cpsBindMethod("MovePosition", _countof(names), names);
+    void *args[] = { (void*)&position };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::MoveRotation(const Quaternion &rot)
+{
+    static const char *names[] = { cpsTypename<Quaternion>() };
+    cpsBindMethod("MoveRotation", _countof(names), names);
+    void *args[] = { (void*)&rot };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::SetDensity(float density)
+{
+    static const char *names[] = { cpsTypename<float>() };
+    cpsBindMethod("SetDensity", _countof(names), names);
+    void *args[] = { (void*)&density };
+    s_method.invoke(*this, args);
+}
+void Rigidbody::Sleep()
+{
+    cpsBindMethod("Sleep", 0);
+    s_method.invoke(*this);
+}
+bool Rigidbody::SweepTest(const Vector3 &direction, RaycastHit &hitInfo, float distance)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypenameRef<RaycastHit>(), cpsTypename<float>() };
+    cpsBindMethod("SweepTest", _countof(names), names);
+    void *args[] = { (void*)&direction, (void*)&hitInfo, (void*)&distance };
+    cpsObject ret = s_method.invoke(*this, args);
+    return ret.getData<gboolean>()!=0;
+}
+cpsTArray<RaycastHit> Rigidbody::SweepTestAll(const Vector3 &direction, float distance)
+{
+    static const char *names[] = { cpsTypename<Vector3>(), cpsTypename<float>() };
+    cpsBindMethod("SweepTestAll", _countof(names), names);
+    void *args[] = { (void*)&direction, (void*)&distance };
+    cpsObject ret = s_method.invoke(*this, args);
+    return cpsTArray<RaycastHit>(ret);
+}
+void Rigidbody::WakeUp()
+{
+    cpsBindMethod("WakeUp", 0);
+    s_method.invoke(*this);
+}
+
 
 
 

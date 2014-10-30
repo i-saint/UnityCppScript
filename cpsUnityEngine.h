@@ -674,41 +674,23 @@ public:
     void                    set_velocity(const Vector3 &v);
     Vector3                 get_worldCenterOfMass();
 
-    //Rigidbody::SetDensity(System.Single) : System.Void
-    //Rigidbody::AddForce(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddForce(UnityEngine.Vector3) : System.Void
-    //Rigidbody::AddForce(System.Single, System.Single, System.Single) : System.Void
-    //Rigidbody::AddForce(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddRelativeForce(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddRelativeForce(UnityEngine.Vector3) : System.Void
-    //Rigidbody::AddRelativeForce(System.Single, System.Single, System.Single) : System.Void
-    //Rigidbody::AddRelativeForce(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddTorque(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddTorque(UnityEngine.Vector3) : System.Void
-    //Rigidbody::AddTorque(System.Single, System.Single, System.Single) : System.Void
-    //Rigidbody::AddTorque(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddRelativeTorque(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddRelativeTorque(UnityEngine.Vector3) : System.Void
-    //Rigidbody::AddRelativeTorque(System.Single, System.Single, System.Single) : System.Void
-    //Rigidbody::AddRelativeTorque(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddForceAtPosition(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddForceAtPosition(UnityEngine.Vector3, UnityEngine.Vector3) : System.Void
-    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
-    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single, System.Single) : System.Void
-    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single) : System.Void
-    //Rigidbody::ClosestPointOnBounds(UnityEngine.Vector3) : UnityEngine.Vector3
-    //Rigidbody::GetRelativePointVelocity(UnityEngine.Vector3) : UnityEngine.Vector3
-    //Rigidbody::GetPointVelocity(UnityEngine.Vector3) : UnityEngine.Vector3
-    //Rigidbody::MovePosition(UnityEngine.Vector3) : System.Void
-    //Rigidbody::MoveRotation(UnityEngine.Quaternion) : System.Void
-    //Rigidbody::Sleep() : System.Void
-    //Rigidbody::IsSleeping() : System.Boolean
-    //Rigidbody::WakeUp() : System.Void
-    //Rigidbody::SweepTest(UnityEngine.Vector3, UnityEngine.RaycastHit&, System.Single) : System.Boolean
-    //Rigidbody::SweepTest(UnityEngine.Vector3, UnityEngine.RaycastHit&) : System.Boolean
-    //Rigidbody::SweepTestAll(UnityEngine.Vector3, System.Single) : UnityEngine.RaycastHit[]
-    //Rigidbody::SweepTestAll(UnityEngine.Vector3) : UnityEngine.RaycastHit[]
-    //Rigidbody::SetMaxAngularVelocity(System.Single) : System.Void
+    void                    AddExplosionForce(float explosionForce, const Vector3 &explosionPosition, float explosionRadius, float upwardsModifier = 0.0f, ForceMode mode = ForceMode_Force);
+    void                    AddForce(const Vector3 &force, ForceMode mode = ForceMode_Force);
+    void                    AddForceAtPosition(const Vector3 &force, const Vector3 &position, ForceMode mode = ForceMode_Force);
+    void                    AddRelativeForce(const Vector3 &force, ForceMode mode = ForceMode_Force);
+    void                    AddRelativeTorque(const Vector3 &torque, ForceMode mode = ForceMode_Force);
+    void                    AddTorque(const Vector3 &torque, ForceMode mode = ForceMode_Force);
+    Vector3                 ClosestPointOnBounds(const Vector3 &position);
+    Vector3                 GetPointVelocity(const Vector3 &worldPoint);
+    Vector3                 GetRelativePointVelocity(const Vector3 &relativePoint);
+    bool                    IsSleeping();
+    void                    MovePosition(const Vector3 &position);
+    void                    MoveRotation(const Quaternion &rot);
+    void                    SetDensity(float density);
+    void                    Sleep();
+    bool                    SweepTest(const Vector3 &direction, RaycastHit &hitInfo, float distance = FLT_MAX);
+    cpsTArray<RaycastHit>   SweepTestAll(const Vector3 &direction, float distance = FLT_MAX);
+    void                    WakeUp();
 };
 
 
