@@ -24,58 +24,92 @@ class cpsAPI Camera;
 cpsAPI cpsImage& GetImage();
 
 enum Space {
-    World = 0,
-    Self = 1,
+    Space_World = 0,
+    Space_Self = 1,
 };
 
 enum SendMessageOptions
 {
-    RequireReceiver,
-    DontRequireReceiver
+    SendMessageOptions_RequireReceiver,
+    SendMessageOptions_DontRequireReceiver
 };
 
 enum HideFlags
 {
-    None = 0,
-    HideInHierarchy = 1,
-    HideInInspector = 2,
-    DontSaveInScene = 4,
-    NotEditable = 8,
-    DontUnload = 16,
-    DontSaveInBuild = 32,
-    DontSave = 52,
-    HideAndDontSave = 61
+    HideFlags_None = 0,
+    HideFlags_HideInHierarchy = 1,
+    HideFlags_HideInInspector = 2,
+    HideFlags_DontSaveInScene = 4,
+    HideFlags_NotEditable = 8,
+    HideFlags_DontUnload = 16,
+    HideFlags_DontSaveInBuild = 32,
+    HideFlags_DontSave = 52,
+    HideFlags_HideAndDontSave = 61
 };
 
 enum MeshTopology
 {
-    Triangles,
-    Quads = 2,
-    Lines,
-    LineStrip,
-    Points
+    MeshTopology_Triangles,
+    MeshTopology_Quads = 2,
+    MeshTopology_Lines,
+    MeshTopology_LineStrip,
+    MeshTopology_Points
 };
 
 enum CubemapFace
 {
-    PositiveX,
-    NegativeX,
-    PositiveY,
-    NegativeY,
-    PositiveZ,
-    NegativeZ
+    CubemapFace_PositiveX,
+    CubemapFace_NegativeX,
+    CubemapFace_PositiveY,
+    CubemapFace_NegativeY,
+    CubemapFace_PositiveZ,
+    CubemapFace_NegativeZ
 };
 
 enum ComputeBufferType
 {
-    Default = 0,
-    Raw = 1,
-    Append = 2,
-    Counter = 4,
-    DrawIndirect = 256
+    ComputeBufferType_Default = 0,
+    ComputeBufferType_Raw = 1,
+    ComputeBufferType_Append = 2,
+    ComputeBufferType_Counter = 4,
+    ComputeBufferType_DrawIndirect = 256
 };
 
+enum CollisionDetectionMode
+{
+    CollisionDetectionMode_Discrete,
+    CollisionDetectionMode_Continuous,
+    CollisionDetectionMode_ContinuousDynamic
+};
 
+enum RigidbodyConstraints
+{
+    RigidbodyConstraints_None,
+    RigidbodyConstraints_FreezePositionX = 2,
+    RigidbodyConstraints_FreezePositionY = 4,
+    RigidbodyConstraints_FreezePositionZ = 8,
+    RigidbodyConstraints_FreezeRotationX = 16,
+    RigidbodyConstraints_FreezeRotationY = 32,
+    RigidbodyConstraints_FreezeRotationZ = 64,
+    RigidbodyConstraints_FreezePosition = 14,
+    RigidbodyConstraints_FreezeRotation = 112,
+    RigidbodyConstraints_FreezeAll = 126
+};
+
+enum RigidbodyInterpolation
+{
+    RigidbodyInterpolation_None,
+    RigidbodyInterpolation_Interpolate,
+    RigidbodyInterpolation_Extrapolate
+};
+
+enum ForceMode
+{
+    ForceMode_Force,
+    ForceMode_Acceleration = 5,
+    ForceMode_Impulse = 1,
+    ForceMode_VelocityChange
+};
 
 struct cpsAPI Vector2
 {
@@ -507,9 +541,9 @@ public:
     }
 
     bool CompareTag(cpsString tag);
-    void SendMessageUpwards(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
-    void SendMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
-    void BroadcastMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = RequireReceiver);
+    void SendMessageUpwards(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = SendMessageOptions_RequireReceiver);
+    void SendMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = SendMessageOptions_RequireReceiver);
+    void BroadcastMessage(cpsString method_name, cpsObject obj = nullptr, SendMessageOptions opt = SendMessageOptions_RequireReceiver);
 };
 
 class cpsAPI Behaviour : public Component
@@ -558,10 +592,10 @@ public:
     bool        get_hasChanged();
     void        set_hasChanged(bool v);
 
-    void        Translate(const Vector3& v, Space s = Self);
+    void        Translate(const Vector3& v, Space s = Space_Self);
     void        Translate(const Vector3& v, Transform relative);
-    void        Rotate(const Vector3& eulerAngles, Space s = Self);
-    void        Rotate(const Vector3& axis, float angle, Space s = Self);
+    void        Rotate(const Vector3& eulerAngles, Space s = Space_Self);
+    void        Rotate(const Vector3& axis, float angle, Space s = Space_Self);
     void        RotateAround(const Vector3& point, const Vector3& axis, float angle);
     void        LookAt(Transform t, const Vector3& v = Vector3::up);
     void        LookAt(const Vector3& worldPos, const Vector3& v = Vector3::up);
@@ -593,6 +627,88 @@ typedef Component super;
 public:
     cpsDeclTraits();
     Rigidbody(cpsObject obj = nullptr);
+
+    float                   get_angularDrag();
+    void                    set_angularDrag(float v);
+    Vector3                 get_angularVelocity();
+    void                    set_angularVelocity(const Vector3 &v);
+    Vector3                 get_centerOfMass();
+    void                    set_centerOfMass(const Vector3 &v);
+    CollisionDetectionMode  get_collisionDetectionMode();
+    void                    set_collisionDetectionMode(CollisionDetectionMode v);
+    RigidbodyConstraints    get_constraints();
+    void                    set_constraints(RigidbodyConstraints v);
+    bool                    get_detectCollisions();
+    void                    set_detectCollisions(bool v);
+    float                   get_drag();
+    void                    set_drag(float v);
+    bool                    get_freezeRotation();
+    void                    set_freezeRotation(bool v);
+    Vector3                 get_inertiaTensor();
+    void                    set_inertiaTensor(const Vector3 &v);
+    Quaternion              get_inertiaTensorRotation();
+    void                    set_inertiaTensorRotation(const Quaternion &v);
+    RigidbodyInterpolation  get_interpolation();
+    void                    set_interpolation(RigidbodyInterpolation v);
+    bool                    get_isKinematic();
+    void                    set_isKinematic(bool v);
+    float                   get_mass();
+    void                    set_mass(float v);
+    float                   get_maxAngularVelocity();
+    void                    set_maxAngularVelocity(float v);
+    Vector3                 get_position();
+    void                    set_position(const Vector3 &v);
+    Quaternion              get_rotation();
+    void                    set_rotation(const Quaternion &v);
+    float                   get_sleepAngularVelocity();
+    void                    set_sleepAngularVelocity(float v);
+    float                   get_sleepVelocity();
+    void                    set_sleepVelocity(float v);
+    int                     get_solverIterationCount();
+    void                    set_solverIterationCount(int v);
+    bool                    get_useConeFriction();
+    void                    set_useConeFriction(bool v);
+    bool                    get_useGravity();
+    void                    set_useGravity(bool v);
+    Vector3                 get_velocity();
+    void                    set_velocity(const Vector3 &v);
+    Vector3                 get_worldCenterOfMass();
+
+    //Rigidbody::SetDensity(System.Single) : System.Void
+    //Rigidbody::AddForce(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddForce(UnityEngine.Vector3) : System.Void
+    //Rigidbody::AddForce(System.Single, System.Single, System.Single) : System.Void
+    //Rigidbody::AddForce(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddRelativeForce(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddRelativeForce(UnityEngine.Vector3) : System.Void
+    //Rigidbody::AddRelativeForce(System.Single, System.Single, System.Single) : System.Void
+    //Rigidbody::AddRelativeForce(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddTorque(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddTorque(UnityEngine.Vector3) : System.Void
+    //Rigidbody::AddTorque(System.Single, System.Single, System.Single) : System.Void
+    //Rigidbody::AddTorque(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddRelativeTorque(UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddRelativeTorque(UnityEngine.Vector3) : System.Void
+    //Rigidbody::AddRelativeTorque(System.Single, System.Single, System.Single) : System.Void
+    //Rigidbody::AddRelativeTorque(System.Single, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddForceAtPosition(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddForceAtPosition(UnityEngine.Vector3, UnityEngine.Vector3) : System.Void
+    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single, System.Single, UnityEngine.ForceMode) : System.Void
+    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single, System.Single) : System.Void
+    //Rigidbody::AddExplosionForce(System.Single, UnityEngine.Vector3, System.Single) : System.Void
+    //Rigidbody::ClosestPointOnBounds(UnityEngine.Vector3) : UnityEngine.Vector3
+    //Rigidbody::GetRelativePointVelocity(UnityEngine.Vector3) : UnityEngine.Vector3
+    //Rigidbody::GetPointVelocity(UnityEngine.Vector3) : UnityEngine.Vector3
+    //Rigidbody::MovePosition(UnityEngine.Vector3) : System.Void
+    //Rigidbody::MoveRotation(UnityEngine.Quaternion) : System.Void
+    //Rigidbody::Sleep() : System.Void
+    //Rigidbody::IsSleeping() : System.Boolean
+    //Rigidbody::WakeUp() : System.Void
+    //Rigidbody::SweepTest(UnityEngine.Vector3, UnityEngine.RaycastHit&, System.Single) : System.Boolean
+    //Rigidbody::SweepTest(UnityEngine.Vector3, UnityEngine.RaycastHit&) : System.Boolean
+    //Rigidbody::SweepTestAll(UnityEngine.Vector3, System.Single) : UnityEngine.RaycastHit[]
+    //Rigidbody::SweepTestAll(UnityEngine.Vector3) : UnityEngine.RaycastHit[]
+    //Rigidbody::SetMaxAngularVelocity(System.Single) : System.Void
 };
 
 
@@ -790,5 +906,9 @@ cpsDeclTraitsF(UnityEngine, HideFlags)
 cpsDeclTraitsF(UnityEngine, MeshTopology)
 cpsDeclTraitsF(UnityEngine, CubemapFace)
 cpsDeclTraitsF(UnityEngine, ComputeBufferType)
+cpsDeclTraitsF(UnityEngine, CollisionDetectionMode)
+cpsDeclTraitsF(UnityEngine, RigidbodyConstraints)
+cpsDeclTraitsF(UnityEngine, RigidbodyInterpolation)
+cpsDeclTraitsF(UnityEngine, ForceMode)
 
 #endif // cpsUnityEngine_h
