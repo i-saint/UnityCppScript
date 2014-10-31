@@ -281,6 +281,14 @@ struct cpsAPI RenderBuffer
 };
 
 
+struct cpsAPI BoneWeight
+{
+    cpsDeclTraits();
+
+    int bone_indices[4];
+    float weight[4];
+};
+
 
 
 
@@ -358,8 +366,51 @@ class cpsAPI Mesh : public Object
 typedef Object super;
 public:
     cpsDeclTraits();
+    static Mesh create();
     Mesh(cpsObject v = nullptr);
+
+    Matrix4x4               get_bindposes();
+    void                    set_bindposes(const Matrix4x4 &v);
+    int                     get_blendShapeCount();
+    cpsTArray<BoneWeight>   get_boneWeights();
+    void                    set_boneWeights(cpsTArray<BoneWeight> v);
+    Bounds                  get_bounds();
+    void                    set_bounds(const Bounds &v);
+    cpsTArray<Color>        get_colors();
+    void                    set_colors(cpsTArray<Color> v);
+    cpsTArray<Color32>      get_colors32();
+    void                    set_colors32(cpsTArray<Color32> v);
+    bool                    get_isReadable();
+    cpsTArray<Vector3>      get_normals();
+    void                    set_normals(cpsTArray<Vector3> v);
+    int                     get_subMeshCount();
+    void                    set_subMeshCount(int v);
+    cpsTArray<Vector4>      get_tangents();
+    void                    set_tangents(cpsTArray<Vector4> v);
+    cpsTArray<int>          get_triangles();
+    void                    set_triangles(cpsTArray<int> v);
+    cpsTArray<Vector2>      get_uv();
+    void                    set_uv(cpsTArray<Vector2> v);
+    cpsTArray<Vector2>      get_uv2();
+    void                    set_uv2(cpsTArray<Vector2> v);
+    int                     get_vertexCount();
+    cpsTArray<Vector3>      get_vertices();
+    void                    set_vertices(cpsTArray<Vector3> v);
+
+    void                    Clear(bool keepVertexLayout = true);
+    //void                    CombineMeshes(CombineInstance[] combine, bool mergeSubMeshes = true, bool useMatrices = true);
+    cpsString               GetBlendShapeName(int index);
+    cpsTArray<int>          GetIndices(int submesh);
+    MeshTopology            GetTopology(int submesh);
+    cpsTArray<int>          GetTriangles(int submesh);
+    void                    MarkDynamic();
+    void                    Optimize();
+    void                    RecalculateBounds();
+    void                    RecalculateNormals();
+    void                    SetIndices(cpsTArray<int> indices, MeshTopology topology, int submesh);
+    void                    SetTriangles(cpsTArray<int> triangles, int submesh);
 };
+
 
 class cpsAPI Material : public Object
 {

@@ -52,6 +52,7 @@ cpsImplTraits(UnityEngine, RaycastHit);
 cpsImplTraits(UnityEngine, RaycastHit2D);
 
 cpsImplTraits(UnityEngine, RenderBuffer);
+cpsImplTraits(UnityEngine, BoneWeight);
 
 
 
@@ -146,6 +147,220 @@ ResourceRequest::ResourceRequest(cpsObject v) : super(v) {}
 
 cpsImplTraits(UnityEngine, Mesh);
 Mesh::Mesh(cpsObject v) : super(v) {}
+Matrix4x4 Mesh::get_bindposes()
+{
+    cpsBindMethod("get_bindposes");
+    return s_method.invoke(*this).getData<Matrix4x4>();
+}
+void Mesh::set_bindposes(const Matrix4x4 &v)
+{
+    cpsBindMethod("set_bindposes");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+int Mesh::get_blendShapeCount()
+{
+    cpsBindMethod("get_blendShapeCount");
+    return s_method.invoke(*this).getData<int>();
+}
+cpsTArray<BoneWeight> Mesh::get_boneWeights()
+{
+    cpsBindMethod("get_boneWeights");
+    return cpsTArray<BoneWeight>(s_method.invoke(*this));
+}
+void Mesh::set_boneWeights(cpsTArray<BoneWeight> v)
+{
+    cpsBindMethod("set_boneWeights");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+Bounds Mesh::get_bounds()
+{
+    cpsBindMethod("get_bounds");
+    return s_method.invoke(*this).getData<Bounds>();
+}
+void Mesh::set_bounds(const Bounds &v)
+{
+    cpsBindMethod("set_bounds");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Color> Mesh::get_colors()
+{
+    cpsBindMethod("get_colors");
+    return cpsTArray<Color>(s_method.invoke(*this));
+}
+void Mesh::set_colors(cpsTArray<Color> v)
+{
+    cpsBindMethod("set_colors");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Color32> Mesh::get_colors32()
+{
+    cpsBindMethod("get_colors32");
+    return cpsTArray<Color32>(s_method.invoke(*this));
+}
+void Mesh::set_colors32(cpsTArray<Color32> v)
+{
+    cpsBindMethod("set_colors32");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+bool Mesh::get_isReadable()
+{
+    cpsBindMethod("get_isReadable");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+cpsTArray<Vector3> Mesh::get_normals()
+{
+    cpsBindMethod("get_normals");
+    return cpsTArray<Vector3>(s_method.invoke(*this));
+}
+void Mesh::set_normals(cpsTArray<Vector3> v)
+{
+    cpsBindMethod("set_normals");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+int Mesh::get_subMeshCount()
+{
+    cpsBindMethod("get_subMeshCount");
+    return s_method.invoke(*this).getData<int>();
+}
+void Mesh::set_subMeshCount(int v)
+{
+    cpsBindMethod("set_subMeshCount");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Vector4> Mesh::get_tangents()
+{
+    cpsBindMethod("get_tangents");
+    return cpsTArray<Vector4>(s_method.invoke(*this));
+}
+void Mesh::set_tangents(cpsTArray<Vector4> v)
+{
+    cpsBindMethod("set_tangents");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<int> Mesh::get_triangles()
+{
+    cpsBindMethod("get_triangles");
+    return cpsTArray<int>(s_method.invoke(*this));
+}
+void Mesh::set_triangles(cpsTArray<int> v)
+{
+    cpsBindMethod("set_triangles");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Vector2> Mesh::get_uv()
+{
+    cpsBindMethod("get_uv");
+    return cpsTArray<Vector2>(s_method.invoke(*this));
+}
+void Mesh::set_uv(cpsTArray<Vector2> v)
+{
+    cpsBindMethod("set_uv");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Vector2> Mesh::get_uv2()
+{
+    cpsBindMethod("get_uv2");
+    return cpsTArray<Vector2>(s_method.invoke(*this));
+}
+void Mesh::set_uv2(cpsTArray<Vector2> v)
+{
+    cpsBindMethod("set_uv2");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+int Mesh::get_vertexCount()
+{
+    cpsBindMethod("get_vertexCount");
+    return s_method.invoke(*this).getData<int>();
+}
+cpsTArray<Vector3> Mesh::get_vertices()
+{
+    cpsBindMethod("get_vertices");
+    return cpsTArray<Vector3>(s_method.invoke(*this));
+}
+void Mesh::set_vertices(cpsTArray<Vector3> v)
+{
+    cpsBindMethod("set_vertices");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+
+void Mesh::Clear(bool keepVertexLayout_)
+{
+    cpsBindMethod("Clear");
+    gboolean keepVertexLayout = keepVertexLayout_;
+    void *args[] = { &keepVertexLayout };
+    s_method.invoke(*this, args);
+}
+//void Mesh::CombineMeshes(CombineInstance[] combine, bool mergeSubMeshes = true, bool useMatrices = true);
+cpsString Mesh::GetBlendShapeName(int index)
+{
+    cpsBindMethod("GetBlendShapeName");
+    void *args[] = { &index };
+    return cpsString(s_method.invoke(*this, args));
+}
+cpsTArray<int> Mesh::GetIndices(int submesh)
+{
+    cpsBindMethod("GetIndices");
+    void *args[] = { &submesh };
+    return cpsTArray<int>(s_method.invoke(*this, args));
+}
+MeshTopology Mesh::GetTopology(int submesh)
+{
+    cpsBindMethod("GetTopology");
+    void *args[] = { &submesh };
+    return s_method.invoke(*this, args).getData<MeshTopology>();
+}
+cpsTArray<int> Mesh::GetTriangles(int submesh)
+{
+    cpsBindMethod("GetTriangles");
+    void *args[] = { &submesh };
+    return cpsTArray<int>(s_method.invoke(*this, args));
+}
+void Mesh::MarkDynamic()
+{
+    cpsBindMethod("MarkDynamic");
+    s_method.invoke(*this);
+}
+void Mesh::Optimize()
+{
+    cpsBindMethod("Optimize");
+    s_method.invoke(*this);
+}
+void Mesh::RecalculateBounds()
+{
+    cpsBindMethod("RecalculateBounds");
+    s_method.invoke(*this);
+}
+void Mesh::RecalculateNormals()
+{
+    cpsBindMethod("RecalculateNormals");
+    s_method.invoke(*this);
+}
+void Mesh::SetIndices(cpsTArray<int> indices, MeshTopology topology, int submesh)
+{
+    cpsBindMethod("SetIndices");
+    void *args[] = { (cpsArray)indices, &topology, &submesh };
+    s_method.invoke(*this, args);
+}
+void Mesh::SetTriangles(cpsTArray<int> triangles, int submesh)
+{
+    cpsBindMethod("SetTriangles");
+    void *args[] = { (cpsArray)triangles, &submesh };
+    s_method.invoke(*this, args);
+}
+
+
 
 cpsImplTraits(UnityEngine, Material);
 Material::Material(cpsObject v) : super(v) {}
