@@ -755,8 +755,160 @@ void Material::SetVector(int nameID, const Vector4 &vector)
 cpsImplTraits(UnityEngine, MaterialPropertyBlock);
 MaterialPropertyBlock::MaterialPropertyBlock(cpsObject v) : super(v) {}
 
+
 cpsImplTraits(UnityEngine, Shader);
 Shader::Shader(cpsObject v) : super(v) {}
+
+bool Shader::get_isSupported()
+{
+    cpsBindMethod("get_isSupported");
+    return s_method.invoke(*this).getData<gboolean>()!=0;
+}
+int Shader::get_maximumLOD()
+{
+    cpsBindMethod("get_maximumLOD");
+    return s_method.invoke(*this).getData<int>();
+}
+void Shader::set_maximumLOD(int v)
+{
+    cpsBindMethod("set_maximumLOD");
+    void *args[] = {&v};
+    s_method.invoke(*this, args);
+}
+int Shader::get_renderQueue()
+{
+    cpsBindMethod("get_renderQueue");
+    return s_method.invoke(*this).getData<int>();
+}
+cpsString Shader::get_customEditor()
+{
+    cpsBindMethod("get_customEditor");
+    return cpsString(s_method.invoke(*this));
+}
+
+/*static*/ int Shader::get_globalMaximumLOD()
+{
+    cpsBindMethod("get_globalMaximumLOD");
+    return s_method.invoke(nullptr).getData<int>();
+}
+/*static*/ void Shader::set_globalMaximumLOD(int v)
+{
+    cpsBindMethod("set_globalMaximumLOD");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+
+/*static*/ Shader Shader::Find(cpsString name)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("Find", _countof(names), names);
+    void *args[] = { name };
+    return Shader(s_method.invoke(nullptr, args));
+}
+/*static*/ int Shader::PropertyToID(cpsString name)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("PropertyToID", _countof(names), names);
+    void *args[] = { name };
+    return s_method.invoke(nullptr, args).getData<int>();
+}
+/*static*/ void Shader::SetGlobalBuffer(cpsString propertyName, ComputeBuffer buffer)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<ComputeBuffer>() };
+    cpsBindMethod("SetGlobalBuffer", _countof(names), names);
+    void *args[] = { propertyName, buffer };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalColor(cpsString propertyName, const Color &color)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Color>() };
+    cpsBindMethod("SetGlobalColor", _countof(names), names);
+    void *args[] = { propertyName, (void*)&color };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalColor(int nameID, const Color &color)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Color>() };
+    cpsBindMethod("SetGlobalColor", _countof(names), names);
+    void *args[] = { &nameID, (void*)&color };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalFloat(cpsString propertyName, float value)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<float>() };
+    cpsBindMethod("SetGlobalFloat", _countof(names), names);
+    void *args[] = { propertyName, &value };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalFloat(int nameID, float value)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<float>() };
+    cpsBindMethod("SetGlobalFloat", _countof(names), names);
+    void *args[] = { &nameID, &value };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalInt(cpsString propertyName, int value)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<int>() };
+    cpsBindMethod("SetGlobalInt", _countof(names), names);
+    void *args[] = { propertyName, &value };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalInt(int nameID, int value)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>() };
+    cpsBindMethod("SetGlobalInt", _countof(names), names);
+    void *args[] = { &nameID, &value };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalMatrix(cpsString propertyName, const Matrix4x4 &mat)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Matrix4x4>() };
+    cpsBindMethod("SetGlobalMatrix", _countof(names), names);
+    void *args[] = { propertyName, (void*)&mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalMatrix(int nameID, const Matrix4x4 &mat)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Matrix4x4>() };
+    cpsBindMethod("SetGlobalMatrix", _countof(names), names);
+    void *args[] = { &nameID, (void*)&mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalTexture(cpsString propertyName, Texture tex)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Texture>() };
+    cpsBindMethod("SetGlobalTexture", _countof(names), names);
+    void *args[] = { propertyName, tex };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalTexture(int nameID, Texture tex)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Texture>() };
+    cpsBindMethod("SetGlobalTexture", _countof(names), names);
+    void *args[] = { &nameID, tex };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalVector(cpsString propertyName, const Vector4 &vec)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Vector4>() };
+    cpsBindMethod("SetGlobalVector", _countof(names), names);
+    void *args[] = { propertyName, (void*)&vec };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::SetGlobalVector(int nameID, const Vector4 &vec)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Vector4>() };
+    cpsBindMethod("SetGlobalVector", _countof(names), names);
+    void *args[] = { &nameID, (void*)&vec };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Shader::WarmupAllShaders()
+{
+    cpsBindMethod("WarmupAllShaders", 0);
+}
+
+
 
 cpsImplTraits(UnityEngine, Texture);
 Texture::Texture(cpsObject v) : super(v) {}

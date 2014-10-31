@@ -496,6 +496,32 @@ typedef Object super;
 public:
     cpsDeclTraits();
     Shader(cpsObject v = nullptr);
+    
+    bool            get_isSupported();
+    int             get_maximumLOD();
+    void            set_maximumLOD(int v);
+    int             get_renderQueue();
+    cpsString       get_customEditor();
+
+    static int      get_globalMaximumLOD();
+    static void     set_globalMaximumLOD(int v);
+
+    static Shader   Find(cpsString name);
+    static int      PropertyToID(cpsString name);
+    static void     SetGlobalBuffer(cpsString propertyName, ComputeBuffer buffer);
+    static void     SetGlobalColor(cpsString propertyName, const Color &color);
+    static void     SetGlobalColor(int nameID, const Color &color);
+    static void     SetGlobalFloat(cpsString propertyName, float value);
+    static void     SetGlobalFloat(int nameID, float value);
+    static void     SetGlobalInt(cpsString propertyName, int value);
+    static void     SetGlobalInt(int nameID, int value);
+    static void     SetGlobalMatrix(cpsString propertyName, const Matrix4x4 &mat);
+    static void     SetGlobalMatrix(int nameID, const Matrix4x4 &mat);
+    static void     SetGlobalTexture(cpsString propertyName, Texture tex);
+    static void     SetGlobalTexture(int nameID, Texture tex);
+    static void     SetGlobalVector(cpsString propertyName, const Vector4 &vec);
+    static void     SetGlobalVector(int nameID, const Vector4 &vec);
+    static void     WarmupAllShaders();
 };
 
 class cpsAPI Texture : public Object
