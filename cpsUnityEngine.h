@@ -422,7 +422,64 @@ class cpsAPI Material : public Object
 typedef Object super;
 public:
     cpsDeclTraits();
+    static Material create(cpsString v);
+    static Material create(Shader v);
+    static Material create(Material v);
     Material(cpsObject v = nullptr);
+
+    Color                   get_color();
+    void                    set_color(const Color &v);
+    Texture                 get_mainTexture();
+    void                    set_mainTexture(Texture v);
+    Vector2                 get_mainTextureOffset();
+    void                    set_mainTextureOffset(const Vector2 &v);
+    Vector2                 get_mainTextureScale();
+    void                    set_mainTextureScale(const Vector2 &v);
+    int                     get_passCount();
+    int                     get_renderQueue();
+    void                    set_renderQueue(int v);
+    Shader                  get_shader();
+    void                    set_shader(Shader v);
+    cpsTArray<cpsString>    get_shaderKeywords();
+    void                    set_shaderKeywords(cpsTArray<cpsString> v);
+
+    void        CopyPropertiesFromMaterial(Material mat);
+    void        DisableKeyword(cpsString keyword);
+    void        EnableKeyword(cpsString keyword);
+    Color       GetColor(cpsString propertyName);
+    Color       GetColor(int nameID);
+    float       GetFloat(cpsString propertyName);
+    float       GetFloat(int nameID);
+    int         GetInt(cpsString propertyName);
+    int         GetInt(int nameID);
+    Matrix4x4   GetMatrix(cpsString propertyName);
+    Matrix4x4   GetMatrix(int nameID);
+    cpsString   GetTag(cpsString tag, bool searchFallbacks, cpsString defaultValue);
+    Texture     GetTexture(cpsString propertyName);
+    Texture     GetTexture(int nameID);
+    Vector2     GetTextureOffset(cpsString propertyName);
+    Vector2     GetTextureScale(cpsString propertyName);
+    Vector4     GetVector(cpsString propertyName);
+    Vector4     GetVector(int nameID);
+    bool        HasProperty(cpsString propertyName);
+    bool        HasProperty(int nameID);
+    void        Lerp(Material start, Material end, float t);
+    void        SetBuffer(cpsString propertyName, ComputeBuffer buffer);
+    void        SetColor(cpsString propertyName, const Color &color);
+    void        SetColor(int nameID, const Color &color);
+    void        SetFloat(cpsString propertyName, float value);
+    void        SetFloat(int nameID, float value);
+    void        SetInt(cpsString propertyName, int value);
+    void        SetInt(int nameID, int value);
+    void        SetMatrix(cpsString propertyName, const Matrix4x4 &matrix);
+    void        SetMatrix(int nameID, const Matrix4x4 &matrix);
+    bool        SetPass(int pass);
+    void        SetTexture(cpsString propertyName, Texture texture);
+    void        SetTexture(int nameID, Texture texture);
+    void        SetTextureOffset(cpsString propertyName, const Vector2 &offset);
+    void        SetTextureScale(cpsString propertyName, const Vector2 &scale);
+    void        SetVector(cpsString propertyName, const Vector4 &vector);
+    void        SetVector(int nameID, const Vector4 &vector);
 };
 
 class cpsAPI MaterialPropertyBlock : public Object

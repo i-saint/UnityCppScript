@@ -405,6 +405,353 @@ void Mesh::SetTriangles(cpsTArray<int> triangles, int submesh)
 cpsImplTraits(UnityEngine, Material);
 Material::Material(cpsObject v) : super(v) {}
 
+Color Material::get_color()
+{
+    cpsBindMethod("get_color");
+    return s_method.invoke(*this).getData<Color>();
+}
+void Material::set_color(const Color &v)
+{
+    cpsBindMethod("set_color");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+
+}
+Texture Material::get_mainTexture()
+{
+    cpsBindMethod("get_mainTexture");
+    return Texture(s_method.invoke(*this));
+}
+void Material::set_mainTexture(Texture v)
+{
+    cpsBindMethod("set_mainTexture");
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+Vector2 Material::get_mainTextureOffset()
+{
+    cpsBindMethod("get_mainTextureOffset");
+    return s_method.invoke(*this).getData<Vector2>();
+}
+void Material::set_mainTextureOffset(const Vector2 &v)
+{
+    cpsBindMethod("set_mainTextureOffset");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Vector2 Material::get_mainTextureScale()
+{
+    cpsBindMethod("get_mainTextureScale");
+    return s_method.invoke(*this).getData<Vector2>();
+}
+void Material::set_mainTextureScale(const Vector2 &v)
+{
+    cpsBindMethod("set_mainTextureScale");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+int Material::get_passCount()
+{
+    cpsBindMethod("get_passCount");
+    return s_method.invoke(*this).getData<int>();
+}
+int Material::get_renderQueue()
+{
+    cpsBindMethod("get_renderQueue");
+    return s_method.invoke(*this).getData<int>();
+}
+void Material::set_renderQueue(int v)
+{
+    cpsBindMethod("set_renderQueue");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Shader Material::get_shader()
+{
+    cpsBindMethod("get_shader");
+    return Shader(s_method.invoke(*this));
+}
+void Material::set_shader(Shader v)
+{
+    cpsBindMethod("set_shader");
+    void *args[] = { v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<cpsString> Material::get_shaderKeywords()
+{
+    cpsBindMethod("get_shaderKeywords");
+    return cpsTArray<cpsString>(s_method.invoke(*this));
+}
+void Material::set_shaderKeywords(cpsTArray<cpsString> v)
+{
+    cpsBindMethod("set_shaderKeywords");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+
+void Material::CopyPropertiesFromMaterial(Material mat)
+{
+    static const char *names[] = {cpsTypename<Material>()};
+    cpsBindMethod("CopyPropertiesFromMaterial", _countof(names), names);
+    void *args[] = { mat };
+    s_method.invoke(*this, args);
+}
+void Material::DisableKeyword(cpsString keyword)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("DisableKeyword");
+    void *args[] = { keyword };
+    s_method.invoke(*this, args);
+}
+void Material::EnableKeyword(cpsString keyword)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("EnableKeyword", _countof(names), names);
+    void *args[] = { keyword };
+    s_method.invoke(*this, args);
+}
+Color Material::GetColor(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetColor", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<Color>();
+}
+Color Material::GetColor(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetColor", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<Color>();
+}
+float Material::GetFloat(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetFloat", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<float>();
+}
+float Material::GetFloat(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetFloat", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<float>();
+}
+int Material::GetInt(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetInt", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<int>();
+}
+int Material::GetInt(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetInt", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<int>();
+}
+Matrix4x4 Material::GetMatrix(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetMatrix", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<Matrix4x4>();
+}
+Matrix4x4 Material::GetMatrix(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetMatrix", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<Matrix4x4>();
+}
+cpsString Material::GetTag(cpsString tag, bool searchFallbacks_, cpsString defaultValue)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<bool>(), cpsTypename<cpsString>() };
+    cpsBindMethod("GetTag", _countof(names), names);
+    gboolean searchFallbacks = searchFallbacks_;
+    void *args[] = { tag, &searchFallbacks, defaultValue };
+    return cpsString(s_method.invoke(*this, args));
+}
+Texture Material::GetTexture(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetTexture", _countof(names), names);
+    void *args[] = { propertyName };
+    return Texture(s_method.invoke(*this, args));
+}
+Texture Material::GetTexture(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetTexture", _countof(names), names);
+    void *args[] = { &nameID };
+    return Texture(s_method.invoke(*this, args));
+}
+Vector2 Material::GetTextureOffset(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetTextureOffset", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<Vector2>();
+}
+Vector2 Material::GetTextureScale(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetTextureScale", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<Vector2>();
+}
+Vector4 Material::GetVector(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("GetVector", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<Vector4>();
+}
+Vector4 Material::GetVector(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("GetVector", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<Vector4>();
+}
+bool Material::HasProperty(cpsString propertyName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("HasProperty", _countof(names), names);
+    void *args[] = { propertyName };
+    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+}
+bool Material::HasProperty(int nameID)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("HasProperty", _countof(names), names);
+    void *args[] = { &nameID };
+    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+}
+void Material::Lerp(Material start, Material end, float t)
+{
+    static const char *names[] = { cpsTypename<Material>(), cpsTypename<Material>(), cpsTypename<float>() };
+    cpsBindMethod("Lerp", _countof(names), names);
+    void *args[] = { start, end, &t };
+    s_method.invoke(*this, args);
+}
+void Material::SetBuffer(cpsString propertyName, ComputeBuffer buffer)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<ComputeBuffer>() };
+    cpsBindMethod("SetBuffer", _countof(names), names);
+    void *args[] = { propertyName, buffer };
+    s_method.invoke(*this, args);
+}
+void Material::SetColor(cpsString propertyName, const Color &color)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Color>() };
+    cpsBindMethod("SetColor", _countof(names), names);
+    void *args[] = { propertyName, (void*)&color };
+    s_method.invoke(*this, args);
+}
+void Material::SetColor(int nameID, const Color &color)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Color>() };
+    cpsBindMethod("SetColor", _countof(names), names);
+    void *args[] = { &nameID, (void*)&color };
+    s_method.invoke(*this, args);
+}
+void Material::SetFloat(cpsString propertyName, float value)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<float>() };
+    cpsBindMethod("SetFloat", _countof(names), names);
+    void *args[] = { propertyName, &value };
+    s_method.invoke(*this, args);
+}
+void Material::SetFloat(int nameID, float value)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<float>() };
+    cpsBindMethod("SetFloat", _countof(names), names);
+    void *args[] = { &nameID, &value };
+    s_method.invoke(*this, args);
+}
+void Material::SetInt(cpsString propertyName, int value)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<int>() };
+    cpsBindMethod("SetInt", _countof(names), names);
+    void *args[] = { propertyName, &value };
+    s_method.invoke(*this, args);
+}
+void Material::SetInt(int nameID, int value)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<int>() };
+    cpsBindMethod("SetInt", _countof(names), names);
+    void *args[] = { &nameID, &value };
+    s_method.invoke(*this, args);
+}
+void Material::SetMatrix(cpsString propertyName, const Matrix4x4 &matrix)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Matrix4x4>() };
+    cpsBindMethod("SetMatrix", _countof(names), names);
+    void *args[] = { propertyName, (void*)&matrix };
+    s_method.invoke(*this, args);
+}
+void Material::SetMatrix(int nameID, const Matrix4x4 &matrix)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Matrix4x4>() };
+    cpsBindMethod("SetMatrix", _countof(names), names);
+    void *args[] = { &nameID, (void*)&matrix };
+    s_method.invoke(*this, args);
+}
+bool Material::SetPass(int pass)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("SetPass", _countof(names), names);
+    void *args[] = { &pass };
+    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+}
+void Material::SetTexture(cpsString propertyName, Texture texture)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Texture>() };
+    cpsBindMethod("SetTexture", _countof(names), names);
+    void *args[] = { propertyName, texture };
+    s_method.invoke(*this, args);
+}
+void Material::SetTexture(int nameID, Texture texture)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Texture>() };
+    cpsBindMethod("SetTexture", _countof(names), names);
+    void *args[] = { &nameID, texture };
+    s_method.invoke(*this, args);
+}
+void Material::SetTextureOffset(cpsString propertyName, const Vector2 &offset)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Vector2>() };
+    cpsBindMethod("SetTextureOffset", _countof(names), names);
+    void *args[] = { propertyName, (void*)&offset };
+    s_method.invoke(*this, args);
+}
+void Material::SetTextureScale(cpsString propertyName, const Vector2 &scale)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Vector2>() };
+    cpsBindMethod("SetTextureScale", _countof(names), names);
+    void *args[] = { propertyName, (void*)&scale };
+    s_method.invoke(*this, args);
+}
+void Material::SetVector(cpsString propertyName, const Vector4 &vector)
+{
+    static const char *names[] = { cpsTypename<cpsString>(), cpsTypename<Vector4>() };
+    cpsBindMethod("SetVector", _countof(names), names);
+    void *args[] = { propertyName, (void*)&vector };
+    s_method.invoke(*this, args);
+}
+void Material::SetVector(int nameID, const Vector4 &vector)
+{
+    static const char *names[] = { cpsTypename<int>(), cpsTypename<Vector4>() };
+    cpsBindMethod("SetVector", _countof(names), names);
+    void *args[] = { &nameID, (void*)&vector };
+    s_method.invoke(*this, args);
+}
+
+
+
 cpsImplTraits(UnityEngine, MaterialPropertyBlock);
 MaterialPropertyBlock::MaterialPropertyBlock(cpsObject v) : super(v) {}
 
