@@ -819,8 +819,8 @@ public:
     static void CancelQuit();
     static bool CanStreamedLevelBeLoaded(int levelIndex);
     static void CaptureScreenshot(cpsString filename, int superSize = 0);
-    //static void ExternalCall(cpsString functionName, cpsArray args); // Web Player only
-    //static void ExternalEval(cpsString script); // Web Player only
+    //static void ExternalCall(cpsString functionName, cpsArray args);  // Web Player only
+    //static void ExternalEval(cpsString script);                       // 
     static float GetStreamProgressForLevel(int levelIndex);
     static bool HasProLicense();
     static bool HasUserAuthorization(UserAuthorization mode);
@@ -844,8 +844,23 @@ class cpsAPI Debug
 {
 public:
     cpsDeclTraits();
+
+    static bool get_developerConsoleVisible();
+    static void set_developerConsoleVisible(bool v);
+    static bool get_isDebugBuild();
+
+    static void Break();
+    static void ClearDeveloperConsole();
+    static void DrawLine(const Vector3 &start, const Vector3 &end, const Color &color = Color::white, float duration = 0.0f, bool depthTest = true);
+    static void DrawRay(const Vector3 &start, const Vector3 &dir, const Color &color = Color::white, float duration = 0.0f, bool depthTest = true);
     static void Log(cpsString message);
     static void Log(cpsString message, cpsObject obj);
+    static void LogError(cpsString message);
+    static void LogError(cpsString message, cpsObject context);
+    //static void LogException(Exception exception);
+    //static void LogException(Exception exception, Object context);
+    static void LogWarning(cpsString message);
+    static void LogWarning(cpsString message, cpsObject context);
 };
 
 

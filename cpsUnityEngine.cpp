@@ -1289,21 +1289,88 @@ cpsImplTraits(UnityEngine, Application);
 
 cpsImplTraits(UnityEngine, Debug);
 
+
+/*static*/ bool Debug::get_developerConsoleVisible()
+{
+    cpsBindMethod("get_developerConsoleVisible");
+    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+}
+/*static*/ void Debug::set_developerConsoleVisible(bool v_)
+{
+    cpsBindMethod("set_developerConsoleVisible");
+    gboolean v = v_;
+    void *args[] = {&v};
+    s_method.invoke(nullptr, args);
+}
+/*static*/ bool Debug::get_isDebugBuild()
+{
+    cpsBindMethod("get_isDebugBuild");
+    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+}
+
+/*static*/ void Debug::Break()
+{
+    cpsBindMethod("Break");
+    s_method.invoke(nullptr);
+}
+/*static*/ void Debug::ClearDeveloperConsole()
+{
+    cpsBindMethod("ClearDeveloperConsole");
+    s_method.invoke(nullptr);
+}
+/*static*/ void Debug::DrawLine(const Vector3 &start, const Vector3 &end, const Color &color, float duration, bool depthTest_)
+{
+    cpsBindMethod("DrawLine");
+    gboolean depthTest = depthTest_;
+    void *args[] = { (void*)&start, (void*)&end, (void*)&color, &duration, &depthTest };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Debug::DrawRay(const Vector3 &start, const Vector3 &dir, const Color &color, float duration, bool depthTest_)
+{
+    cpsBindMethod("DrawRay");
+    gboolean depthTest = depthTest_;
+    void *args[] = { (void*)&start, (void*)&dir, (void*)&color, &duration, &depthTest };
+    s_method.invoke(nullptr, args);
+}
 /*static*/ void Debug::Log(cpsString message)
 {
     cpsBindMethod("Log", 1);
-
     void *args[] = { message };
     s_method.invoke(nullptr, args);
 }
-
 /*static*/ void Debug::Log(cpsString message, cpsObject obj)
 {
     cpsBindMethod("Log", 2);
-
     void *args[] = { message, obj };
     s_method.invoke(nullptr, args);
 }
+/*static*/ void Debug::LogError(cpsString message)
+{
+    cpsBindMethod("LogError", 1);
+    void *args[] = { message };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Debug::LogError(cpsString message, cpsObject context)
+{
+    cpsBindMethod("LogError", 2);
+    void *args[] = { message, context };
+    s_method.invoke(nullptr, args);
+}
+///*static*/ void Debug::LogException(Exception exception);
+///*static*/ void Debug::LogException(Exception exception, Object context);
+/*static*/ void Debug::LogWarning(cpsString message)
+{
+    cpsBindMethod("LogWarning", 1);
+    void *args[] = { message };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Debug::LogWarning(cpsString message, cpsObject context)
+{
+    cpsBindMethod("LogWarning", 2);
+    void *args[] = { message, context };
+    s_method.invoke(nullptr, args);
+}
+
 
 
 cpsImplTraits(UnityEngine, GL);
