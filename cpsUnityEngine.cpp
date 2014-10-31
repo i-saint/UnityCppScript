@@ -140,9 +140,49 @@ cpsString Object::ToString() const
 
 cpsImplTraits(UnityEngine, AsyncOperation);
 AsyncOperation::AsyncOperation(cpsObject v) : super(v) {}
+bool AsyncOperation::get_isDone()
+{
+    cpsBindMethod("get_isDone");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+float AsyncOperation::get_progress()
+{
+    cpsBindMethod("get_progress");
+    return s_method.invoke(*this).getData<float>();
+}
+int AsyncOperation::get_priority()
+{
+    cpsBindMethod("get_priority");
+    return s_method.invoke(*this).getData<int>();
+}
+void AsyncOperation::set_priority(int v)
+{
+    cpsBindMethod("set_priority");
+    void *args[] = {&v};
+    s_method.invoke(*this, args);
+}
+bool AsyncOperation::get_allowSceneActivation()
+{
+    cpsBindMethod("get_allowSceneActivation");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+void AsyncOperation::set_allowSceneActivation(bool v_)
+{
+    cpsBindMethod("set_allowSceneActivation");
+    gboolean v = v_;
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+
 
 cpsImplTraits(UnityEngine, ResourceRequest);
 ResourceRequest::ResourceRequest(cpsObject v) : super(v) {}
+Object ResourceRequest::get_asset()
+{
+    cpsBindMethod("get_priority");
+    return Object(s_method.invoke(*this));
+}
+
 
 
 cpsImplTraits(UnityEngine, Mesh);

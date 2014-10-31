@@ -348,6 +348,12 @@ typedef Object super;
 public:
     cpsDeclTraits();
     AsyncOperation(cpsObject v = nullptr);
+    bool    get_isDone();
+    float   get_progress();
+    int     get_priority();
+    void    set_priority(int v);
+    bool    get_allowSceneActivation();
+    void    set_allowSceneActivation(bool v);
 };
 
 class cpsAPI ResourceRequest : public AsyncOperation
@@ -356,8 +362,7 @@ typedef AsyncOperation super;
 public:
     cpsDeclTraits();
     ResourceRequest(cpsObject v = nullptr);
-
-    cpsObject get_asset();
+    Object get_asset();
 };
 
 
