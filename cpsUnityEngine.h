@@ -111,6 +111,14 @@ enum ForceMode
     ForceMode_VelocityChange
 };
 
+enum UserAuthorization
+{
+    UserAuthorization_WebCam = 1,
+    UserAuthorization_Microphone
+};
+
+
+
 struct cpsAPI Vector2
 {
     cpsDeclTraits();
@@ -807,6 +815,28 @@ public:
     cpsDeclTraits();
     static cpsString    get_dataPath();
     static bool         get_isEditor();
+
+    static void CancelQuit();
+    static bool CanStreamedLevelBeLoaded(int levelIndex);
+    static void CaptureScreenshot(cpsString filename, int superSize = 0);
+    //static void ExternalCall(cpsString functionName, cpsArray args); // Web Player only
+    //static void ExternalEval(cpsString script); // Web Player only
+    static float GetStreamProgressForLevel(int levelIndex);
+    static bool HasProLicense();
+    static bool HasUserAuthorization(UserAuthorization mode);
+    static void LoadLevel(int index);
+    static void LoadLevel(cpsString name);
+    static void LoadLevelAdditive(int index);
+    static void LoadLevelAdditive(cpsString name);
+    static AsyncOperation LoadLevelAdditiveAsync(int index);
+    static AsyncOperation LoadLevelAdditiveAsync(cpsString levelName);
+    static AsyncOperation LoadLevelAsync(int index);
+    static AsyncOperation LoadLevelAsync(cpsString levelName);
+    static void OpenURL(cpsString url);
+    static void Quit();
+    //static void RegisterLogCallback(LogCallback handler);
+    //static void RegisterLogCallbackThreaded(LogCallback handler);
+    static AsyncOperation RequestUserAuthorization(UserAuthorization mode);
 };
 
 
@@ -944,6 +974,8 @@ public:
     static cpsTArray<cpsObject> LoadAll(cpsString path);
     //static Object LoadAssetAtPath(cpsString assetPath, Type type);
     static ResourceRequest LoadAsync(cpsString path);
+    static void UnloadAsset(Object assetToUnload);
+    static AsyncOperation UnloadUnusedAssets();
 };
 
 

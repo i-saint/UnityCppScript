@@ -1162,15 +1162,128 @@ cpsImplTraits(UnityEngine, Application);
 /*static*/ cpsString Application::get_dataPath()
 {
     cpsBindMethod("get_dataPath");
-    return cpsString(s_method.invoke(nullptr, nullptr));
+    return cpsString(s_method.invoke(nullptr));
 }
 
 /*static*/ bool Application::get_isEditor()
 {
     cpsBindMethod("get_isEditor");
-    cpsObject ret = s_method.invoke(nullptr, nullptr);
+    cpsObject ret = s_method.invoke(nullptr);
     return *((gboolean*)ret.getDataPtr()) != 0;
 }
+
+/*static*/ void Application::CancelQuit()
+{
+    cpsBindMethod("CancelQuit");
+    s_method.invoke(nullptr);
+}
+/*static*/ bool Application::CanStreamedLevelBeLoaded(int levelIndex)
+{
+    cpsBindMethod("CancelQuit");
+    void *args[] = {&levelIndex};
+    return s_method.invoke(nullptr, args).getData<gboolean>() != 0;
+}
+/*static*/ void Application::CaptureScreenshot(cpsString filename, int superSize)
+{
+    cpsBindMethod("CaptureScreenshot");
+    void *args[] = { filename, &superSize };
+    s_method.invoke(nullptr, args);
+}
+///*static*/ void Application::ExternalCall(cpsString functionName, cpsArray args); // Web Player only
+///*static*/ void Application::ExternalEval(cpsString script); // Web Player only
+/*static*/ float Application::GetStreamProgressForLevel(int levelIndex)
+{
+    cpsBindMethod("GetStreamProgressForLevel");
+    void *args[] = { &levelIndex };
+    return s_method.invoke(nullptr, args).getData<float>();
+}
+/*static*/ bool Application::HasProLicense()
+{
+    cpsBindMethod("HasProLicense");
+    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+}
+/*static*/ bool Application::HasUserAuthorization(UserAuthorization mode)
+{
+    cpsBindMethod("HasUserAuthorization");
+    void *args[] = { &mode };
+    return s_method.invoke(nullptr, args).getData<gboolean>() != 0;
+}
+/*static*/ void Application::LoadLevel(int index)
+{
+    static const char *names[] = {cpsTypename<int>()};
+    cpsBindMethod("LoadLevel", _countof(names), names);
+    void *args[] = { &index };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Application::LoadLevel(cpsString name)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("LoadLevel", _countof(names), names);
+    void *args[] = { name };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Application::LoadLevelAdditive(int index)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("LoadLevelAdditive", _countof(names), names);
+    void *args[] = { &index };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Application::LoadLevelAdditive(cpsString name)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("LoadLevelAdditive", _countof(names), names);
+    void *args[] = { name };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ AsyncOperation Application::LoadLevelAdditiveAsync(int index)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("LoadLevelAdditiveAsync", _countof(names), names);
+    void *args[] = { &index };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ AsyncOperation Application::LoadLevelAdditiveAsync(cpsString levelName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("LoadLevelAdditiveAsync", _countof(names), names);
+    void *args[] = { levelName };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ AsyncOperation Application::LoadLevelAsync(int index)
+{
+    static const char *names[] = { cpsTypename<int>() };
+    cpsBindMethod("LoadLevelAsync", _countof(names), names);
+    void *args[] = { &index };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ AsyncOperation Application::LoadLevelAsync(cpsString levelName)
+{
+    static const char *names[] = { cpsTypename<cpsString>() };
+    cpsBindMethod("LoadLevelAsync", _countof(names), names);
+    void *args[] = { levelName };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ void Application::OpenURL(cpsString url)
+{
+    cpsBindMethod("OpenURL", 1);
+    void *args[] = { url };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Application::Quit()
+{
+    cpsBindMethod("Quit", 0);
+    s_method.invoke(nullptr);
+}
+///*static*/ void Application::RegisterLogCallback(LogCallback handler);
+///*static*/ void Application::RegisterLogCallbackThreaded(LogCallback handler);
+/*static*/ AsyncOperation Application::RequestUserAuthorization(UserAuthorization mode)
+{
+    cpsBindMethod("RequestUserAuthorization", 1);
+    void *args[] = { &mode };
+    return s_method.invoke(nullptr, args);
+}
+
 
 
 
@@ -1622,8 +1735,43 @@ cpsImplTraits(UnityEngine, Physics);
 
 cpsImplTraits(UnityEngine, Physics2D);
 
+
+
 cpsImplTraits(UnityEngine, Resources);
 
+/*static*/ cpsObject Resources::Load(cpsString path)
+{
+    cpsBindMethod("Load", 1);
+    void *args[] = { path };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ cpsTArray<cpsObject> Resources::LoadAll(cpsString path)
+{
+    cpsBindMethod("LoadAll", 1);
+    void *args[] = { path };
+    cpsObject ret = s_method.invoke(nullptr, args);
+    return cpsTArray<cpsObject>(ret);
+}
+
+//static Object Resources::LoadAssetAtPath(cpsString assetPath, Type type);
+
+/*static*/ ResourceRequest Resources::LoadAsync(cpsString path)
+{
+    cpsBindMethod("LoadAsync", 1);
+    void *args[] = { path };
+    return s_method.invoke(nullptr, args);
+}
+/*static*/ void Resources::UnloadAsset(Object assetToUnload)
+{
+    cpsBindMethod("UnloadAsset", 1);
+    void *args[] = { assetToUnload };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ AsyncOperation Resources::UnloadUnusedAssets()
+{
+    cpsBindMethod("UnloadAsset", 0);
+    return s_method.invoke(nullptr);
+}
 
 
 

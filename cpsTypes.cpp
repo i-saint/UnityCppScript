@@ -471,6 +471,17 @@ template<> cpsAPI const char* cpsTypename<float>()
     return "System.Single";
 }
 
+template<> cpsAPI cpsClass cpsTypeinfo<cpsString>()
+{
+    static cpsCachedClass s_class;
+    if (!s_class) { s_class = mono_get_string_class(); }
+    return s_class;
+}
+template<> cpsAPI const char* cpsTypename<cpsString>()
+{
+    return "System.String";
+}
+
 
 
 void cpsClearCache();

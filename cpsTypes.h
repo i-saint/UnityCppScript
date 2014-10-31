@@ -245,13 +245,6 @@ template<class T> const char* cpsTypenameArray(){ return T::getTypenameArray(); 
 template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 
-template<> cpsAPI cpsClass    cpsTypeinfo<bool>();
-template<> cpsAPI const char* cpsTypename<bool>();
-template<> cpsAPI cpsClass    cpsTypeinfo<int>();
-template<> cpsAPI const char* cpsTypename<int>();
-template<> cpsAPI cpsClass    cpsTypeinfo<float>();
-template<> cpsAPI const char* cpsTypename<float>();
-
 
 #define cpsDeclTraits()\
     static cpsClass getClass();\
@@ -305,5 +298,17 @@ template<> cpsAPI const char* cpsTypename<float>();
     {\
         return #Namespace "." #Type "[]";\
     }
+
+
+
+
+template<> cpsAPI cpsClass    cpsTypeinfo<bool>();
+template<> cpsAPI const char* cpsTypename<bool>();
+template<> cpsAPI cpsClass    cpsTypeinfo<int>();
+template<> cpsAPI const char* cpsTypename<int>();
+template<> cpsAPI cpsClass    cpsTypeinfo<float>();
+template<> cpsAPI const char* cpsTypename<float>();
+template<> cpsAPI cpsClass    cpsTypeinfo<cpsString>();
+template<> cpsAPI const char* cpsTypename<cpsString>();
 
 #endif // cpsTypes_h
