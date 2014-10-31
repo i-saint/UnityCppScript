@@ -2128,6 +2128,155 @@ cpsImplTraits(UnityEngine, Debug);
 
 
 cpsImplTraits(UnityEngine, GL);
+/*static*/ void GL::Begin(int mode)
+{
+    cpsBindMethod("Begin");
+    void *args[] = {&mode};
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::Clear(bool clearDepth_, bool clearColor_, const Color &backgroundColor, float depth)
+{
+    cpsBindMethod("Clear");
+    gboolean clearDepth = clearDepth_;
+    gboolean clearColor = clearColor_;
+    void *args[] = { &clearDepth, &clearColor, (void*)&backgroundColor, &depth };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::ClearWithSkybox(bool clearDepth_, Camera camera)
+{
+    cpsBindMethod("ClearWithSkybox");
+    gboolean clearDepth = clearDepth_;
+    void *args[] = { &clearDepth, camera };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::Color_(const Color &c)
+{
+    cpsBindMethod("Color");
+    void *args[] = { (void*)&c };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::End()
+{
+    cpsBindMethod("End");
+    s_method.invoke(nullptr);
+}
+/*static*/ Matrix4x4 GL::GetGPUProjectionMatrix(const Matrix4x4 &proj, bool renderIntoTexture_)
+{
+    cpsBindMethod("GetGPUProjectionMatrix");
+    gboolean renderIntoTexture = renderIntoTexture_;
+    void *args[] = { (void*)&proj, &renderIntoTexture };
+    return s_method.invoke(nullptr, args).getData<Matrix4x4>();
+}
+/*static*/ void GL::InvalidateState()
+{
+    cpsBindMethod("InvalidateState");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::IssuePluginEvent(int eventID)
+{
+    cpsBindMethod("IssuePluginEvent");
+    void *args[] = { &eventID };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::LoadIdentity()
+{
+    cpsBindMethod("LoadIdentity");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::LoadOrtho()
+{
+    cpsBindMethod("LoadOrtho");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::LoadPixelMatrix()
+{
+    cpsBindMethod("LoadPixelMatrix");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::LoadProjectionMatrix(const Matrix4x4 &mat)
+{
+    cpsBindMethod("LoadProjectionMatrix");
+    void *args[] = { (void*)&mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::MultiTexCoord(int unit, const Vector3 &v)
+{
+    cpsBindMethod("MultiTexCoord");
+    void *args[] = { &unit, (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::MultiTexCoord2(int unit, float x, float y)
+{
+    cpsBindMethod("MultiTexCoord2");
+    void *args[] = { &unit, &x, &y };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::MultiTexCoord3(int unit, float x, float y, float z)
+{
+    cpsBindMethod("MultiTexCoord3");
+    void *args[] = { &unit, &x, &y, &z };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::MultMatrix(const Matrix4x4 &mat)
+{
+    cpsBindMethod("MultMatrix");
+    void *args[] = { (void*)&mat };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::PopMatrix()
+{
+    cpsBindMethod("PopMatrix");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::PushMatrix()
+{
+    cpsBindMethod("PushMatrix");
+    s_method.invoke(nullptr);
+}
+/*static*/ void GL::SetRevertBackfacing(bool revertBackFaces_)
+{
+    cpsBindMethod("SetRevertBackfacing");
+    gboolean revertBackFaces = revertBackFaces_;
+    void *args[] = { &revertBackFaces };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::TexCoord(const Vector3 &v)
+{
+    cpsBindMethod("TexCoord");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::TexCoord2(float x, float y)
+{
+    cpsBindMethod("TexCoord2");
+    void *args[] = { &x, &y };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::TexCoord3(float x, float y, float z)
+{
+    cpsBindMethod("TexCoord3");
+    void *args[] = { &x, &y, &z };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::Vertex(const Vector3 &v)
+{
+    cpsBindMethod("Vertex");
+    void *args[] = { (void*)&v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::Vertex3(float x, float y, float z)
+{
+    cpsBindMethod("Vertex3");
+    void *args[] = { &x, &y, &z };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void GL::Viewport(const Rect &pixelRect)
+{
+    cpsBindMethod("Viewport");
+    void *args[] = { (void*)&pixelRect };
+    s_method.invoke(nullptr, args);
+}
+
 
 
 cpsImplTraits(UnityEngine, GUI);

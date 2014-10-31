@@ -1007,6 +1007,36 @@ class cpsAPI GL
 {
 public:
     cpsDeclTraits();
+    static const int QUADS = 7;
+    static const int LINES = 1;
+    static const int TRIANGLES = 4;
+    static const int TRIANGLE_STRIP = 5;
+
+    static void         Begin(int mode);
+    static void         Clear(bool clearDepth, bool clearColor, const Color &backgroundColor, float depth = 1.0f);
+    static void         ClearWithSkybox(bool clearDepth, Camera camera);
+    static void         Color_(const Color &c);
+    static void         End();
+    static Matrix4x4    GetGPUProjectionMatrix(const Matrix4x4 &proj, bool renderIntoTexture);
+    static void         InvalidateState();
+    static void         IssuePluginEvent(int eventID);
+    static void         LoadIdentity();
+    static void         LoadOrtho();
+    static void         LoadPixelMatrix();
+    static void         LoadProjectionMatrix(const Matrix4x4 &mat);
+    static void         MultiTexCoord(int unit, const Vector3 &v);
+    static void         MultiTexCoord2(int unit, float x, float y);
+    static void         MultiTexCoord3(int unit, float x, float y, float z);
+    static void         MultMatrix(const Matrix4x4 &mat);
+    static void         PopMatrix();
+    static void         PushMatrix();
+    static void         SetRevertBackfacing(bool revertBackFaces);
+    static void         TexCoord(const Vector3 &v);
+    static void         TexCoord2(float x, float y);
+    static void         TexCoord3(float x, float y, float z);
+    static void         Vertex(const Vector3 &v);
+    static void         Vertex3(float x, float y, float z);
+    static void         Viewport(const Rect &pixelRect);
 };
 
 
