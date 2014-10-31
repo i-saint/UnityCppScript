@@ -19,6 +19,8 @@ class cpsAPI ComputeBuffer;
 class cpsAPI Mesh;
 class cpsAPI Camera;
 
+class cpsAPI Component;
+
 
 
 cpsAPI cpsImage& GetImage();
@@ -115,6 +117,16 @@ enum UserAuthorization
 {
     UserAuthorization_WebCam = 1,
     UserAuthorization_Microphone
+};
+
+enum PrimitiveType
+{
+    PrimitiveType_Sphere,
+    PrimitiveType_Capsule,
+    PrimitiveType_Cylinder,
+    PrimitiveType_Cube,
+    PrimitiveType_Plane,
+    PrimitiveType_Quad
 };
 
 
@@ -583,6 +595,21 @@ public:
 };
 
 
+class Motion : public Object
+{
+typedef Object super;
+public:
+    cpsDeclTraits();
+    Motion(cpsObject v = nullptr);
+};
+
+class AnimationClip : public Motion
+{
+typedef Motion super;
+public:
+    cpsDeclTraits();
+    AnimationClip(cpsObject v = nullptr);
+};
 
 
 
@@ -592,6 +619,109 @@ typedef Object super;
 public:
     cpsDeclTraits();
     GameObject(cpsObject v = nullptr);
+
+    template<class ComponentT>
+    ComponentT AddComponent()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("AddComponent", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return ComponentT(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    ComponentT GetComponent()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponent", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return ComponentT(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    cpsTArray<ComponentT> GetComponents()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponents", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    ComponentT GetComponentInChildren()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentInChildren", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return ComponentT(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    cpsTArray<ComponentT> GetComponentsInChildren()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentsInChildren", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    ComponentT GetComponentInParent()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentInParent", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return ComponentT(s_method.invoke(mobj));
+    }
+
+    template<class ComponentT>
+    cpsTArray<ComponentT> GetComponentsInParent()
+    {
+        static cpsCachedMethod s_generics;
+        static cpsCachedMethod s_method;
+        if (!s_generics) {
+            cpsClass tparams[] = { ComponentT::getClass() };
+            s_generics = cpsObject(mobj).getClass().findMethod("GetComponentsInParent", 0);
+            s_method = s_generics.instantiate(tparams, 1);
+        }
+        return cpsTArray<ComponentT>(s_method.invoke(mobj));
+    }
+
+    void BroadcastMessage(cpsString methodName, Object parameter = Object(), SendMessageOptions options = SendMessageOptions_RequireReceiver);
+    bool CompareTag(cpsString tag);
+    void SampleAnimation(AnimationClip animation, float time);
+    void SendMessage(cpsString methodName, Object value = Object(), SendMessageOptions options = SendMessageOptions_RequireReceiver);
+    void SendMessageUpwards(cpsString methodName, Object value = Object(), SendMessageOptions options = SendMessageOptions_RequireReceiver);
+    void SetActive(bool value);
+
+    static GameObject               CreatePrimitive(PrimitiveType type);
+    static GameObject               Find(cpsString name);
+    static cpsTArray<GameObject>    FindGameObjectsWithTag(cpsString tag);
+    static GameObject               FindWithTag(cpsString tag);
 };
 
 class cpsAPI Component : public Object

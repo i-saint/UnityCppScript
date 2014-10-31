@@ -996,8 +996,80 @@ PhysicMaterial2D::PhysicMaterial2D(cpsObject v) : super(v) {}
 
 
 
+cpsImplTraits(UnityEngine, Motion);
+Motion::Motion(cpsObject v) : super(v) {}
+
+
+
+cpsImplTraits(UnityEngine, AnimationClip);
+AnimationClip::AnimationClip(cpsObject v) : super(v) {}
+
+
+
 cpsImplTraits(UnityEngine, GameObject);
 GameObject::GameObject(cpsObject v) : super(v) {}
+void GameObject::BroadcastMessage(cpsString methodName, Object parameter, SendMessageOptions options)
+{
+    cpsBindMethod("BroadcastMessage");
+    void *args[] = {methodName, parameter, &options};
+    s_method.invoke(*this, args);
+}
+bool GameObject::CompareTag(cpsString tag)
+{
+    cpsBindMethod("CompareTag");
+    void *args[] = { tag };
+    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+}
+void GameObject::SampleAnimation(AnimationClip animation, float time)
+{
+    cpsBindMethod("SampleAnimation");
+    void *args[] = { animation, &time };
+    s_method.invoke(*this, args);
+}
+void GameObject::SendMessage(cpsString methodName, Object value, SendMessageOptions options)
+{
+    cpsBindMethod("SendMessage");
+    void *args[] = { methodName, value, &options };
+    s_method.invoke(*this, args);
+}
+void GameObject::SendMessageUpwards(cpsString methodName, Object value, SendMessageOptions options)
+{
+    cpsBindMethod("SendMessageUpwards");
+    void *args[] = { methodName, value, &options };
+    s_method.invoke(*this, args);
+}
+void GameObject::SetActive(bool value_)
+{
+    cpsBindMethod("SetActive");
+    gboolean value = value_;
+    void *args[] = { &value };
+    s_method.invoke(*this, args);
+}
+
+/*static*/ GameObject GameObject::CreatePrimitive(PrimitiveType type)
+{
+    cpsBindMethod("CreatePrimitive");
+    void *args[] = { &type };
+    return GameObject(s_method.invoke(nullptr, args));
+}
+/*static*/ GameObject GameObject::Find(cpsString name)
+{
+    cpsBindMethod("Find");
+    void *args[] = { name };
+    return GameObject(s_method.invoke(nullptr, args));
+}
+/*static*/ cpsTArray<GameObject> GameObject::FindGameObjectsWithTag(cpsString tag)
+{
+    cpsBindMethod("FindGameObjectsWithTag");
+    void *args[] = { tag };
+    return cpsTArray<GameObject>(s_method.invoke(nullptr, args));
+}
+/*static*/ GameObject GameObject::FindWithTag(cpsString tag)
+{
+    cpsBindMethod("FindWithTag");
+    void *args[] = { tag };
+    return GameObject(s_method.invoke(nullptr, args));
+}
 
 
 
