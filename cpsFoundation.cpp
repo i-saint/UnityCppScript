@@ -1,5 +1,5 @@
 ﻿#include "cpsInternal.h"
-#include "cpsTypes.h"
+#include "cpsFoundation.h"
 #include "cpsUtils.h"
 #include <vector>
 #include <map>

@@ -19,17 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpsTypes.cpp" />
+    <ClCompile Include="cpsFoundation.cpp" />
     <ClCompile Include="cpsUnityEngine.cpp" />
     <ClCompile Include="cpsUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpsBinder.h" />
+    <ClInclude Include="cpsFoundation.h" />
     <ClInclude Include="cpsInternal.h" />
     <ClInclude Include="cpsUnityEngine.h" />
     <ClInclude Include="cpsUtils.h" />
     <ClInclude Include="monoAPI.h" />
-    <ClInclude Include="cpsTypes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{45CAFE1A-2ED4-44CA-9E3B-CA285A51F151}</ProjectGuid>

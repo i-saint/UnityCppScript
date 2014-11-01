@@ -1,7 +1,7 @@
 ﻿#ifndef cpsBinder_h
 #define cpsBinder_h
 
-#include "cpsTypes.h"
+#include "cpsFoundation.h"
 #include <type_traits>
 #define cpsUnRefConst(T) typename std::remove_const<typename std::remove_reference<T>::type>::type
 

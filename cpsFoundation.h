@@ -1,5 +1,5 @@
-﻿#ifndef cpsTypes_h
-#define cpsTypes_h
+﻿#ifndef cpsFoundation_h
+#define cpsFoundation_h
 
 #define _ITERATOR_DEBUG_LEVEL 0
 
@@ -311,4 +311,4 @@ template<> cpsAPI const char* cpsTypename<float>();
 template<> cpsAPI cpsClass    cpsTypeinfo<cpsString>();
 template<> cpsAPI const char* cpsTypename<cpsString>();
 
-#endif // cpsTypes_h
+#endif // cpsFoundation_h

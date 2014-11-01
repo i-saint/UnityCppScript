@@ -1,7 +1,7 @@
 ﻿#ifndef cpsUnityEngine_h
 #define cpsUnityEngine_h
 
-#include "cpsTypes.h"
+#include "cpsFoundation.h"
 #include <vector>
 
 namespace UnityEngine

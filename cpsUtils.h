@@ -1,7 +1,7 @@
 ﻿#ifndef cpsUtils_h
 #define cpsUtils_h
 
-#include "cpsTypes.h"
+#include "cpsFoundation.h"
 
 #define cpsMaxSymName 2500
 
