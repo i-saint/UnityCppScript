@@ -16,18 +16,6 @@
 namespace UnityEngine
 {
 
-const Vector2 Vector2::zero = Vector2(0.0f, 0.0f);
-const Vector2 Vector2::one = Vector2(1.0f, 1.0f);
-
-const Vector3 Vector3::zero = Vector3(0.0f, 0.0f, 0.0f);
-const Vector3 Vector3::one = Vector3(1.0f, 1.0f, 1.0f);
-const Vector3 Vector3::up = Vector3(0.0f, 1.0f, 0.0f);
-
-const Vector4 Vector4::zero = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
-const Vector4 Vector4::one = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
-
-
 cpsAPI cpsImage& GetImage()
 {
     static cpsCachedImage s_image;
@@ -37,9 +25,88 @@ cpsAPI cpsImage& GetImage()
 
 
 cpsImplTraits(UnityEngine, Vector2);
+const float Vector2::kEpsilon = 1E-05f;
+const Vector2 Vector2::one = Vector2(1.0f, 1.0f);
+const Vector2 Vector2::right = Vector2(1.0f, 0.0f);
+const Vector2 Vector2::up = Vector2(0.0f, 1.0f);
+const Vector2 Vector2::zero = Vector2(0.0f, 0.0f);
+
+
 cpsImplTraits(UnityEngine, Vector3);
+const float Vector3::kEpsilon = 1E-05f;
+const Vector3 Vector3::back = Vector3(0.0f, 0.0f, -1.0f);
+const Vector3 Vector3::down = Vector3(0.0f, -1.0f, 0.0f);
+const Vector3 Vector3::forward = Vector3(0.0f, 0.0f, 1.0f);
+const Vector3 Vector3::left = Vector3(-1.0f, 0.0f, 0.0f);
+const Vector3 Vector3::one = Vector3(1.0f, 1.0f, 1.0f);
+const Vector3 Vector3::right = Vector3(1.0f, 0.0f, 0.0f);
+const Vector3 Vector3::up = Vector3(0.0f, 1.0f, 0.0f);
+const Vector3 Vector3::zero = Vector3(0.0f, 0.0f, 0.0f);
+
+/*static*/ void Vector3::OrthoNormalize(Vector3 &normal, Vector3 &tangent, Vector3 &binormal)
+{
+    cpsBindMethod("Internal_OrthoNormalize3");
+    void *args[] = { (void*)&normal, (void*)&tangent, (void*)&binormal };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Vector3::OrthoNormalize(Vector3 &normal, Vector3 &tangent)
+{
+    cpsBindMethod("Internal_OrthoNormalize2");
+    void *args[] = { (void*)&normal, (void*)&tangent };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ Vector3 Vector3::RotateTowards(Vector3 &current, Vector3 &target, float maxRadiansDelta, float maxMagnitudeDelta)
+{
+    cpsBindMethod("INTERNAL_CALL_RotateTowards");
+    void *args[] = { (void*)&current, (void*)&target, (void*)&maxRadiansDelta, (void*)&maxMagnitudeDelta };
+    return s_method.invoke(nullptr, args).getData<Vector3>();
+}
+/*static*/ Vector3 Vector3::Slerp(Vector3 &from, Vector3 &to, float t)
+{
+    cpsBindMethod("INTERNAL_CALL_Slerp");
+    void *args[] = { (void*)&from, (void*)&to, (void*)&t };
+    return s_method.invoke(nullptr, args).getData<Vector3>();
+}
+/*static*/ Vector3 Vector3::SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime)
+{
+    float deltaTime = Time::get_deltaTime();
+    float maxSpeed = FLT_MAX;
+    return SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime);
+}
+/*static*/ Vector3 Vector3::SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime, float maxSpeed)
+{
+    float deltaTime = Time::get_deltaTime();
+    return SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime);
+}
+/*static*/ Vector3 Vector3::SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, float deltaTime)
+{
+    smoothTime = std::max(0.0001f, smoothTime);
+    float num = 2.0f / smoothTime;
+    float num2 = num * deltaTime;
+    float d = 1.0f / (1.0f + num2 + 0.48f * num2 * num2 + 0.235f * num2 * num2 * num2);
+    Vector3 vector = current - target;
+    Vector3 vector2 = target;
+    float maxLength = maxSpeed * smoothTime;
+    vector = ClampMagnitude(vector, maxLength);
+    target = current - vector;
+    Vector3 vector3 = (currentVelocity + num * vector) * deltaTime;
+    currentVelocity = (currentVelocity - num * vector3) * d;
+    Vector3 vector4 = target + (vector + vector3) * d;
+    if (Dot(vector2 - current, vector4 - vector2) > 0.0f)
+    {
+        vector4 = vector2;
+        currentVelocity = (vector4 - vector2) / deltaTime;
+    }
+    return vector4;
+}
+
+
 cpsImplTraits(UnityEngine, Vector4);
+const Vector4 Vector4::zero = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+const Vector4 Vector4::one = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
 cpsImplTraits(UnityEngine, Color);
+
 cpsImplTraits(UnityEngine, Color32);
 cpsImplTraits(UnityEngine, Quaternion);
 cpsImplTraits(UnityEngine, Matrix4x4);
@@ -2816,6 +2883,101 @@ cpsImplTraits(UnityEngine, Resources);
 }
 
 
+cpsImplTraits(UnityEngine, Time);
+/*static*/ int Time::get_captureFramerate()
+{
+    cpsBindMethod("get_captureFramerate");
+    return s_method.invoke(nullptr).getData<int>();
+}
+/*static*/ void Time::set_captureFramerate(int v)
+{
+    cpsBindMethod("set_captureFramerate");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Time::get_deltaTime()
+{
+    cpsBindMethod("get_deltaTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ float Time::get_fixedDeltaTime()
+{
+    cpsBindMethod("get_fixedDeltaTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ void Time::set_fixedDeltaTime(float v)
+{
+    cpsBindMethod("set_fixedDeltaTime");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Time::get_fixedTime()
+{
+    cpsBindMethod("get_fixedTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ int Time::get_frameCount()
+{
+    cpsBindMethod("get_frameCount");
+    return s_method.invoke(nullptr).getData<int>();
+}
+/*static*/ float Time::get_maximumDeltaTime()
+{
+    cpsBindMethod("get_maximumDeltaTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ void Time::set_maximumDeltaTime(float v)
+{
+    cpsBindMethod("set_maximumDeltaTime");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Time::get_realtimeSinceStartup()
+{
+    cpsBindMethod("get_realtimeSinceStartup");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ int Time::get_renderedFrameCount()
+{
+    cpsBindMethod("get_renderedFrameCount");
+    return s_method.invoke(nullptr).getData<int>();
+}
+/*static*/ float Time::get_smoothDeltaTime()
+{
+    cpsBindMethod("get_smoothDeltaTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ float Time::get_time()
+{
+    cpsBindMethod("get_time");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ float Time::get_timeScale()
+{
+    cpsBindMethod("get_timeScale");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ void Time::set_timeScale(float v)
+{
+    cpsBindMethod("set_timeScale");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ float Time::get_timeSinceLevelLoad()
+{
+    cpsBindMethod("get_timeSinceLevelLoad");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ float Time::get_unscaledDeltaTime()
+{
+    cpsBindMethod("get_unscaledDeltaTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
+/*static*/ float Time::get_unscaledTime()
+{
+    cpsBindMethod("get_unscaledTime");
+    return s_method.invoke(nullptr).getData<float>();
+}
 
 } // namespace UnityEngine
 

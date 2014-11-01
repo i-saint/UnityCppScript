@@ -2,7 +2,13 @@
 #define cpsUnityEngine_h
 
 #include "cpsFoundation.h"
-#include <vector>
+
+#ifdef max
+#   undef max
+#endif // max
+#ifdef min
+#   undef min
+#endif // min
 
 namespace UnityEngine
 {
@@ -130,37 +136,322 @@ enum PrimitiveType
 };
 
 
+template<class T>
+inline float clamp(T v, T minv, T maxv) { return std::min<T>(std::max<T>(v, minv), maxv); }
+
+template<class T>
+inline float clamp01(T v) { return std::min<T>(std::max<T>(v, T(0)), T(1)); }
+
 
 struct cpsAPI Vector2
 {
     cpsDeclTraits();
+    static const float kEpsilon;
     static const Vector2 zero;
+    static const Vector2 right;
+    static const Vector2 up;
     static const Vector2 one;
 
     union {
         struct { float x, y; };
         float v[2];
     };
-    Vector2(float a = 0.0f, float b = 0.0f) : x(a), y(b){}
+    Vector2(float x_ = 0.0f, float y_ = 0.0f) : x(x_), y(y_){}
+
+    float&          operator[](int i)                   { return v[i]; }
+    const float&    operator[](int i) const             { return v[i]; }
+    inline Vector2  operator-() const                   { return Vector2(   -x,    -y); }
+    inline Vector2  operator+(const Vector2 &v) const   { return Vector2(x+v.x, y+v.y); }
+    inline Vector2  operator-(const Vector2 &v) const   { return Vector2(x-v.x, y-v.y); }
+    inline Vector2  operator*(const Vector2 &v) const   { return Vector2(x*v.x, y*v.y); }
+    inline Vector2  operator/(const Vector2 &v) const   { return Vector2(x/v.x, y/v.y); }
+    inline Vector2  operator*(float v) const            { return Vector2(x*v, y*v); }
+    inline Vector2  operator/(float v) const            { return Vector2(x / v, y / v); }
+    inline bool     operator==(const Vector2 &v) const  { return x==v.x && y==v.y; }
+    inline bool     operator!=(const Vector2 &v) const  { return x!=v.x || y!=v.y; }
+    inline Vector2& operator+=(const Vector2 &v)        { x+=v.x; y+=v.y; return *this; }
+    inline Vector2& operator-=(const Vector2 &v)        { x-=v.x; y-=v.y; return *this; }
+    inline Vector2& operator*=(const Vector2 &v)        { x*=v.x; y*=v.y; return *this; }
+    inline Vector2& operator/=(const Vector2 &v)        { x/=v.x; y/=v.y; return *this; }
+    inline Vector2& operator*=(float v)                 { x*=v;   y*=v;   return *this; }
+    inline Vector2& operator/=(float v)                 { x/=v;   y/=v;   return *this; }
+
+    float get_magnitude() const
+    {
+        return std::sqrt(x*x + y*y);
+    }
+    Vector2 get_normalized() const
+    {
+        Vector2 r = *this;
+        r.Normalize();
+        return r;
+    }
+    float get_sqrMagnitude() const
+    {
+        return x*x + y*y;
+    }
+
+    void Normalize()
+    {
+        float mag = get_magnitude();
+        if (mag > kEpsilon)
+        {
+            *this /= mag;
+        }
+        else
+        {
+            *this = Vector2::zero;
+        }
+    }
+    void Scale(const Vector2 &scale)
+    {
+        *this *= scale;
+    }
+    void Set(float x_, float y_)
+    {
+        *this = Vector2(x_, y_);
+    }
+    float SqrMagnitude() const
+    {
+        return x*x + y*y;
+    }
+
+
+    static float Angle(const Vector2 &from, const Vector2 &to)
+    {
+        return std::acos(clamp(Dot(from.get_normalized(), to.get_normalized()), -1.0f, 1.0f)) * 57.29578f;
+    }
+    static Vector2 ClampMagnitude(const Vector2 &vector, float maxLength)
+    {
+        if (vector.get_sqrMagnitude() > maxLength * maxLength)
+        {
+            return vector.get_normalized() * maxLength;
+        }
+        return vector;
+    }
+    static float Distance(const Vector2 &a, const Vector2 &b)
+    {
+        return (a - b).get_magnitude();
+    }
+    static float Dot(Vector2 lhs, Vector2 rhs)
+    {
+        return lhs.x * rhs.x + lhs.y * rhs.y;
+    }
+    static Vector2 Lerp(const Vector2 &from, const Vector2 &to, float t)
+    {
+        t = clamp01(t);
+        return Vector2(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t);
+    }
+    static Vector2 Max(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return Vector2(std::max(lhs.x, rhs.x), std::max(lhs.y, rhs.y));
+    }
+    static Vector2 Min(const Vector2 &lhs, const Vector2 &rhs)
+    {
+        return Vector2(std::min(lhs.x, rhs.x), std::min(lhs.y, rhs.y));
+    }
+    static Vector2 MoveTowards(const Vector2 &current, const Vector2 &target, float maxDistanceDelta)
+    {
+        Vector2 a = target - current;
+        float mag = a.get_magnitude();
+        if (mag <= maxDistanceDelta || mag == 0.0f)
+        {
+            return target;
+        }
+        return current + a / mag * maxDistanceDelta;
+    }
+    static Vector2 Scale(const Vector2 &a, const Vector2 &b)
+    {
+        return Vector2(a.x * b.x, a.y * b.y);
+    }
+    static float SqrMagnitude(const Vector2 &a)
+    {
+        return a.x*a.x + a.y*a.y;
+    }
 };
+inline Vector2  operator*(float t, const Vector2 &v) { return Vector2(t*v.x, t*v.y); }
+inline Vector2  operator/(float t, const Vector2 &v) { return Vector2(t / v.x, t / v.y); }
+
 
 struct cpsAPI Vector3
 {
     cpsDeclTraits();
-    static const Vector3 zero;
+    static const float kEpsilon;
+    static const Vector3 back;
+    static const Vector3 down;
+    static const Vector3 forward;
+    static const Vector3 left;
     static const Vector3 one;
+    static const Vector3 right;
     static const Vector3 up;
+    static const Vector3 zero;
 
     union {
         struct { float x, y, z; };
         float v[3];
     };
-    Vector3(float a = 0.0f, float b = 0.0f, float c = 0.0f) : x(a), y(b), z(c){}
+    Vector3(float x_ = 0.0f, float y_ = 0.0f, float z_ = 0.0f) : x(x_), y(y_), z(z_){}
+
+    float&          operator[](int i)                   { return v[i]; }
+    const float&    operator[](int i) const             { return v[i]; }
+    inline Vector3  operator-() const                   { return Vector3(-x, -y, -z); }
+    inline Vector3  operator+(const Vector3 &v) const   { return Vector3(x+v.x, y+v.y, z+v.z); }
+    inline Vector3  operator-(const Vector3 &v) const   { return Vector3(x-v.x, y-v.y, z-v.z); }
+    inline Vector3  operator*(const Vector3 &v) const   { return Vector3(x*v.x, y*v.y, z*v.z); }
+    inline Vector3  operator/(const Vector3 &v) const   { return Vector3(x/v.x, y/v.y, z/v.z); }
+    inline Vector3  operator*(float v) const            { return Vector3(  x*v,   y*v,   z*v); }
+    inline Vector3  operator/(float v) const            { return Vector3(  x/v,   y/v,   z/v); }
+    inline bool     operator==(const Vector3 &v) const  { return x==v.x && y==v.y && z==v.z; }
+    inline bool     operator!=(const Vector3 &v) const  { return x!=v.x || y!=v.y || z!=v.z; }
+    inline Vector3& operator+=(const Vector3 &v)        { x+=v.x; y+=v.y; z+=v.z; return *this; }
+    inline Vector3& operator-=(const Vector3 &v)        { x-=v.x; y-=v.y; z-=v.z; return *this; }
+    inline Vector3& operator*=(const Vector3 &v)        { x*=v.x; y*=v.y; z*=v.z; return *this; }
+    inline Vector3& operator/=(const Vector3 &v)        { x/=v.x; y/=v.y; z/=v.z; return *this; }
+    inline Vector3& operator*=(float v)                 { x*=v;   y*=v;   z*=v;   return *this; }
+    inline Vector3& operator/=(float v)                 { x/=v;   y/=v;   z/=v;   return *this; }
+
+
+    float get_magnitude() const
+    {
+        return std::sqrt(x*x + y*y + z*z);
+    }
+    Vector3 get_normalized() const
+    {
+        Vector3 r = *this;
+        r.Normalize();
+        return r;
+    }
+    float get_sqrMagnitude() const
+    {
+        return x*x + y*y + z*z;
+    }
+
+
+    void Normalize()
+    {
+        float num = Magnitude(*this);
+        if (num > kEpsilon)
+        {
+            *this /= num;
+        }
+        else
+        {
+            *this = zero;
+        }
+    }
+    void Scale(Vector3 scale)
+    {
+        *this *= scale;
+    }
+
+    void Set(float new_x, float new_y, float new_z)
+    {
+        *this = Vector3(new_x, new_y, new_z);
+    }
+
+
+    static float Angle(const Vector3 &from, const Vector3 &to)
+    {
+        return std::acos(clamp(Dot(from.get_normalized(), to.get_normalized()), -1.0f, 1.0f)) * 57.29578f;
+    }
+    static Vector3 ClampMagnitude(const Vector3 &vector, float maxLength)
+    {
+        if (vector.get_sqrMagnitude() > maxLength * maxLength)
+        {
+            return vector.get_normalized() * maxLength;
+        }
+        return vector;
+    }
+    static Vector3 Cross(Vector3 lhs, Vector3 rhs)
+    {
+        return Vector3(lhs.y*rhs.z - lhs.z*rhs.y, lhs.z*rhs.x - lhs.x*rhs.z, lhs.x*rhs.y - lhs.y*rhs.x);
+    }
+    static float Distance(Vector3 a, Vector3 b)
+    {
+        Vector3 vector = Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+        return std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+    }
+    static float Dot(Vector3 lhs, Vector3 rhs)
+    {
+        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+    }
+    static Vector3 Exclude(Vector3 excludeThis, Vector3 fromThat)
+    {
+        return fromThat - Project(fromThat, excludeThis);
+    }
+    static Vector3 Lerp(Vector3 from, Vector3 to, float t)
+    {
+        t = clamp01(t);
+        return Vector3(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t, from.z + (to.z - from.z) * t);
+    }
+    static float Magnitude(Vector3 a)
+    {
+        return std::sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+    }
+    static Vector3 Max(Vector3 lhs, Vector3 rhs)
+    {
+        return Vector3(std::max(lhs.x, rhs.x), std::max(lhs.y, rhs.y), std::max(lhs.z, rhs.z));
+    }
+    static Vector3 Min(Vector3 lhs, Vector3 rhs)
+    {
+        return Vector3(std::min(lhs.x, rhs.x), std::min(lhs.y, rhs.y), std::min(lhs.z, rhs.z));
+    }
+    static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDistanceDelta)
+    {
+        Vector3 a = target - current;
+        float magnitude = a.get_magnitude();
+        if (magnitude <= maxDistanceDelta || magnitude == 0.0f)
+        {
+            return target;
+        }
+        return current + a / magnitude * maxDistanceDelta;
+    }
+    static Vector3 Normalize(Vector3 value)
+    {
+        float num = Magnitude(value);
+        if (num > kEpsilon)
+        {
+            return value / num;
+        }
+        return zero;
+    }
+    static void OrthoNormalize(Vector3 &normal, Vector3 &tangent, Vector3 &binormal);
+    static void OrthoNormalize(Vector3 &normal, Vector3 &tangent);
+    static Vector3 Project(const Vector3 &vector, const Vector3 &onNormal)
+    {
+        float num = Dot(onNormal, onNormal);
+        if (num < 1.401298E-45f)
+        {
+            return zero;
+        }
+        return onNormal * Dot(vector, onNormal) / num;
+    }
+    static Vector3 Reflect(const Vector3 &inDirection, const Vector3 &inNormal)
+    {
+        return inNormal * (- 2.0f * Dot(inNormal, inDirection)) + inDirection;
+    }
+    static Vector3 RotateTowards(Vector3 &current, Vector3 &target, float maxRadiansDelta, float maxMagnitudeDelta);
+    static Vector3 Scale(const Vector3 &a, const Vector3 &b)
+    {
+        return Vector3(a.x*b.x, a.y*b.y, a.z*b.z);
+    }
+    static Vector3 Slerp(Vector3 &from, Vector3 &to, float t);
+    static Vector3 SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime);
+    static Vector3 SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime, float maxSpeed);
+    static Vector3 SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, float deltaTime);
+    static float SqrMagnitude(Vector3 a)
+    {
+        return a.x*a.x + a.y*a.y + a.z*a.z;
+    }
 };
+inline Vector3 operator*(float t, const Vector3 &v) { return Vector3( t*v.x, t*v.y, t*v.z); }
+inline Vector3 operator/(float t, const Vector3 &v) { return Vector3( t/v.x, t/v.y, t/v.z); }
+
 
 struct cpsAPI Vector4
 {
     cpsDeclTraits();
+    static const float kEpsilon;
     static const Vector4 zero;
     static const Vector4 one;
 
@@ -168,8 +459,30 @@ struct cpsAPI Vector4
         struct { float x, y, z, w; };
         float v[4];
     };
-    Vector4(float a = 0.0f, float b = 0.0f, float c = 0.0f, float d = 0.0f) : x(a), y(b), z(c), w(d){}
+    Vector4(float x_ = 0.0f, float y_ = 0.0f, float z_ = 0.0f, float w_ = 0.0f) : x(x_), y(y_), z(z_), w(w_){}
+
+    float&          operator[](int i)                   { return v[i]; }
+    const float&    operator[](int i) const             { return v[i]; }
+    inline Vector4  operator-() const                   { return Vector4(   -x,    -y,    -z,    -w); }
+    inline Vector4  operator+(const Vector4 &v) const   { return Vector4(x+v.x, y+v.y, z+v.z, w+v.w); }
+    inline Vector4  operator-(const Vector4 &v) const   { return Vector4(x-v.x, y-v.y, z-v.z, w-v.w); }
+    inline Vector4  operator*(const Vector4 &v) const   { return Vector4(x*v.x, y*v.y, z*v.z, w*v.w); }
+    inline Vector4  operator/(const Vector4 &v) const   { return Vector4(x/v.x, y/v.y, z/v.z, w/v.w); }
+    inline Vector4  operator*(float v)  const           { return Vector4(  x*v,   y*v,   z*v,   w*v); }
+    inline Vector4  operator/(float v)  const           { return Vector4(  x/v,   y/v,   z/v,   w/v); }
+    inline bool     operator==(const Vector4 &v) const  { return x==v.x && y==v.y && z==v.z && w==v.w; }
+    inline bool     operator!=(const Vector4 &v) const  { return x!=v.x || y!=v.y || z!=v.z || w!=v.w; }
+    inline Vector4& operator+=(const Vector4 &v)        { x+=v.x; y+=v.y; z+=v.z; w+=v.w; return *this; }
+    inline Vector4& operator-=(const Vector4 &v)        { x-=v.x; y-=v.y; z-=v.z; w-=v.w; return *this; }
+    inline Vector4& operator*=(const Vector4 &v)        { x*=v.x; y*=v.y; z*=v.z; w*=v.w; return *this; }
+    inline Vector4& operator/=(const Vector4 &v)        { x/=v.x; y/=v.y; z/=v.z; w/=v.w; return *this; }
+    inline Vector4& operator*=(float v)                 { x*=v;   y*=v;   z*=v;   w*=v;   return *this; }
+    inline Vector4& operator/=(float v)                 { x/=v;   y/=v;   z/=v;   w/=v;   return *this; }
 };
+inline Vector4 operator*(float t, const Vector4 &v) { return Vector4( t*v.x, t*v.y, t*v.z, t*v.w); }
+inline Vector4 operator/(float t, const Vector4 &v) { return Vector4( t/v.x, t/v.y, t/v.z, t/v.w); }
+
+
 
 struct Color
 {
@@ -1292,6 +1605,29 @@ public:
     static AsyncOperation UnloadUnusedAssets();
 };
 
+class cpsAPI Time
+{
+public:
+    cpsDeclTraits();
+    static int      get_captureFramerate();
+    static void     set_captureFramerate(int v);
+    static float    get_deltaTime();
+    static float    get_fixedDeltaTime();
+    static void     set_fixedDeltaTime(float v);
+    static float    get_fixedTime();
+    static int      get_frameCount();
+    static float    get_maximumDeltaTime();
+    static void     set_maximumDeltaTime(float v);
+    static float    get_realtimeSinceStartup();
+    static int      get_renderedFrameCount();
+    static float    get_smoothDeltaTime();
+    static float    get_time();
+    static float    get_timeScale();
+    static void     set_timeScale(float v);
+    static float    get_timeSinceLevelLoad();
+    static float    get_unscaledDeltaTime();
+    static float    get_unscaledTime();
+};
 
 } // namespace UnityEngine
 
