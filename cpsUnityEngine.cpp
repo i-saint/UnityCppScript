@@ -3250,6 +3250,115 @@ cpsImplTraits(UnityEngine, Time);
     return s_method.invoke(nullptr).getValue<float>();
 }
 
+
+cpsImplTraits(UnityEngine, Profiler);
+/*static*/ bool Profiler::get_enableBinaryLog()
+{
+    cpsBindMethod("get_enableBinaryLog");
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
+}
+/*static*/ void Profiler::set_enableBinaryLog(bool v_)
+{
+    cpsBindMethod("set_enableBinaryLog");
+    gboolean v = v_;
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ bool Profiler::get_enabled()
+{
+    cpsBindMethod("get_enabled");
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
+}
+/*static*/ void Profiler::set_enabled(bool v_)
+{
+    cpsBindMethod("set_enabled");
+    gboolean v = v_;
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ cpsString Profiler::get_logFile()
+{
+    cpsBindMethod("get_logFile");
+    return cpsString(s_method.invoke(nullptr));
+}
+/*static*/ void Profiler::set_logFile(cpsString v)
+{
+    cpsBindMethod("set_logFile");
+    void *args[] = { v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ bool Profiler::get_supported()
+{
+    cpsBindMethod("get_supported");
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
+}
+/*static*/ void Profiler::set_supported(bool v)
+{
+    cpsBindMethod("set_supported");
+    void *args[] = { &v };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ uint32_t Profiler::get_usedHeapSize()
+{
+    cpsBindMethod("get_usedHeapSize");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+
+/*static*/ void Profiler::AddFramesFromFile(cpsString file)
+{
+    cpsBindMethod("AddFramesFromFile");
+    void *args[] = { file };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Profiler::BeginSample(cpsString name)
+{
+    cpsBindMethod("BeginSample", 1);
+    void *args[] = { name };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Profiler::BeginSample(cpsString name, Object targetObject)
+{
+    cpsBindMethod("BeginSample", 2);
+    void *args[] = { name, targetObject };
+    s_method.invoke(nullptr, args);
+}
+/*static*/ void Profiler::EndSample()
+{
+    cpsBindMethod("EndSample");
+}
+/*static*/ uint32_t Profiler::GetMonoHeapSize()
+{
+    cpsBindMethod("GetMonoHeapSize");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+/*static*/ uint32_t Profiler::GetMonoUsedSize()
+{
+    cpsBindMethod("GetMonoUsedSize");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+/*static*/ int Profiler::GetRuntimeMemorySize(Object o)
+{
+    cpsBindMethod("GetRuntimeMemorySize");
+    void *args[] = { o };
+    return s_method.invoke(nullptr).getValue<int>();
+}
+/*static*/ uint32_t Profiler::GetTotalAllocatedMemory()
+{
+    cpsBindMethod("GetTotalAllocatedMemory");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+/*static*/ uint32_t Profiler::GetTotalReservedMemory()
+{
+    cpsBindMethod("GetTotalReservedMemory");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+/*static*/ uint32_t Profiler::GetTotalUnusedReservedMemory()
+{
+    cpsBindMethod("GetTotalUnusedReservedMemory");
+    return s_method.invoke(nullptr).getValue<uint32_t>();
+}
+
+
 } // namespace UnityEngine
 
 

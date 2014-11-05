@@ -1763,6 +1763,27 @@ class Profiler
 
 public:
     cpsDeclTraits();
+
+    static bool         get_enableBinaryLog();
+    static void         set_enableBinaryLog(bool v);
+    static bool         get_enabled();
+    static void         set_enabled(bool v);
+    static cpsString    get_logFile();
+    static void         set_logFile(cpsString v);
+    static bool         get_supported();
+    static void         set_supported(bool v);
+    static uint32_t     get_usedHeapSize();
+
+    static void         AddFramesFromFile(cpsString file);
+    static void         BeginSample(cpsString name, Object targetObject);
+    static void         BeginSample(cpsString name);
+    static void         EndSample();
+    static uint32_t     GetMonoHeapSize();
+    static uint32_t     GetMonoUsedSize();
+    static int          GetRuntimeMemorySize(Object o);
+    static uint32_t     GetTotalAllocatedMemory();
+    static uint32_t     GetTotalReservedMemory();
+    static uint32_t     GetTotalUnusedReservedMemory();
 };
 
 } // namespace UnityEngine
