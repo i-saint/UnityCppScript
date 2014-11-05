@@ -396,6 +396,7 @@ MONO_API MonoEvent*             mono_class_get_events(MonoClass* klass, gpointer
 MONO_API MonoClass*             mono_class_get_interfaces(MonoClass* klass, gpointer *iter);
 MONO_API MonoClass*             mono_class_get_nested_types(MonoClass* klass, gpointer *iter);
 MONO_API MonoGenericContext*    mono_class_get_context(MonoClass *klass);
+MONO_API gboolean               mono_class_is_subclass_of(MonoClass *klass, MonoClass *klassc, gboolean check_interfaces);
 
 MONO_API MonoObject*        mono_object_new(MonoDomain *domain, MonoClass *klass);
 MONO_API MonoDomain*        mono_object_get_domain(MonoObject *obj);

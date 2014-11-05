@@ -59,13 +59,13 @@ const Vector3 Vector3::zero = Vector3(0.0f, 0.0f, 0.0f);
 {
     cpsBindMethod("INTERNAL_CALL_RotateTowards");
     void *args[] = { (void*)&current, (void*)&target, (void*)&maxRadiansDelta, (void*)&maxMagnitudeDelta };
-    return s_method.invoke(nullptr, args).getData<Vector3>();
+    return s_method.invoke(nullptr, args).getValue<Vector3>();
 }
 /*static*/ Vector3 Vector3::Slerp(Vector3 &from, Vector3 &to, float t)
 {
     cpsBindMethod("INTERNAL_CALL_Slerp");
     void *args[] = { (void*)&from, (void*)&to, (void*)&t };
-    return s_method.invoke(nullptr, args).getData<Vector3>();
+    return s_method.invoke(nullptr, args).getValue<Vector3>();
 }
 /*static*/ Vector3 Vector3::SmoothDamp(const Vector3 &current, Vector3 &target, Vector3 &currentVelocity, float smoothTime)
 {
@@ -146,7 +146,7 @@ void Object::set_name(cpsString name)
 HideFlags Object::get_hideFlags() const
 {
     cpsBindMethod("get_hideFlags");
-    return s_method.invoke(*this).getData<HideFlags>();
+    return s_method.invoke(*this).getValue<HideFlags>();
 }
 void Object::set_hideFlags(HideFlags flags)
 {
@@ -157,13 +157,13 @@ void Object::set_hideFlags(HideFlags flags)
 void* Object::obj_address() const
 {
     cpsBindMethod("obj_address");
-    return s_method.invoke(*this).getData<void*>();
+    return s_method.invoke(*this).getValue<void*>();
 }
 
 int Object::GetInstanceID() const
 {
     cpsBindMethod("GetInstanceID");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 cpsString Object::ToString() const
 {
@@ -175,13 +175,13 @@ cpsString Object::ToString() const
 {
     cpsBindMethod("Instantiate", 3);
     void *args[] = { original, (void*)&position, (void*)&rotation };
-    return s_method.invoke(nullptr, args).getData<MonoObject*>();
+    return s_method.invoke(nullptr, args).getValue<MonoObject*>();
 }
 /*static*/ Object Object::Instantiate(Object original)
 {
     cpsBindMethod("Instantiate", 1);
     void *args[] = { original };
-    return s_method.invoke(nullptr, args).getData<MonoObject*>();
+    return s_method.invoke(nullptr, args).getValue<MonoObject*>();
 }
 /*static*/ void Object::Destroy(cpsObject obj, float delay)
 {
@@ -215,17 +215,17 @@ AsyncOperation::AsyncOperation(cpsObject v) : super(v) {}
 bool AsyncOperation::get_isDone()
 {
     cpsBindMethod("get_isDone");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 float AsyncOperation::get_progress()
 {
     cpsBindMethod("get_progress");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 int AsyncOperation::get_priority()
 {
     cpsBindMethod("get_priority");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void AsyncOperation::set_priority(int v)
 {
@@ -236,7 +236,7 @@ void AsyncOperation::set_priority(int v)
 bool AsyncOperation::get_allowSceneActivation()
 {
     cpsBindMethod("get_allowSceneActivation");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void AsyncOperation::set_allowSceneActivation(bool v_)
 {
@@ -262,7 +262,7 @@ Mesh::Mesh(cpsObject v) : super(v) {}
 Matrix4x4 Mesh::get_bindposes()
 {
     cpsBindMethod("get_bindposes");
-    return s_method.invoke(*this).getData<Matrix4x4>();
+    return s_method.invoke(*this).getValue<Matrix4x4>();
 }
 void Mesh::set_bindposes(const Matrix4x4 &v)
 {
@@ -273,7 +273,7 @@ void Mesh::set_bindposes(const Matrix4x4 &v)
 int Mesh::get_blendShapeCount()
 {
     cpsBindMethod("get_blendShapeCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 cpsTArray<BoneWeight> Mesh::get_boneWeights()
 {
@@ -289,7 +289,7 @@ void Mesh::set_boneWeights(cpsTArray<BoneWeight> v)
 Bounds Mesh::get_bounds()
 {
     cpsBindMethod("get_bounds");
-    return s_method.invoke(*this).getData<Bounds>();
+    return s_method.invoke(*this).getValue<Bounds>();
 }
 void Mesh::set_bounds(const Bounds &v)
 {
@@ -322,7 +322,7 @@ void Mesh::set_colors32(cpsTArray<Color32> v)
 bool Mesh::get_isReadable()
 {
     cpsBindMethod("get_isReadable");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 cpsTArray<Vector3> Mesh::get_normals()
 {
@@ -338,7 +338,7 @@ void Mesh::set_normals(cpsTArray<Vector3> v)
 int Mesh::get_subMeshCount()
 {
     cpsBindMethod("get_subMeshCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void Mesh::set_subMeshCount(int v)
 {
@@ -393,7 +393,7 @@ void Mesh::set_uv2(cpsTArray<Vector2> v)
 int Mesh::get_vertexCount()
 {
     cpsBindMethod("get_vertexCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 cpsTArray<Vector3> Mesh::get_vertices()
 {
@@ -431,7 +431,7 @@ MeshTopology Mesh::GetTopology(int submesh)
 {
     cpsBindMethod("GetTopology");
     void *args[] = { &submesh };
-    return s_method.invoke(*this, args).getData<MeshTopology>();
+    return s_method.invoke(*this, args).getValue<MeshTopology>();
 }
 cpsTArray<int> Mesh::GetTriangles(int submesh)
 {
@@ -480,7 +480,7 @@ Material::Material(cpsObject v) : super(v) {}
 Color Material::get_color()
 {
     cpsBindMethod("get_color");
-    return s_method.invoke(*this).getData<Color>();
+    return s_method.invoke(*this).getValue<Color>();
 }
 void Material::set_color(const Color &v)
 {
@@ -503,7 +503,7 @@ void Material::set_mainTexture(Texture v)
 Vector2 Material::get_mainTextureOffset()
 {
     cpsBindMethod("get_mainTextureOffset");
-    return s_method.invoke(*this).getData<Vector2>();
+    return s_method.invoke(*this).getValue<Vector2>();
 }
 void Material::set_mainTextureOffset(const Vector2 &v)
 {
@@ -514,7 +514,7 @@ void Material::set_mainTextureOffset(const Vector2 &v)
 Vector2 Material::get_mainTextureScale()
 {
     cpsBindMethod("get_mainTextureScale");
-    return s_method.invoke(*this).getData<Vector2>();
+    return s_method.invoke(*this).getValue<Vector2>();
 }
 void Material::set_mainTextureScale(const Vector2 &v)
 {
@@ -525,12 +525,12 @@ void Material::set_mainTextureScale(const Vector2 &v)
 int Material::get_passCount()
 {
     cpsBindMethod("get_passCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 int Material::get_renderQueue()
 {
     cpsBindMethod("get_renderQueue");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void Material::set_renderQueue(int v)
 {
@@ -587,56 +587,56 @@ Color Material::GetColor(cpsString propertyName)
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetColor", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<Color>();
+    return s_method.invoke(*this, args).getValue<Color>();
 }
 Color Material::GetColor(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("GetColor", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<Color>();
+    return s_method.invoke(*this, args).getValue<Color>();
 }
 float Material::GetFloat(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetFloat", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<float>();
+    return s_method.invoke(*this, args).getValue<float>();
 }
 float Material::GetFloat(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("GetFloat", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<float>();
+    return s_method.invoke(*this, args).getValue<float>();
 }
 int Material::GetInt(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetInt", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<int>();
+    return s_method.invoke(*this, args).getValue<int>();
 }
 int Material::GetInt(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("GetInt", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<int>();
+    return s_method.invoke(*this, args).getValue<int>();
 }
 Matrix4x4 Material::GetMatrix(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetMatrix", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<Matrix4x4>();
+    return s_method.invoke(*this, args).getValue<Matrix4x4>();
 }
 Matrix4x4 Material::GetMatrix(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("GetMatrix", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<Matrix4x4>();
+    return s_method.invoke(*this, args).getValue<Matrix4x4>();
 }
 cpsString Material::GetTag(cpsString tag, bool searchFallbacks_, cpsString defaultValue)
 {
@@ -665,42 +665,42 @@ Vector2 Material::GetTextureOffset(cpsString propertyName)
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetTextureOffset", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<Vector2>();
+    return s_method.invoke(*this, args).getValue<Vector2>();
 }
 Vector2 Material::GetTextureScale(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetTextureScale", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<Vector2>();
+    return s_method.invoke(*this, args).getValue<Vector2>();
 }
 Vector4 Material::GetVector(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("GetVector", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<Vector4>();
+    return s_method.invoke(*this, args).getValue<Vector4>();
 }
 Vector4 Material::GetVector(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("GetVector", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<Vector4>();
+    return s_method.invoke(*this, args).getValue<Vector4>();
 }
 bool Material::HasProperty(cpsString propertyName)
 {
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("HasProperty", _countof(names), names);
     void *args[] = { propertyName };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 bool Material::HasProperty(int nameID)
 {
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("HasProperty", _countof(names), names);
     void *args[] = { &nameID };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 void Material::Lerp(Material start, Material end, float t)
 {
@@ -777,7 +777,7 @@ bool Material::SetPass(int pass)
     static const char *names[] = { cpsTypename<int>() };
     cpsBindMethod("SetPass", _countof(names), names);
     void *args[] = { &pass };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 void Material::SetTexture(cpsString propertyName, Texture texture)
 {
@@ -834,12 +834,12 @@ Shader::Shader(cpsObject v) : super(v) {}
 bool Shader::get_isSupported()
 {
     cpsBindMethod("get_isSupported");
-    return s_method.invoke(*this).getData<gboolean>()!=0;
+    return s_method.invoke(*this).getValue<gboolean>()!=0;
 }
 int Shader::get_maximumLOD()
 {
     cpsBindMethod("get_maximumLOD");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void Shader::set_maximumLOD(int v)
 {
@@ -850,7 +850,7 @@ void Shader::set_maximumLOD(int v)
 int Shader::get_renderQueue()
 {
     cpsBindMethod("get_renderQueue");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 cpsString Shader::get_customEditor()
 {
@@ -861,7 +861,7 @@ cpsString Shader::get_customEditor()
 /*static*/ int Shader::get_globalMaximumLOD()
 {
     cpsBindMethod("get_globalMaximumLOD");
-    return s_method.invoke(nullptr).getData<int>();
+    return s_method.invoke(nullptr).getValue<int>();
 }
 /*static*/ void Shader::set_globalMaximumLOD(int v)
 {
@@ -882,7 +882,7 @@ cpsString Shader::get_customEditor()
     static const char *names[] = { cpsTypename<cpsString>() };
     cpsBindMethod("PropertyToID", _countof(names), names);
     void *args[] = { name };
-    return s_method.invoke(nullptr, args).getData<int>();
+    return s_method.invoke(nullptr, args).getValue<int>();
 }
 /*static*/ void Shader::SetGlobalBuffer(cpsString propertyName, ComputeBuffer buffer)
 {
@@ -1017,13 +1017,13 @@ int ComputeBuffer::get_count()
 {
     cpsBindMethod("get_count", 0);
     cpsObject ret = s_method.invoke(*this);
-    return ret.getData<int>();
+    return ret.getValue<int>();
 }
 int ComputeBuffer::get_stride()
 {
     cpsBindMethod("get_stride", 0);
     cpsObject ret = s_method.invoke(*this);
-    return ret.getData<int>();
+    return ret.getValue<int>();
 }
 void ComputeBuffer::Dispose()
 {
@@ -1090,7 +1090,7 @@ bool GameObject::CompareTag(cpsString tag)
 {
     cpsBindMethod("CompareTag");
     void *args[] = { tag };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 void GameObject::SampleAnimation(AnimationClip animation, float time)
 {
@@ -1151,7 +1151,7 @@ Behaviour::Behaviour(cpsObject obj) : super(obj) {}
 bool Behaviour::get_enabled() const
 {
     cpsBindMethod("get_enabled");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Behaviour::set_enabled(bool v)
 {
@@ -1169,12 +1169,12 @@ Component::Component(cpsObject obj) : super(obj) {}
 GameObject Component::get_gameObject() const
 {
     cpsBindMethod("get_gameObject");
-    return s_method.invoke(*this).getData<MonoObject*>();
+    return s_method.invoke(*this).getValue<MonoObject*>();
 }
 bool Component::get_active() const
 {
     cpsBindMethod("get_active");
-    return s_method.invoke(*this).getData<gboolean>()!=0;
+    return s_method.invoke(*this).getValue<gboolean>()!=0;
 }
 void Component::set_active(bool v)
 {
@@ -1199,7 +1199,7 @@ bool Component::CompareTag(cpsString v)
 {
     cpsBindMethod("CompareTag", 1);
     void *args[] = { v };
-    return s_method.invoke(*this, args).getData<gboolean>()!=0;
+    return s_method.invoke(*this, args).getValue<gboolean>()!=0;
 }
 
 void Component::SendMessageUpwards(cpsString method_name, cpsObject obj, SendMessageOptions opt)
@@ -1232,7 +1232,7 @@ Transform::Transform(cpsObject obj) : super(obj) {}
 Vector3 Transform::get_position() const
 {
     cpsBindMethod("get_position");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_position(const Vector3& v)
 {
@@ -1244,7 +1244,7 @@ void Transform::set_position(const Vector3& v)
 Vector3 Transform::get_localPosition() const
 {
     cpsBindMethod("get_localPosition");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_localPosition(const Vector3& v)
 {
@@ -1256,7 +1256,7 @@ void Transform::set_localPosition(const Vector3& v)
 Vector3 Transform::get_eulerAngles() const
 {
     cpsBindMethod("get_eulerAngles");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_eulerAngles(const Vector3& v)
 {
@@ -1268,7 +1268,7 @@ void Transform::set_eulerAngles(const Vector3& v)
 Vector3 Transform::get_right() const
 {
     cpsBindMethod("get_right");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_right(const Vector3& v)
 {
@@ -1280,7 +1280,7 @@ void Transform::set_right(const Vector3& v)
 Vector3 Transform::get_up() const
 {
     cpsBindMethod("get_up");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_up(const Vector3& v)
 {
@@ -1292,7 +1292,7 @@ void Transform::set_up(const Vector3& v)
 Vector3 Transform::get_forward() const
 {
     cpsBindMethod("get_forward");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_forward(const Vector3& v)
 {
@@ -1304,7 +1304,7 @@ void Transform::set_forward(const Vector3& v)
 Quaternion Transform::get_rotation() const
 {
     cpsBindMethod("get_rotation");
-    return s_method.invoke(*this).getData<Quaternion>();
+    return s_method.invoke(*this).getValue<Quaternion>();
 }
 void Transform::set_rotation(const Quaternion &v)
 {
@@ -1316,7 +1316,7 @@ void Transform::set_rotation(const Quaternion &v)
 Quaternion Transform::get_localRotation() const
 {
     cpsBindMethod("get_localRotation");
-    return s_method.invoke(*this).getData<Quaternion>();
+    return s_method.invoke(*this).getValue<Quaternion>();
 }
 void Transform::set_localRotation(const Quaternion &v)
 {
@@ -1328,7 +1328,7 @@ void Transform::set_localRotation(const Quaternion &v)
 Vector3 Transform::get_localScale() const
 {
     cpsBindMethod("get_localScale");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Transform::set_localScale(const Vector3& v)
 {
@@ -1352,12 +1352,12 @@ void Transform::set_parent(const Transform &v)
 Matrix4x4 Transform::get_worldToLocalMatrix() const
 {
     cpsBindMethod("get_worldToLocalMatrix");
-    return s_method.invoke(*this).getData<Matrix4x4>();
+    return s_method.invoke(*this).getValue<Matrix4x4>();
 }
 Matrix4x4 Transform::get_localToWorldMatrix() const
 {
     cpsBindMethod("get_localToWorldMatrix");
-    return s_method.invoke(*this).getData<Matrix4x4>();
+    return s_method.invoke(*this).getValue<Matrix4x4>();
 }
 
 Transform Transform::get_root()
@@ -1368,18 +1368,18 @@ Transform Transform::get_root()
 int Transform::get_childCount()
 {
     cpsBindMethod("get_childCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 Vector3 Transform::get_lossyScale()
 {
     cpsBindMethod("get_lossyScale");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 
 bool Transform::get_hasChanged()
 {
     cpsBindMethod("get_hasChanged");
-    return s_method.invoke(*this).getData<gboolean>()!=0;
+    return s_method.invoke(*this).getValue<gboolean>()!=0;
 }
 void Transform::set_hasChanged(bool v)
 {
@@ -1446,28 +1446,28 @@ Vector3 Transform::TransformDirection(const Vector3& v)
 {
     cpsBindMethod("TransformDirection", 1);
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 
 Vector3 Transform::InverseTransformDirection(const Vector3& v)
 {
     cpsBindMethod("InverseTransformDirection", 1);
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 
 Vector3 Transform::TransformPoint(const Vector3& v)
 {
     cpsBindMethod("TransformPoint", 1);
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 
 Vector3 Transform::InverseTransformPoint(const Vector3& v)
 {
     cpsBindMethod("InverseTransformPoint", 1);
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 
 void Transform::DetachChildren()
@@ -1498,14 +1498,14 @@ void Transform::SetSiblingIndex(int i)
 int Transform::GetSiblingIndex()
 {
     cpsBindMethod("GetSiblingIndex", 0);
-    return s_method.invoke(*this).getData<int>();;
+    return s_method.invoke(*this).getValue<int>();;
 }
 
 Transform Transform::Find(cpsString name)
 {
     cpsBindMethod("Find", 1);
     void *args[] = { name };
-    return s_method.invoke(*this, args).getData<MonoObject*>();
+    return s_method.invoke(*this, args).getValue<MonoObject*>();
 }
 
 void Transform::SendTransformChangedScale()
@@ -1518,14 +1518,14 @@ bool Transform::IsChildOf(Transform t)
 {
     cpsBindMethod("IsChildOf", 1);
     void *args[] = { t.mobj };
-    return s_method.invoke(*this, args).getData<gboolean>()!=0;
+    return s_method.invoke(*this, args).getValue<gboolean>()!=0;
 }
 
 Transform Transform::FindChild(cpsString name)
 {
     cpsBindMethod("FindChild", 1);
     void *args[] = { name };
-    return s_method.invoke(*this, args).getData<MonoObject*>();
+    return s_method.invoke(*this, args).getValue<MonoObject*>();
 }
 
 void Transform::RotateAround(const Vector3& axis, float a)
@@ -1546,19 +1546,19 @@ Transform Transform::GetChild(int i)
 {
     cpsBindMethod("GetChild", 1);
     void *args[] = { &i };
-    return s_method.invoke(*this, args).getData<MonoObject*>();
+    return s_method.invoke(*this, args).getValue<MonoObject*>();
 }
 
 int Transform::GetChildCount()
 {
     cpsBindMethod("GetChildCount", 0);
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 
 bool Transform::IsNonUniformScaleTransform()
 {
     cpsBindMethod("IsNonUniformScaleTransform", 0);
-    return s_method.invoke(*this).getData<gboolean>()!=0;
+    return s_method.invoke(*this).getValue<gboolean>()!=0;
 }
 
 
@@ -1569,7 +1569,7 @@ Rigidbody::Rigidbody(cpsObject obj) : super(obj) {}
 float Rigidbody::get_angularDrag()
 {
     cpsBindMethod("get_angularDrag");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_angularDrag(float v)
 {
@@ -1580,7 +1580,7 @@ void Rigidbody::set_angularDrag(float v)
 Vector3 Rigidbody::get_angularVelocity()
 {
     cpsBindMethod("get_angularVelocity");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Rigidbody::set_angularVelocity(const Vector3 &v)
 {
@@ -1591,7 +1591,7 @@ void Rigidbody::set_angularVelocity(const Vector3 &v)
 Vector3 Rigidbody::get_centerOfMass()
 {
     cpsBindMethod("get_centerOfMass");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Rigidbody::set_centerOfMass(const Vector3 &v)
 {
@@ -1602,7 +1602,7 @@ void Rigidbody::set_centerOfMass(const Vector3 &v)
 CollisionDetectionMode Rigidbody::get_collisionDetectionMode()
 {
     cpsBindMethod("get_collisionDetectionMode");
-    return s_method.invoke(*this).getData<CollisionDetectionMode>();
+    return s_method.invoke(*this).getValue<CollisionDetectionMode>();
 }
 void Rigidbody::set_collisionDetectionMode(CollisionDetectionMode v)
 {
@@ -1613,7 +1613,7 @@ void Rigidbody::set_collisionDetectionMode(CollisionDetectionMode v)
 RigidbodyConstraints Rigidbody::get_constraints()
 {
     cpsBindMethod("get_constraints");
-    return s_method.invoke(*this).getData<RigidbodyConstraints>();
+    return s_method.invoke(*this).getValue<RigidbodyConstraints>();
 }
 void Rigidbody::set_constraints(RigidbodyConstraints v)
 {
@@ -1624,7 +1624,7 @@ void Rigidbody::set_constraints(RigidbodyConstraints v)
 bool Rigidbody::get_detectCollisions()
 {
     cpsBindMethod("get_detectCollisions");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::set_detectCollisions(bool v_)
 {
@@ -1636,7 +1636,7 @@ void Rigidbody::set_detectCollisions(bool v_)
 float Rigidbody::get_drag()
 {
     cpsBindMethod("get_drag");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_drag(float v)
 {
@@ -1647,7 +1647,7 @@ void Rigidbody::set_drag(float v)
 bool Rigidbody::get_freezeRotation()
 {
     cpsBindMethod("get_freezeRotation");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::set_freezeRotation(bool v_)
 {
@@ -1659,7 +1659,7 @@ void Rigidbody::set_freezeRotation(bool v_)
 Vector3 Rigidbody::get_inertiaTensor()
 {
     cpsBindMethod("get_inertiaTensor");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Rigidbody::set_inertiaTensor(const Vector3 &v)
 {
@@ -1670,7 +1670,7 @@ void Rigidbody::set_inertiaTensor(const Vector3 &v)
 Quaternion Rigidbody::get_inertiaTensorRotation()
 {
     cpsBindMethod("get_inertiaTensorRotation");
-    return s_method.invoke(*this).getData<Quaternion>();
+    return s_method.invoke(*this).getValue<Quaternion>();
 }
 void Rigidbody::set_inertiaTensorRotation(const Quaternion &v)
 {
@@ -1681,7 +1681,7 @@ void Rigidbody::set_inertiaTensorRotation(const Quaternion &v)
 RigidbodyInterpolation Rigidbody::get_interpolation()
 {
     cpsBindMethod("get_interpolation");
-    return s_method.invoke(*this).getData<RigidbodyInterpolation>();
+    return s_method.invoke(*this).getValue<RigidbodyInterpolation>();
 }
 void Rigidbody::set_interpolation(RigidbodyInterpolation v)
 {
@@ -1692,7 +1692,7 @@ void Rigidbody::set_interpolation(RigidbodyInterpolation v)
 bool Rigidbody::get_isKinematic()
 {
     cpsBindMethod("get_isKinematic");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::set_isKinematic(bool v_)
 {
@@ -1704,7 +1704,7 @@ void Rigidbody::set_isKinematic(bool v_)
 float Rigidbody::get_mass()
 {
     cpsBindMethod("get_mass");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_mass(float v)
 {
@@ -1715,7 +1715,7 @@ void Rigidbody::set_mass(float v)
 float Rigidbody::get_maxAngularVelocity()
 {
     cpsBindMethod("get_maxAngularVelocity");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_maxAngularVelocity(float v)
 {
@@ -1726,7 +1726,7 @@ void Rigidbody::set_maxAngularVelocity(float v)
 Vector3 Rigidbody::get_position()
 {
     cpsBindMethod("get_position");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Rigidbody::set_position(const Vector3 &v)
 {
@@ -1737,7 +1737,7 @@ void Rigidbody::set_position(const Vector3 &v)
 Quaternion Rigidbody::get_rotation()
 {
     cpsBindMethod("get_rotation");
-    return s_method.invoke(*this).getData<Quaternion>();
+    return s_method.invoke(*this).getValue<Quaternion>();
 }
 void Rigidbody::set_rotation(const Quaternion &v)
 {
@@ -1748,7 +1748,7 @@ void Rigidbody::set_rotation(const Quaternion &v)
 float Rigidbody::get_sleepAngularVelocity()
 {
     cpsBindMethod("get_sleepAngularVelocity");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_sleepAngularVelocity(float v)
 {
@@ -1759,7 +1759,7 @@ void Rigidbody::set_sleepAngularVelocity(float v)
 float Rigidbody::get_sleepVelocity()
 {
     cpsBindMethod("get_sleepVelocity");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void Rigidbody::set_sleepVelocity(float v)
 {
@@ -1770,7 +1770,7 @@ void Rigidbody::set_sleepVelocity(float v)
 int Rigidbody::get_solverIterationCount()
 {
     cpsBindMethod("get_solverIterationCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void Rigidbody::set_solverIterationCount(int v)
 {
@@ -1781,7 +1781,7 @@ void Rigidbody::set_solverIterationCount(int v)
 bool Rigidbody::get_useConeFriction()
 {
     cpsBindMethod("get_useConeFriction");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::set_useConeFriction(bool v_)
 {
@@ -1793,7 +1793,7 @@ void Rigidbody::set_useConeFriction(bool v_)
 bool Rigidbody::get_useGravity()
 {
     cpsBindMethod("get_useGravity");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::set_useGravity(bool v_)
 {
@@ -1805,7 +1805,7 @@ void Rigidbody::set_useGravity(bool v_)
 Vector3 Rigidbody::get_velocity()
 {
     cpsBindMethod("get_velocity");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void Rigidbody::set_velocity(const Vector3 &v)
 {
@@ -1816,7 +1816,7 @@ void Rigidbody::set_velocity(const Vector3 &v)
 Vector3 Rigidbody::get_worldCenterOfMass()
 {
     cpsBindMethod("get_worldCenterOfMass");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 
 void Rigidbody::AddExplosionForce(float explosionForce, const Vector3 &explosionPosition, float explosionRadius, float upwardsModifier, ForceMode mode)
@@ -1866,26 +1866,26 @@ Vector3 Rigidbody::ClosestPointOnBounds(const Vector3 &position)
     static const char *names[] = { cpsTypename<Vector3>() };
     cpsBindMethod("ClosestPointOnBounds", _countof(names), names);
     void *args[] = { (void*)&position };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 Vector3 Rigidbody::GetPointVelocity(const Vector3 &worldPoint)
 {
     static const char *names[] = { cpsTypename<Vector3>() };
     cpsBindMethod("GetPointVelocity", _countof(names), names);
     void *args[] = { (void*)&worldPoint };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 Vector3 Rigidbody::GetRelativePointVelocity(const Vector3 &relativePoint)
 {
     static const char *names[] = { cpsTypename<Vector3>() };
     cpsBindMethod("GetRelativePointVelocity", _countof(names), names);
     void *args[] = { (void*)&relativePoint };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 bool Rigidbody::IsSleeping()
 {
     cpsBindMethod("IsSleeping", 0);
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Rigidbody::MovePosition(const Vector3 &position)
 {
@@ -1919,7 +1919,7 @@ bool Rigidbody::SweepTest(const Vector3 &direction, RaycastHit &hitInfo, float d
     cpsBindMethod("SweepTest", _countof(names), names);
     void *args[] = { (void*)&direction, (void*)&hitInfo, (void*)&distance };
     cpsObject ret = s_method.invoke(*this, args);
-    return ret.getData<gboolean>()!=0;
+    return ret.getValue<gboolean>()!=0;
 }
 cpsTArray<RaycastHit> Rigidbody::SweepTestAll(const Vector3 &direction, float distance)
 {
@@ -1949,7 +1949,7 @@ Collider::Collider(cpsObject obj) : super(obj) {}
 bool Collider::get_enabled()
 {
     cpsBindMethod("get_enabled");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Collider::set_enabled(bool v)
 {
@@ -1962,12 +1962,12 @@ void Collider::set_enabled(bool v)
 Rigidbody Collider::get_attachedRigidbody()
 {
     cpsBindMethod("get_attachedRigidbody");
-    return s_method.invoke(*this).getData<MonoObject*>();
+    return s_method.invoke(*this).getValue<MonoObject*>();
 }
 bool Collider::get_isTrigger()
 {
     cpsBindMethod("get_isTrigger");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Collider::set_isTrigger(bool v)
 {
@@ -1980,7 +1980,7 @@ void Collider::set_isTrigger(bool v)
 PhysicMaterial Collider::get_material()
 {
     cpsBindMethod("get_material");
-    return s_method.invoke(*this).getData<MonoObject*>();
+    return s_method.invoke(*this).getValue<MonoObject*>();
 }
 void Collider::set_material(PhysicMaterial v)
 {
@@ -1991,7 +1991,7 @@ void Collider::set_material(PhysicMaterial v)
 PhysicMaterial Collider::get_sharedMaterial()
 {
     cpsBindMethod("get_sharedMaterial");
-    return s_method.invoke(*this).getData<MonoObject*>();
+    return s_method.invoke(*this).getValue<MonoObject*>();
 }
 void Collider::set_sharedMaterial(PhysicMaterial v)
 {
@@ -2002,21 +2002,21 @@ void Collider::set_sharedMaterial(PhysicMaterial v)
 Bounds Collider::get_bounds()
 {
     cpsBindMethod("get_bounds");
-    return s_method.invoke(*this).getData<Bounds>();
+    return s_method.invoke(*this).getValue<Bounds>();
 }
 
 Vector3 Collider::ClosestPointOnBounds(const Vector3 &v)
 {
     cpsBindMethod("ClosestPointOnBounds");
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<Vector3>();
+    return s_method.invoke(*this, args).getValue<Vector3>();
 }
 
 bool Collider::Raycast(const Ray &ray, RaycastHit &hit, float dist)
 {
     cpsBindMethod("Raycast");
     void *args[] = { (void*)&ray, (void*)&hit, &dist };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 
 
@@ -2025,7 +2025,7 @@ BoxCollider::BoxCollider(cpsObject obj) : super(obj) {}
 Vector3 BoxCollider::get_center()
 {
     cpsBindMethod("get_bounds");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void BoxCollider::set_center(const Vector3 &v)
 {
@@ -2036,7 +2036,7 @@ void BoxCollider::set_center(const Vector3 &v)
 Vector3 BoxCollider::get_size()
 {
     cpsBindMethod("get_size");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void BoxCollider::set_size(const Vector3 &v)
 {
@@ -2052,7 +2052,7 @@ SphereCollider::SphereCollider(cpsObject obj) : super(obj) {}
 Vector3 SphereCollider::get_center()
 {
     cpsBindMethod("get_center");
-    return s_method.invoke(*this).getData<Vector3>();
+    return s_method.invoke(*this).getValue<Vector3>();
 }
 void SphereCollider::set_center(const Vector3 &v)
 {
@@ -2063,7 +2063,7 @@ void SphereCollider::set_center(const Vector3 &v)
 float SphereCollider::get_radius()
 {
     cpsBindMethod("get_radius");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void SphereCollider::set_radius(float v)
 {
@@ -2079,7 +2079,7 @@ CapsuleCollider::CapsuleCollider(cpsObject obj) : super(obj) {}
 Vector3 CapsuleCollider::get_center()
 {
     cpsBindMethod("get_center");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void CapsuleCollider::set_center(const Vector3 &v)
 {
@@ -2090,7 +2090,7 @@ void CapsuleCollider::set_center(const Vector3 &v)
 CapsuleCollider::Direction CapsuleCollider::get_direction()
 {
     cpsBindMethod("get_direction");
-    return s_method.invoke(*this).getData<Direction>();
+    return s_method.invoke(*this).getValue<Direction>();
 }
 void CapsuleCollider::set_direction(Direction v)
 {
@@ -2101,7 +2101,7 @@ void CapsuleCollider::set_direction(Direction v)
 float CapsuleCollider::get_height()
 {
     cpsBindMethod("get_height");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void CapsuleCollider::set_height(float v)
 {
@@ -2112,7 +2112,7 @@ void CapsuleCollider::set_height(float v)
 float CapsuleCollider::get_radius()
 {
     cpsBindMethod("get_radius");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void CapsuleCollider::set_radius(float v)
 {
@@ -2127,7 +2127,7 @@ MeshCollider::MeshCollider(cpsObject obj) : super(obj) {}
 bool MeshCollider::get_convex()
 {
     cpsBindMethod("get_convex");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void MeshCollider::set_convex(bool v_)
 {
@@ -2150,7 +2150,7 @@ void MeshCollider::set_sharedMesh(Mesh v)
 bool MeshCollider::get_smoothSphereCollisions()
 {
     cpsBindMethod("get_smoothSphereCollisions");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void MeshCollider::set_smoothSphereCollisions(bool v_)
 {
@@ -2173,12 +2173,12 @@ Rigidbody2D Collider2D::get_attachedRigidbody()
 Bounds Collider2D::get_bounds()
 {
     cpsBindMethod("get_bounds");
-    return s_method.invoke(*this).getData<Bounds>();
+    return s_method.invoke(*this).getValue<Bounds>();
 }
 bool Collider2D::get_isTrigger()
 {
     cpsBindMethod("get_isTrigger");
-    return s_method.invoke(*this).getData<gboolean>() != 0;
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
 }
 void Collider2D::set_isTrigger(bool v_)
 {
@@ -2190,7 +2190,7 @@ void Collider2D::set_isTrigger(bool v_)
 int Collider2D::get_shapeCount()
 {
     cpsBindMethod("get_shapeCount");
-    return s_method.invoke(*this).getData<int>() != 0;
+    return s_method.invoke(*this).getValue<int>() != 0;
 }
 PhysicsMaterial2D Collider2D::get_sharedMaterial()
 {
@@ -2208,7 +2208,7 @@ bool Collider2D::OverlapPoint(const Vector2 &v)
 {
     cpsBindMethod("OverlapPoint");
     void *args[] = { (void*)&v };
-    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
 }
 
 
@@ -2218,7 +2218,7 @@ BoxCollider2D::BoxCollider2D(cpsObject obj) : super(obj) {}
 Vector2 BoxCollider2D::get_center()
 {
     cpsBindMethod("get_center");
-    return s_method.invoke(*this).getData<Vector2>();
+    return s_method.invoke(*this).getValue<Vector2>();
 
 }
 void BoxCollider2D::set_center(const Vector2 &v)
@@ -2230,7 +2230,7 @@ void BoxCollider2D::set_center(const Vector2 &v)
 Vector2 BoxCollider2D::get_size()
 {
     cpsBindMethod("get_size");
-    return s_method.invoke(*this).getData<Vector2>();
+    return s_method.invoke(*this).getValue<Vector2>();
 }
 void BoxCollider2D::set_size(const Vector2 &v)
 {
@@ -2245,7 +2245,7 @@ CircleCollider2D::CircleCollider2D(cpsObject obj) : super(obj) {}
 Vector2 CircleCollider2D::get_center()
 {
     cpsBindMethod("get_center");
-    return s_method.invoke(*this).getData<Vector2>();
+    return s_method.invoke(*this).getValue<Vector2>();
 }
 void CircleCollider2D::set_center(const Vector2 &v)
 {
@@ -2256,7 +2256,7 @@ void CircleCollider2D::set_center(const Vector2 &v)
 float CircleCollider2D::get_radius()
 {
     cpsBindMethod("get_radius");
-    return s_method.invoke(*this).getData<float>();
+    return s_method.invoke(*this).getValue<float>();
 }
 void CircleCollider2D::set_radius(float v)
 {
@@ -2271,7 +2271,7 @@ PolygonCollider2D::PolygonCollider2D(cpsObject obj) : super(obj) {}
 int PolygonCollider2D::get_pathCount()
 {
     cpsBindMethod("get_pathCount");
-    return s_method.invoke(*this).getData<int>();
+    return s_method.invoke(*this).getValue<int>();
 }
 void PolygonCollider2D::set_pathCount(int v)
 {
@@ -2345,7 +2345,7 @@ cpsImplTraits(UnityEngine, Application);
 {
     cpsBindMethod("CancelQuit");
     void *args[] = {&levelIndex};
-    return s_method.invoke(nullptr, args).getData<gboolean>() != 0;
+    return s_method.invoke(nullptr, args).getValue<gboolean>() != 0;
 }
 /*static*/ void Application::CaptureScreenshot(cpsString filename, int superSize)
 {
@@ -2359,18 +2359,18 @@ cpsImplTraits(UnityEngine, Application);
 {
     cpsBindMethod("GetStreamProgressForLevel");
     void *args[] = { &levelIndex };
-    return s_method.invoke(nullptr, args).getData<float>();
+    return s_method.invoke(nullptr, args).getValue<float>();
 }
 /*static*/ bool Application::HasProLicense()
 {
     cpsBindMethod("HasProLicense");
-    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
 }
 /*static*/ bool Application::HasUserAuthorization(UserAuthorization mode)
 {
     cpsBindMethod("HasUserAuthorization");
     void *args[] = { &mode };
-    return s_method.invoke(nullptr, args).getData<gboolean>() != 0;
+    return s_method.invoke(nullptr, args).getValue<gboolean>() != 0;
 }
 /*static*/ void Application::LoadLevel(int index)
 {
@@ -2457,7 +2457,7 @@ cpsImplTraits(UnityEngine, Debug);
 /*static*/ bool Debug::get_developerConsoleVisible()
 {
     cpsBindMethod("get_developerConsoleVisible");
-    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
 }
 /*static*/ void Debug::set_developerConsoleVisible(bool v_)
 {
@@ -2469,7 +2469,7 @@ cpsImplTraits(UnityEngine, Debug);
 /*static*/ bool Debug::get_isDebugBuild()
 {
     cpsBindMethod("get_isDebugBuild");
-    return s_method.invoke(nullptr).getData<gboolean>() != 0;
+    return s_method.invoke(nullptr).getValue<gboolean>() != 0;
 }
 
 /*static*/ void Debug::Break()
@@ -2575,7 +2575,7 @@ cpsImplTraits(UnityEngine, GL);
     cpsBindMethod("GetGPUProjectionMatrix");
     gboolean renderIntoTexture = renderIntoTexture_;
     void *args[] = { (void*)&proj, &renderIntoTexture };
-    return s_method.invoke(nullptr, args).getData<Matrix4x4>();
+    return s_method.invoke(nullptr, args).getValue<Matrix4x4>();
 }
 /*static*/ void GL::InvalidateState()
 {
@@ -2699,13 +2699,13 @@ cpsImplTraits(UnityEngine, Graphics);
 {
     cpsBindMethod("get_activeColorBuffer");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<RenderBuffer>();
+    return ret.getValue<RenderBuffer>();
 }
 /*static*/ RenderBuffer Graphics::get_activeDepthBuffer()
 {
     cpsBindMethod("get_activeDepthBuffer");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<RenderBuffer>();
+    return ret.getValue<RenderBuffer>();
 }
 /*static*/ cpsString Graphics::get_deviceName()
 {
@@ -2729,7 +2729,7 @@ cpsImplTraits(UnityEngine, Graphics);
 {
     cpsBindMethod("get_supportsVertexProgram");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<gboolean>()!=0;
+    return ret.getValue<gboolean>()!=0;
 }
 
 /*static*/ void Graphics::Blit(Texture source, RenderTexture dest)
@@ -2926,7 +2926,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_gravity");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<Vector3>();
+    return ret.getValue<Vector3>();
 }
 /*static*/ void Physics::set_gravity(const Vector3 v)
 {
@@ -2938,7 +2938,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_minPenetrationForPenalty");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
+    return ret.getValue<float>();
 }
 /*static*/ void Physics::set_minPenetrationForPenalty(float v)
 {
@@ -2950,7 +2950,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_bounceThreshold");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
+    return ret.getValue<float>();
 }
 /*static*/ void Physics::set_bounceThreshold(float v)
 {
@@ -2962,7 +2962,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_sleepVelocity");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
+    return ret.getValue<float>();
 }
 /*static*/ void Physics::set_sleepVelocity(float v)
 {
@@ -2974,7 +2974,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_sleepAngularVelocity");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
+    return ret.getValue<float>();
 }
 /*static*/ void Physics::set_sleepAngularVelocity(float v)
 {
@@ -2986,7 +2986,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_maxAngularVelocity");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<float>();
+    return ret.getValue<float>();
 }
 /*static*/ void Physics::set_maxAngularVelocity(float v)
 {
@@ -2998,7 +2998,7 @@ cpsImplTraits(UnityEngine, Physics);
 {
     cpsBindMethod("get_solverIterationCount");
     cpsObject ret = s_method.invoke(nullptr);
-    return ret.getData<int>();
+    return ret.getValue<int>();
 }
 /*static*/ void Physics::set_solverIterationCount(int v)
 {
@@ -3013,7 +3013,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("CheckCapsule", _countof(names), names);
     void *args[] = { (void*)&start, (void*)&end, &radius, &layermask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ bool Physics::CheckSphere(const Vector3 &position, float radius, int layerMask)
 {
@@ -3021,7 +3021,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("CheckSphere", _countof(names), names);
     void *args[] = { (void*)&position, &radius, &layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ bool Physics::Raycast(const Ray &ray, RaycastHit &hitInfo, float distance, int layerMask)
 {
@@ -3029,7 +3029,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("Raycast", _countof(names), names);
     void *args[] = { (void*)&ray, &hitInfo, &distance, &layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ bool Physics::CapsuleCast(const Vector3 &point1, const Vector3 &point2, float radius, const Vector3 &direction, RaycastHit &hitInfo, float distance, int layerMask)
 {
@@ -3037,7 +3037,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("CapsuleCast", _countof(names), names);
     void *args[] = { (void*)&point1, (void*)&point2, (void*)&radius, (void*)&direction, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ bool Physics::Linecast(const Vector3 &start, const Vector3 &end, RaycastHit &hitInfo, int layerMask)
 {
@@ -3045,7 +3045,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("Linecast", _countof(names), names);
     void *args[] = { (void*)&start, (void*)&end, (void*)&hitInfo, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ bool Physics::SphereCast(const Ray &ray, float radius, RaycastHit &hitInfo, float distance, int layerMask)
 {
@@ -3053,7 +3053,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("SphereCast", _countof(names), names);
     void *args[] = { (void*)&ray, (void*)&radius, (void*)&hitInfo, (void*)&distance, (void*)&layerMask };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ cpsTArray<Collider> Physics::OverlapSphere(const Vector3 &position, float radius, int layerMask)
 {
@@ -3093,7 +3093,7 @@ cpsImplTraits(UnityEngine, Physics);
     cpsBindMethod("GetIgnoreLayerCollision", _countof(names), names);
     void *args[] = { &layer1, &layer2 };
     cpsObject ret = s_method.invoke(nullptr, args);
-    return ret.getData<gboolean>() != 0;
+    return ret.getValue<gboolean>() != 0;
 }
 /*static*/ void Physics::IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
 {
@@ -3158,7 +3158,7 @@ cpsImplTraits(UnityEngine, Time);
 /*static*/ int Time::get_captureFramerate()
 {
     cpsBindMethod("get_captureFramerate");
-    return s_method.invoke(nullptr).getData<int>();
+    return s_method.invoke(nullptr).getValue<int>();
 }
 /*static*/ void Time::set_captureFramerate(int v)
 {
@@ -3169,12 +3169,12 @@ cpsImplTraits(UnityEngine, Time);
 /*static*/ float Time::get_deltaTime()
 {
     cpsBindMethod("get_deltaTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ float Time::get_fixedDeltaTime()
 {
     cpsBindMethod("get_fixedDeltaTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ void Time::set_fixedDeltaTime(float v)
 {
@@ -3185,17 +3185,17 @@ cpsImplTraits(UnityEngine, Time);
 /*static*/ float Time::get_fixedTime()
 {
     cpsBindMethod("get_fixedTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ int Time::get_frameCount()
 {
     cpsBindMethod("get_frameCount");
-    return s_method.invoke(nullptr).getData<int>();
+    return s_method.invoke(nullptr).getValue<int>();
 }
 /*static*/ float Time::get_maximumDeltaTime()
 {
     cpsBindMethod("get_maximumDeltaTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ void Time::set_maximumDeltaTime(float v)
 {
@@ -3206,27 +3206,27 @@ cpsImplTraits(UnityEngine, Time);
 /*static*/ float Time::get_realtimeSinceStartup()
 {
     cpsBindMethod("get_realtimeSinceStartup");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ int Time::get_renderedFrameCount()
 {
     cpsBindMethod("get_renderedFrameCount");
-    return s_method.invoke(nullptr).getData<int>();
+    return s_method.invoke(nullptr).getValue<int>();
 }
 /*static*/ float Time::get_smoothDeltaTime()
 {
     cpsBindMethod("get_smoothDeltaTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ float Time::get_time()
 {
     cpsBindMethod("get_time");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ float Time::get_timeScale()
 {
     cpsBindMethod("get_timeScale");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ void Time::set_timeScale(float v)
 {
@@ -3237,17 +3237,17 @@ cpsImplTraits(UnityEngine, Time);
 /*static*/ float Time::get_timeSinceLevelLoad()
 {
     cpsBindMethod("get_timeSinceLevelLoad");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ float Time::get_unscaledDeltaTime()
 {
     cpsBindMethod("get_unscaledDeltaTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 /*static*/ float Time::get_unscaledTime()
 {
     cpsBindMethod("get_unscaledTime");
-    return s_method.invoke(nullptr).getData<float>();
+    return s_method.invoke(nullptr).getValue<float>();
 }
 
 } // namespace UnityEngine

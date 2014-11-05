@@ -6,6 +6,11 @@
 #include <algorithm>
 
 
+bool cpsAPI cpsIsSubclassOf(cpsClass parent, cpsClass child)
+{
+    return mono_class_is_subclass_of(parent, child, false) != 0;
+}
+
 cpsImage cpsImage::findImage(const char *name)
 {
     return mono_assembly_get_image(mono_domain_assembly_open(mono_domain_get(), name));
@@ -432,7 +437,7 @@ size_t cpsArray::getSize() const
 {
     return ((MonoArray*)mobj)->max_length;
 }
-void* cpsArray::getData()
+void* cpsArray::getDataPtr()
 {
     return ((MonoArray*)mobj)->vector;
 }

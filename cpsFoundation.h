@@ -41,6 +41,12 @@ class cpsString;
 typedef char        cps_char8;
 typedef uint16_t    cps_char16;
 
+bool cpsAPI cpsIsSubclassOf(cpsClass parent, cpsClass child);
+template<class T> const char* cpsTypename();
+template<class T> const char* cpsTypenameRef();
+template<class T> const char* cpsTypenameArray();
+template<class T> cpsClass    cpsTypeinfo();
+
 
 class cpsAPI cpsImage
 {
@@ -158,6 +164,9 @@ public:
 
     //cpsClass insantiate(cpsClass *template_params);
 
+    template<class T>
+    T as() const { return cpsIsSubclassOf(*this, cpsTypeinfo<T>()) ? T(*this) : nullptr; }
+
 public:
     MonoClass *mclass;
 };
@@ -175,7 +184,7 @@ public:
     MonoDomain* getDomain() const;
     cpsClass    getClass() const;
     void*       getDataPtr();
-    template<class T> T& getData(int offset=0) { return *(T*)((size_t)getDataPtr()+offset); }
+    template<class T> T& getValue(int offset=0) { return *(T*)((size_t)getDataPtr()+offset); }
 
     // redirect to cpsClass
     cpsField    findField(const char *name) const;
@@ -209,7 +218,7 @@ public:
     cpsArray(MonoArray *o) : cpsObject((MonoObject*)o) {}
 
     size_t getSize() const;
-    void* getData();
+    void* getDataPtr();
 };
 
 template<class T>
@@ -224,8 +233,8 @@ public:
     typedef T*          iterator;
     typedef const T*    const_iterator;
 
-    cpsTArray(cpsObject cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getData()) {}
-    cpsTArray(cpsArray cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getData()) {}
+    cpsTArray(cpsObject cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getDataPtr()) {}
+    cpsTArray(cpsArray cs_array) : m_array(cs_array), m_size(m_array.getSize()), m_data((pointer)m_array.getDataPtr()) {}
     size_t          size() const                { return m_size; }
     reference       operator[](size_t i)        { return m_data[i]; }
     const_reference operator[](size_t i) const  { return m_data[i]; }
@@ -241,11 +250,6 @@ private:
     pointer m_data;
 };
 
-
-template<class T> const char* cpsTypename()     { return T::getTypename(); }
-template<class T> const char* cpsTypenameRef()  { return T::getTypenameRef(); }
-template<class T> const char* cpsTypenameArray(){ return T::getTypenameArray(); }
-template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 
 
@@ -304,6 +308,10 @@ template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 
 
+template<class T> const char* cpsTypename()     { return T::getTypename(); }
+template<class T> const char* cpsTypenameRef()  { return T::getTypenameRef(); }
+template<class T> const char* cpsTypenameArray(){ return T::getTypenameArray(); }
+template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 template<> cpsAPI cpsClass    cpsTypeinfo<bool>();
 template<> cpsAPI const char* cpsTypename<bool>();
