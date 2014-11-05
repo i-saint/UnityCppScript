@@ -135,6 +135,36 @@ enum PrimitiveType
     PrimitiveType_Quad
 };
 
+enum RenderingPath
+{
+    RenderingPath_UsePlayerSettings = -1,
+    RenderingPath_VertexLit,
+    RenderingPath_Forward,
+    RenderingPath_DeferredLighting
+};
+
+enum CameraClearFlags
+{
+    CameraClearFlags_Skybox = 1,
+    CameraClearFlags_Color,
+    CameraClearFlags_SolidColor = 2,
+    CameraClearFlags_Depth,
+    CameraClearFlags_Nothing
+};
+enum DepthTextureMode
+{
+    DepthTextureMode_None = 0,
+    DepthTextureMode_Depth = 1,
+    DepthTextureMode_DepthNormals = 2
+};
+
+enum TransparencySortMode
+{
+    TransparencySortMode_Default,
+    TransparencySortMode_Perspective,
+    TransparencySortMode_Orthographic
+};
+
 
 template<class T>
 inline float clamp(T v, T minv, T maxv) { return std::min<T>(std::max<T>(v, minv), maxv); }
@@ -872,6 +902,7 @@ public:
     cpsDeclTraits();
     Texture(cpsObject v = nullptr);
 };
+
 class cpsAPI Texture2D : public Texture
 {
 typedef Texture super;
@@ -879,12 +910,21 @@ public:
     cpsDeclTraits();
     Texture2D(cpsObject v = nullptr);
 };
+
 class cpsAPI RenderTexture : public Texture
 {
 typedef Texture super;
 public:
     cpsDeclTraits();
     RenderTexture(cpsObject = nullptr);
+};
+
+class cpsAPI Cubemap : Texture
+{
+typedef Texture super;
+public:
+    cpsDeclTraits();
+    Cubemap(cpsObject = nullptr);
 };
 
 
@@ -1479,6 +1519,97 @@ typedef Component super;
 public:
     cpsDeclTraits();
     Camera(cpsObject obj = nullptr);
+
+    static cpsTArray<Camera>    get_allCameras();
+    static int                  get_allCamerasCount();
+    static Camera               get_current();
+    static Camera               get_main();
+    static int                  GetAllCameras(cpsTArray<Camera> &v);
+    static void                 SetupCurrent(Camera cur);
+
+    RenderingPath           get_actualRenderingPath();
+    float                   get_aspect();
+    void                    set_aspect(float v);
+    Color                   get_backgroundColor();
+    void                    set_backgroundColor(const Color &v);
+    Matrix4x4               get_cameraToWorldMatrix();
+    CameraClearFlags        get_clearFlags();
+    void                    set_clearFlags(CameraClearFlags v);
+    bool                    get_clearStencilAfterLightingPass();
+    void                    set_clearStencilAfterLightingPass(bool v);
+    int                     get_cullingMask();
+    void                    set_cullingMask(int v);
+    float                   get_depth();
+    void                    set_depth(float v);
+    DepthTextureMode        get_depthTextureMode();
+    void                    set_depthTextureMode(DepthTextureMode v);
+    int                     get_eventMask();
+    void                    set_eventMask(int v);
+    float                   get_farClipPlane();
+    void                    set_farClipPlane(float v);
+    float                   get_fieldOfView();
+    void                    set_fieldOfView(float v);
+    bool                    get_hdr();
+    void                    set_hdr(bool v);
+    bool                    get_isOrthoGraphic();
+    void                    set_isOrthoGraphic(bool v);
+    cpsTArray<float>        get_layerCullDistances();
+    void                    set_layerCullDistances(cpsTArray<float> v);
+    bool                    get_layerCullSpherical();
+    void                    set_layerCullSpherical(bool v);
+    float                   get_nearClipPlane();
+    void                    set_nearClipPlane(float v);
+    bool                    get_orthographic();
+    void                    set_orthographic(bool v);
+    float                   get_orthographicSize();
+    void                    set_orthographicSize(float v);
+    float                   get_pixelHeight();
+    Rect                    get_pixelRect();
+    void                    set_pixelRect(const Rect &v);
+    float                   get_pixelWidth();
+    Matrix4x4               get_projectionMatrix();
+    void                    set_projectionMatrix(const Matrix4x4 &v);
+    Rect                    get_rect();
+    void                    set_rect(const Rect &v);
+    RenderingPath           get_renderingPath();
+    void                    set_renderingPath(RenderingPath v);
+    float                   get_stereoConvergence();
+    void                    set_stereoConvergence(float v);
+    bool                    get_stereoEnabled();
+    void                    set_stereoEnabled(bool v);
+    float                   get_stereoSeparation();
+    void                    set_stereoSeparation(float v);
+    RenderTexture           get_targetTexture();
+    void                    set_targetTexture(RenderTexture v);
+    TransparencySortMode    get_transparencySortMode();
+    void                    set_transparencySortMode(TransparencySortMode v);
+    bool                    get_useOcclusionCulling();
+    void                    set_useOcclusionCulling(bool v);
+    Vector3                 get_velocity();
+    void                    set_velocity(const Vector3 &v);
+    Matrix4x4               get_worldToCameraMatrix();
+    void                    set_worldToCameraMatrix(const Matrix4x4 &v);
+
+    Matrix4x4               CalculateObliqueMatrix(const Vector4 &clipPlane);
+    void                    CopyFrom(Camera other);
+    void                    Render();
+    bool                    RenderToCubemap(Cubemap cubemap, int faceMask = 63);
+    void                    RenderWithShader(Shader shader, cpsString replacementTag);
+    void                    ResetAspect();
+    void                    ResetProjectionMatrix();
+    void                    ResetReplacementShader();
+    void                    ResetWorldToCameraMatrix();
+    Ray                     ScreenPointToRay(const Vector3 &position);
+    Vector3                 ScreenToViewportPoint(const Vector3 &position);
+    Vector3                 ScreenToWorldPoint(const Vector3 &position);
+    void                    SetReplacementShader(Shader shader, cpsString replacementTag);
+    void                    SetTargetBuffers(RenderBuffer colorBuffer, RenderBuffer depthBuffer);
+    void                    SetTargetBuffers(cpsTArray<RenderBuffer> colorBuffer, RenderBuffer depthBuffer);
+    Ray                     ViewportPointToRay(const Vector3 &position);
+    Vector3                 ViewportToScreenPoint(const Vector3 &position);
+    Vector3                 ViewportToWorldPoint(const Vector3 &position);
+    Vector3                 WorldToScreenPoint(const Vector3 &position);
+    Vector3                 WorldToViewportPoint(const Vector3 &position);
 };
 
 

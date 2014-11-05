@@ -991,6 +991,9 @@ Texture2D::Texture2D(cpsObject v) : super(v) {}
 cpsImplTraits(UnityEngine, RenderTexture);
 RenderTexture::RenderTexture(cpsObject v) : super(v) {}
 
+cpsImplTraits(UnityEngine, Cubemap);
+Cubemap::Cubemap(cpsObject v) : super(v) {}
+
 
 
 cpsImplTraits(UnityEngine, ComputeBuffer);
@@ -3372,3 +3375,8 @@ cpsImplTraitsF(UnityEngine, CollisionDetectionMode)
 cpsImplTraitsF(UnityEngine, RigidbodyConstraints)
 cpsImplTraitsF(UnityEngine, RigidbodyInterpolation)
 cpsImplTraitsF(UnityEngine, ForceMode)
+
+cpsImplTraitsF(UnityEngine, RenderingPath)
+cpsImplTraitsF(UnityEngine, CameraClearFlags)
+cpsImplTraitsF(UnityEngine, DepthTextureMode)
+cpsImplTraitsF(UnityEngine, TransparencySortMode)
