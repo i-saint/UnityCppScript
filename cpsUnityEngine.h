@@ -615,6 +615,22 @@ struct cpsAPI BoneWeight
 };
 
 
+class cpsAPI Collision : public cpsObject
+{
+typedef cpsObject super;
+public:
+    cpsDeclTraits();
+    Collision(cpsObject = nullptr);
+};
+
+class cpsAPI Collision2D : public cpsObject
+{
+typedef cpsObject super;
+public:
+    cpsDeclTraits();
+    Collision2D(cpsObject = nullptr);
+};
+
 
 
 class cpsAPI Object : public cpsObject
@@ -891,6 +907,7 @@ public:
     static void CopyCount(ComputeBuffer src, ComputeBuffer dst, int count);
 };
 
+
 class cpsAPI PhysicMaterial : public Object
 {
 typedef Object super;
@@ -899,12 +916,12 @@ public:
     PhysicMaterial(cpsObject v = nullptr);
 };
 
-class cpsAPI PhysicMaterial2D : public Object
+class cpsAPI PhysicsMaterial2D : public Object
 {
 typedef Object super;
 public:
     cpsDeclTraits();
-    PhysicMaterial2D(cpsObject v = nullptr);
+    PhysicsMaterial2D(cpsObject v = nullptr);
 };
 
 
@@ -1405,6 +1422,16 @@ typedef Behaviour super;
 public:
     cpsDeclTraits();
     Collider2D(cpsObject obj = nullptr);
+
+    Rigidbody2D         get_attachedRigidbody();
+    Bounds              get_bounds();
+    bool                get_isTrigger();
+    void                set_isTrigger(bool v);
+    int                 get_shapeCount();
+    PhysicsMaterial2D   get_sharedMaterial();
+    void                set_sharedMaterial(PhysicsMaterial2D v);
+
+    bool OverlapPoint(const Vector2 &v);
 };
 
 class cpsAPI BoxCollider2D : public Collider2D
@@ -1413,6 +1440,35 @@ typedef Collider2D super;
 public:
     cpsDeclTraits();
     BoxCollider2D(cpsObject obj = nullptr);
+    Vector2 get_center();
+    void    set_center(const Vector2 &v);
+    Vector2 get_size();
+    void    set_size(const Vector2 &v);
+};
+
+class cpsAPI CircleCollider2D : public Collider2D
+{
+typedef Collider2D super;
+public:
+    cpsDeclTraits();
+    CircleCollider2D(cpsObject obj = nullptr);
+    Vector2 get_center();
+    void    set_center(const Vector2 &v);
+    float   get_radius();
+    void    set_radius(float v);
+};
+
+class cpsAPI PolygonCollider2D : public Collider2D
+{
+typedef Collider2D super;
+public:
+    cpsDeclTraits();
+    PolygonCollider2D(cpsObject obj = nullptr);
+
+    int                 get_pathCount();
+    void                set_pathCount(int v);
+    cpsTArray<Vector2>  get_points();
+    void                set_points(cpsTArray<Vector2> v);
 };
 
 

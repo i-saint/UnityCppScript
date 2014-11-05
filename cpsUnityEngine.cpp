@@ -122,9 +122,14 @@ cpsImplTraits(UnityEngine, RenderBuffer);
 cpsImplTraits(UnityEngine, BoneWeight);
 
 
+cpsImplTraits(UnityEngine, Collision);
+Collision::Collision(cpsObject v) : super(v) {}
+
+cpsImplTraits(UnityEngine, Collision2D);
+Collision2D::Collision2D(cpsObject v) : super(v) {}
+
 
 cpsImplTraits(UnityEngine, Object);
-
 Object::Object(cpsObject v) : super(v) {}
 
 cpsString Object::get_name() const
@@ -1058,8 +1063,8 @@ PhysicMaterial::PhysicMaterial(cpsObject v) : super(v) {}
 
 
 
-cpsImplTraits(UnityEngine, PhysicMaterial2D);
-PhysicMaterial2D::PhysicMaterial2D(cpsObject v) : super(v) {}
+cpsImplTraits(UnityEngine, PhysicsMaterial2D);
+PhysicsMaterial2D::PhysicsMaterial2D(cpsObject v) : super(v) {}
 
 
 
@@ -2160,9 +2165,131 @@ void MeshCollider::set_smoothSphereCollisions(bool v_)
 cpsImplTraits(UnityEngine, Collider2D);
 Collider2D::Collider2D(cpsObject obj) : super(obj) {}
 
+Rigidbody2D Collider2D::get_attachedRigidbody()
+{
+    cpsBindMethod("get_attachedRigidbody");
+    return Rigidbody2D(s_method.invoke(*this));
+}
+Bounds Collider2D::get_bounds()
+{
+    cpsBindMethod("get_bounds");
+    return s_method.invoke(*this).getData<Bounds>();
+}
+bool Collider2D::get_isTrigger()
+{
+    cpsBindMethod("get_isTrigger");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+void Collider2D::set_isTrigger(bool v_)
+{
+    cpsBindMethod("set_isTrigger");
+    gboolean v = v_;
+    void *args[] = {&v};
+    s_method.invoke(*this, args);
+}
+int Collider2D::get_shapeCount()
+{
+    cpsBindMethod("get_shapeCount");
+    return s_method.invoke(*this).getData<int>() != 0;
+}
+PhysicsMaterial2D Collider2D::get_sharedMaterial()
+{
+    cpsBindMethod("get_sharedMaterial");
+    return PhysicsMaterial2D(s_method.invoke(*this));
+}
+void Collider2D::set_sharedMaterial(PhysicsMaterial2D v)
+{
+    cpsBindMethod("set_sharedMaterial");
+    void *args[] = { v };
+    s_method.invoke(*this, args);
+}
+
+bool Collider2D::OverlapPoint(const Vector2 &v)
+{
+    cpsBindMethod("OverlapPoint");
+    void *args[] = { (void*)&v };
+    return s_method.invoke(*this, args).getData<gboolean>() != 0;
+}
+
+
 cpsImplTraits(UnityEngine, BoxCollider2D);
 BoxCollider2D::BoxCollider2D(cpsObject obj) : super(obj) {}
 
+Vector2 BoxCollider2D::get_center()
+{
+    cpsBindMethod("get_center");
+    return s_method.invoke(*this).getData<Vector2>();
+
+}
+void BoxCollider2D::set_center(const Vector2 &v)
+{
+    cpsBindMethod("set_center");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Vector2 BoxCollider2D::get_size()
+{
+    cpsBindMethod("get_size");
+    return s_method.invoke(*this).getData<Vector2>();
+}
+void BoxCollider2D::set_size(const Vector2 &v)
+{
+    cpsBindMethod("set_size");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+cpsImplTraits(UnityEngine, CircleCollider2D);
+CircleCollider2D::CircleCollider2D(cpsObject obj) : super(obj) {}
+
+Vector2 CircleCollider2D::get_center()
+{
+    cpsBindMethod("get_center");
+    return s_method.invoke(*this).getData<Vector2>();
+}
+void CircleCollider2D::set_center(const Vector2 &v)
+{
+    cpsBindMethod("set_center");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float CircleCollider2D::get_radius()
+{
+    cpsBindMethod("get_radius");
+    return s_method.invoke(*this).getData<float>();
+}
+void CircleCollider2D::set_radius(float v)
+{
+    cpsBindMethod("set_radius");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+cpsImplTraits(UnityEngine, PolygonCollider2D);
+PolygonCollider2D::PolygonCollider2D(cpsObject obj) : super(obj) {}
+
+int PolygonCollider2D::get_pathCount()
+{
+    cpsBindMethod("get_pathCount");
+    return s_method.invoke(*this).getData<int>();
+}
+void PolygonCollider2D::set_pathCount(int v)
+{
+    cpsBindMethod("set_pathCount");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<Vector2> PolygonCollider2D::get_points()
+{
+    cpsBindMethod("get_points");
+    return cpsTArray<Vector2>(s_method.invoke(*this));
+}
+void PolygonCollider2D::set_points(cpsTArray<Vector2> v)
+{
+    cpsBindMethod("set_points");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
 
 
 cpsImplTraits(UnityEngine, Camera);
