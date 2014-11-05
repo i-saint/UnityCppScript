@@ -1334,6 +1334,70 @@ public:
     bool            Raycast(const Ray &ray, RaycastHit &hit, float dist);
 };
 
+class cpsAPI BoxCollider : public Collider
+{
+typedef Collider super;
+public:
+    cpsDeclTraits();
+    BoxCollider(cpsObject obj = nullptr);
+
+    Vector3 get_center();
+    void    set_center(const Vector3 &v);
+    Vector3 get_size();
+    void    set_size(const Vector3 &v);
+};
+
+class cpsAPI SphereCollider : public Collider
+{
+typedef Collider super;
+public:
+    cpsDeclTraits();
+    SphereCollider(cpsObject obj = nullptr);
+
+    Vector3 get_center();
+    void    set_center(const Vector3 &v);
+    float   get_radius();
+    void    set_radius(float v);
+};
+
+class cpsAPI CapsuleCollider : public Collider
+{
+typedef Collider super;
+public:
+    enum Direction {
+        Direction_X,
+        Direction_Y,
+        Direction_Z,
+    };
+
+    cpsDeclTraits();
+    CapsuleCollider(cpsObject obj = nullptr);
+
+    Vector3     get_center();
+    void        set_center(const Vector3 &v);
+    Direction   get_direction();
+    void        set_direction(Direction v);
+    float       get_height();
+    void        set_height(float v);
+    float       get_radius();
+    void        set_radius(float v);
+};
+
+class cpsAPI MeshCollider : public Collider
+{
+typedef Collider super;
+public:
+    cpsDeclTraits();
+    MeshCollider(cpsObject obj = nullptr);
+
+    bool get_convex();
+    void set_convex(bool v);
+    Mesh get_sharedMesh();
+    void set_sharedMesh(Mesh v);
+    bool get_smoothSphereCollisions();
+    void set_smoothSphereCollisions(bool v);
+};
+
 
 class cpsAPI Collider2D : public Behaviour
 {
@@ -1342,6 +1406,15 @@ public:
     cpsDeclTraits();
     Collider2D(cpsObject obj = nullptr);
 };
+
+class cpsAPI BoxCollider2D : public Collider2D
+{
+typedef Collider2D super;
+public:
+    cpsDeclTraits();
+    BoxCollider2D(cpsObject obj = nullptr);
+};
+
 
 
 class cpsAPI Camera : public Component
@@ -1627,6 +1700,13 @@ public:
     static float    get_timeSinceLevelLoad();
     static float    get_unscaledDeltaTime();
     static float    get_unscaledTime();
+};
+
+class Profiler
+{
+
+public:
+    cpsDeclTraits();
 };
 
 } // namespace UnityEngine

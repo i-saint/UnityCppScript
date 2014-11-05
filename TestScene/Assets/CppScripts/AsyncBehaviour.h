@@ -1,6 +1,7 @@
 ﻿#ifndef AsyncBehaviour_h
 #define AsyncBehaviour_h
 #include "CppBehaviour.h"
+#include <vector>
 
 class AsyncBehaviour;
 typedef uint32_t EntityHandle;

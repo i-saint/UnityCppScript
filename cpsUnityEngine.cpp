@@ -2015,9 +2015,153 @@ bool Collider::Raycast(const Ray &ray, RaycastHit &hit, float dist)
 }
 
 
+cpsImplTraits(UnityEngine, BoxCollider);
+BoxCollider::BoxCollider(cpsObject obj) : super(obj) {}
+Vector3 BoxCollider::get_center()
+{
+    cpsBindMethod("get_bounds");
+    return s_method.invoke(*this).getData<Vector3>();
+}
+void BoxCollider::set_center(const Vector3 &v)
+{
+    cpsBindMethod("set_center");
+    void *args[] = {(void*)&v};
+    s_method.invoke(*this, args);
+}
+Vector3 BoxCollider::get_size()
+{
+    cpsBindMethod("get_size");
+    return s_method.invoke(*this).getData<Vector3>();
+}
+void BoxCollider::set_size(const Vector3 &v)
+{
+    cpsBindMethod("set_size");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+
+cpsImplTraits(UnityEngine, SphereCollider);
+SphereCollider::SphereCollider(cpsObject obj) : super(obj) {}
+
+Vector3 SphereCollider::get_center()
+{
+    cpsBindMethod("get_center");
+    return s_method.invoke(*this).getData<Vector3>();
+}
+void SphereCollider::set_center(const Vector3 &v)
+{
+    cpsBindMethod("set_center");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float SphereCollider::get_radius()
+{
+    cpsBindMethod("get_radius");
+    return s_method.invoke(*this).getData<float>();
+}
+void SphereCollider::set_radius(float v)
+{
+    cpsBindMethod("set_radius");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+
+cpsImplTraits(UnityEngine, CapsuleCollider);
+CapsuleCollider::CapsuleCollider(cpsObject obj) : super(obj) {}
+
+Vector3 CapsuleCollider::get_center()
+{
+    cpsBindMethod("get_center");
+    return s_method.invoke(*this).getData<float>();
+}
+void CapsuleCollider::set_center(const Vector3 &v)
+{
+    cpsBindMethod("set_center");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+CapsuleCollider::Direction CapsuleCollider::get_direction()
+{
+    cpsBindMethod("get_direction");
+    return s_method.invoke(*this).getData<Direction>();
+}
+void CapsuleCollider::set_direction(Direction v)
+{
+    cpsBindMethod("set_direction");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float CapsuleCollider::get_height()
+{
+    cpsBindMethod("get_height");
+    return s_method.invoke(*this).getData<float>();
+}
+void CapsuleCollider::set_height(float v)
+{
+    cpsBindMethod("set_height");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float CapsuleCollider::get_radius()
+{
+    cpsBindMethod("get_radius");
+    return s_method.invoke(*this).getData<float>();
+}
+void CapsuleCollider::set_radius(float v)
+{
+    cpsBindMethod("set_radius");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+cpsImplTraits(UnityEngine, MeshCollider);
+MeshCollider::MeshCollider(cpsObject obj) : super(obj) {}
+
+bool MeshCollider::get_convex()
+{
+    cpsBindMethod("get_convex");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+void MeshCollider::set_convex(bool v_)
+{
+    cpsBindMethod("set_convex");
+    gboolean v = v_;
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+Mesh MeshCollider::get_sharedMesh()
+{
+    cpsBindMethod("get_sharedMesh");
+    return Mesh(s_method.invoke(*this));
+}
+void MeshCollider::set_sharedMesh(Mesh v)
+{
+    cpsBindMethod("set_sharedMesh");
+    void *args[] = { v };
+    s_method.invoke(*this, args);
+}
+bool MeshCollider::get_smoothSphereCollisions()
+{
+    cpsBindMethod("get_smoothSphereCollisions");
+    return s_method.invoke(*this).getData<gboolean>() != 0;
+}
+void MeshCollider::set_smoothSphereCollisions(bool v_)
+{
+    cpsBindMethod("set_smoothSphereCollisions");
+    gboolean v = v_;
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+
+
 
 cpsImplTraits(UnityEngine, Collider2D);
 Collider2D::Collider2D(cpsObject obj) : super(obj) {}
+
+cpsImplTraits(UnityEngine, BoxCollider2D);
+BoxCollider2D::BoxCollider2D(cpsObject obj) : super(obj) {}
 
 
 
