@@ -2298,6 +2298,503 @@ void PolygonCollider2D::set_points(cpsTArray<Vector2> v)
 cpsImplTraits(UnityEngine, Camera);
 Camera::Camera(cpsObject obj) : super(obj) {}
 
+/*static*/ cpsTArray<Camera> Camera::get_allCameras()
+{
+    cpsBindMethod("get_allCameras");
+    return cpsTArray<Camera>(s_method.invoke(nullptr));
+}
+/*static*/ int Camera::get_allCamerasCount()
+{
+    cpsBindMethod("get_allCamerasCount");
+    return s_method.invoke(nullptr).getValue<int>();
+}
+/*static*/ Camera Camera::get_current()
+{
+    cpsBindMethod("get_current");
+    return Camera(s_method.invoke(nullptr));
+}
+/*static*/ Camera Camera::get_main()
+{
+    cpsBindMethod("get_main");
+    return Camera(s_method.invoke(nullptr));
+}
+/*static*/ int Camera::GetAllCameras(cpsTArray<Camera> &v)
+{
+    cpsBindMethod("GetAllCameras");
+    void *args[] = { (cpsArray)v };
+    return s_method.invoke(nullptr, args).getValue<int>();
+}
+/*static*/ void Camera::SetupCurrent(Camera cur)
+{
+    cpsBindMethod("SetupCurrent");
+    void *args[] = { cur };
+    s_method.invoke(nullptr, args);
+}
+
+RenderingPath Camera::get_actualRenderingPath()
+{
+    cpsBindMethod("get_actualRenderingPath");
+    return s_method.invoke(*this).getValue<RenderingPath>();
+}
+float Camera::get_aspect()
+{
+    cpsBindMethod("get_aspect");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_aspect(float v)
+{
+    cpsBindMethod("set_aspect");
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+Color Camera::get_backgroundColor()
+{
+    cpsBindMethod("get_backgroundColor");
+    return s_method.invoke(*this).getValue<Color>();
+}
+void Camera::set_backgroundColor(const Color &v)
+{
+    cpsBindMethod("set_backgroundColor");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Matrix4x4 Camera::get_cameraToWorldMatrix()
+{
+    cpsBindMethod("get_cameraToWorldMatrix");
+    return s_method.invoke(*this).getValue<Matrix4x4>();
+}
+CameraClearFlags Camera::get_clearFlags()
+{
+    cpsBindMethod("get_clearFlags");
+    return s_method.invoke(*this).getValue<CameraClearFlags>();
+}
+void Camera::set_clearFlags(CameraClearFlags v)
+{
+    cpsBindMethod("set_clearFlags");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_clearStencilAfterLightingPass()
+{
+    cpsBindMethod("get_clearStencilAfterLightingPass");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_clearStencilAfterLightingPass(bool v_)
+{
+    cpsBindMethod("set_clearStencilAfterLightingPass");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+int Camera::get_cullingMask()
+{
+    cpsBindMethod("get_cullingMask");
+    return s_method.invoke(*this).getValue<int>();
+}
+void Camera::set_cullingMask(int v)
+{
+    cpsBindMethod("set_cullingMask");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_depth()
+{
+    cpsBindMethod("get_depth");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_depth(float v)
+{
+    cpsBindMethod("set_depth");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+DepthTextureMode Camera::get_depthTextureMode()
+{
+    cpsBindMethod("get_depthTextureMode");
+    return s_method.invoke(*this).getValue<DepthTextureMode>();
+}
+void Camera::set_depthTextureMode(DepthTextureMode v)
+{
+    cpsBindMethod("set_depthTextureMode");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+int Camera::get_eventMask()
+{
+    cpsBindMethod("get_eventMask");
+    return s_method.invoke(*this).getValue<int>();
+}
+void Camera::set_eventMask(int v)
+{
+    cpsBindMethod("set_eventMask");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_farClipPlane()
+{
+    cpsBindMethod("get_farClipPlane");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_farClipPlane(float v)
+{
+    cpsBindMethod("set_farClipPlane");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_fieldOfView()
+{
+    cpsBindMethod("get_fieldOfView");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_fieldOfView(float v)
+{
+    cpsBindMethod("set_fieldOfView");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_hdr()
+{
+    cpsBindMethod("get_hdr");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_hdr(bool v_)
+{
+    cpsBindMethod("set_hdr");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_isOrthoGraphic()
+{
+    cpsBindMethod("get_isOrthoGraphic");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_isOrthoGraphic(bool v_)
+{
+    cpsBindMethod("set_isOrthoGraphic");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+cpsTArray<float> Camera::get_layerCullDistances()
+{
+    cpsBindMethod("get_layerCullDistances");
+    return cpsTArray<float>(s_method.invoke(*this));
+}
+void Camera::set_layerCullDistances(cpsTArray<float> v)
+{
+    cpsBindMethod("set_layerCullDistances");
+    void *args[] = { (cpsArray)v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_layerCullSpherical()
+{
+    cpsBindMethod("get_layerCullSpherical");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_layerCullSpherical(bool v_)
+{
+    cpsBindMethod("set_layerCullSpherical");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_nearClipPlane()
+{
+    cpsBindMethod("get_nearClipPlane");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_nearClipPlane(float v)
+{
+    cpsBindMethod("set_nearClipPlane");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_orthographic()
+{
+    cpsBindMethod("get_orthographic");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_orthographic(bool v_)
+{
+    cpsBindMethod("set_orthographic");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_orthographicSize()
+{
+    cpsBindMethod("get_orthographicSize");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_orthographicSize(float v)
+{
+    cpsBindMethod("set_orthographicSize");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_pixelHeight()
+{
+    cpsBindMethod("get_pixelHeight");
+    return s_method.invoke(*this).getValue<float>();
+}
+Rect Camera::get_pixelRect()
+{
+    cpsBindMethod("get_pixelRect");
+    return s_method.invoke(*this).getValue<Rect>();
+}
+void Camera::set_pixelRect(const Rect &v)
+{
+    cpsBindMethod("set_pixelRect");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_pixelWidth()
+{
+    cpsBindMethod("get_pixelWidth");
+    return s_method.invoke(*this).getValue<float>();
+}
+Matrix4x4 Camera::get_projectionMatrix()
+{
+    cpsBindMethod("get_projectionMatrix");
+    return s_method.invoke(*this).getValue<Matrix4x4>();
+}
+void Camera::set_projectionMatrix(const Matrix4x4 &v)
+{
+    cpsBindMethod("set_projectionMatrix");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Rect Camera::get_rect()
+{
+    cpsBindMethod("get_rect");
+    return s_method.invoke(*this).getValue<Rect>();
+}
+void Camera::set_rect(const Rect &v)
+{
+    cpsBindMethod("set_rect");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+RenderingPath Camera::get_renderingPath()
+{
+    cpsBindMethod("get_renderingPath");
+    return s_method.invoke(*this).getValue<RenderingPath>();
+}
+void Camera::set_renderingPath(RenderingPath v)
+{
+    cpsBindMethod("set_renderingPath");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_stereoConvergence()
+{
+    cpsBindMethod("get_stereoConvergence");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_stereoConvergence(float v)
+{
+    cpsBindMethod("set_stereoConvergence");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_stereoEnabled()
+{
+    cpsBindMethod("get_stereoEnabled");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_stereoEnabled(bool v_)
+{
+    cpsBindMethod("set_stereoEnabled");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+float Camera::get_stereoSeparation()
+{
+    cpsBindMethod("get_stereoSeparation");
+    return s_method.invoke(*this).getValue<float>();
+}
+void Camera::set_stereoSeparation(float v)
+{
+    cpsBindMethod("set_stereoSeparation");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+RenderTexture Camera::get_targetTexture()
+{
+    cpsBindMethod("get_targetTexture");
+    return RenderTexture(s_method.invoke(*this));
+}
+void Camera::set_targetTexture(RenderTexture v)
+{
+    cpsBindMethod("set_targetTexture");
+    void *args[] = { v };
+    s_method.invoke(*this, args);
+}
+TransparencySortMode Camera::get_transparencySortMode()
+{
+    cpsBindMethod("get_transparencySortMode");
+    return s_method.invoke(*this).getValue<TransparencySortMode>();
+}
+void Camera::set_transparencySortMode(TransparencySortMode v)
+{
+    cpsBindMethod("set_transparencySortMode");
+    void *args[] = { &v };
+    s_method.invoke(*this, args);
+}
+bool Camera::get_useOcclusionCulling()
+{
+    cpsBindMethod("get_useOcclusionCulling");
+    return s_method.invoke(*this).getValue<gboolean>() != 0;
+}
+void Camera::set_useOcclusionCulling(bool v_)
+{
+    cpsBindMethod("set_useOcclusionCulling");
+    gboolean v = v_;
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Vector3 Camera::get_velocity()
+{
+    cpsBindMethod("get_velocity");
+    return s_method.invoke(*this).getValue<Vector3>();
+}
+void Camera::set_velocity(const Vector3 &v)
+{
+    cpsBindMethod("set_velocity");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+Matrix4x4 Camera::get_worldToCameraMatrix()
+{
+    cpsBindMethod("get_worldToCameraMatrix");
+    return s_method.invoke(*this).getValue<Matrix4x4>();
+}
+void Camera::set_worldToCameraMatrix(const Matrix4x4 &v)
+{
+    cpsBindMethod("set_worldToCameraMatrix");
+    void *args[] = { (void*)&v };
+    s_method.invoke(*this, args);
+}
+
+Matrix4x4 Camera::CalculateObliqueMatrix(const Vector4 &clipPlane)
+{
+    cpsBindMethod("CalculateObliqueMatrix");
+    void *args[] = { (void*)&clipPlane };
+    return s_method.invoke(*this, args).getValue<Matrix4x4>();
+}
+void Camera::CopyFrom(Camera other)
+{
+    cpsBindMethod("CopyFrom");
+    void *args[] = { (void*)&other };
+    s_method.invoke(*this, args);
+}
+void Camera::Render()
+{
+    cpsBindMethod("Render");
+    s_method.invoke(*this);
+}
+bool Camera::RenderToCubemap(Cubemap cubemap, int faceMask)
+{
+    cpsBindMethod("RenderToCubemap");
+    void *args[] = { cubemap, &faceMask };
+    return s_method.invoke(*this, args).getValue<gboolean>() != 0;
+}
+void Camera::RenderWithShader(Shader shader, cpsString replacementTag)
+{
+    cpsBindMethod("RenderWithShader");
+    void *args[] = { shader, replacementTag };
+    s_method.invoke(*this, args);
+}
+void Camera::ResetAspect()
+{
+    cpsBindMethod("ResetAspect");
+    s_method.invoke(*this);
+}
+void Camera::ResetProjectionMatrix()
+{
+    cpsBindMethod("ResetProjectionMatrix");
+    s_method.invoke(*this);
+}
+void Camera::ResetReplacementShader()
+{
+    cpsBindMethod("ResetReplacementShader");
+    s_method.invoke(*this);
+}
+void Camera::ResetWorldToCameraMatrix()
+{
+    cpsBindMethod("ResetWorldToCameraMatrix");
+    s_method.invoke(*this);
+}
+Ray Camera::ScreenPointToRay(const Vector3 &position)
+{
+    cpsBindMethod("ScreenPointToRay");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Ray>();
+}
+Vector3 Camera::ScreenToViewportPoint(const Vector3 &position)
+{
+    cpsBindMethod("ScreenToViewportPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
+Vector3 Camera::ScreenToWorldPoint(const Vector3 &position)
+{
+    cpsBindMethod("ScreenToWorldPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
+void Camera::SetReplacementShader(Shader shader, cpsString replacementTag)
+{
+    cpsBindMethod("SetReplacementShader");
+    void *args[] = { shader, replacementTag };
+    s_method.invoke(*this, args);
+}
+void Camera::SetTargetBuffers(RenderBuffer colorBuffer, RenderBuffer depthBuffer)
+{
+    const char *typenames[] = { cpsTypename<RenderBuffer>(), cpsTypename<RenderBuffer>() };
+    cpsBindMethod("SetTargetBuffers", _countof(typenames), typenames);
+    void *args[] = { &colorBuffer, &depthBuffer };
+    s_method.invoke(*this, args);
+}
+void Camera::SetTargetBuffers(cpsTArray<RenderBuffer> colorBuffer, RenderBuffer depthBuffer)
+{
+    const char *typenames[] = { cpsTypenameArray<RenderBuffer>(), cpsTypename<RenderBuffer>() };
+    cpsBindMethod("SetTargetBuffers", _countof(typenames), typenames);
+    void *args[] = { (cpsArray)colorBuffer, &depthBuffer };
+    s_method.invoke(*this, args);
+}
+Ray Camera::ViewportPointToRay(const Vector3 &position)
+{
+    cpsBindMethod("ViewportPointToRay");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Ray>();
+}
+Vector3 Camera::ViewportToScreenPoint(const Vector3 &position)
+{
+    cpsBindMethod("ViewportToScreenPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
+Vector3 Camera::ViewportToWorldPoint(const Vector3 &position)
+{
+    cpsBindMethod("ViewportToWorldPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
+Vector3 Camera::WorldToScreenPoint(const Vector3 &position)
+{
+    cpsBindMethod("WorldToScreenPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
+Vector3 Camera::WorldToViewportPoint(const Vector3 &position)
+{
+    cpsBindMethod("WorldToViewportPoint");
+    void *args[] = { (void*)&position };
+    return s_method.invoke(*this, args).getValue<Vector3>();
+}
 
 
 cpsImplTraits(UnityEngine, Light);

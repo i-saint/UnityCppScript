@@ -919,7 +919,7 @@ public:
     RenderTexture(cpsObject = nullptr);
 };
 
-class cpsAPI Cubemap : Texture
+class cpsAPI Cubemap : public Texture
 {
 typedef Texture super;
 public:
