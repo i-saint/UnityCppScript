@@ -336,7 +336,7 @@ MonoDomain* cpsObject::getDomain() const
 
 void* cpsObject::getDataPtr()
 {
-    return (char*)mobj + sizeof(MonoObject);
+    return mono_object_unbox(mobj);
 }
 
 cpsField cpsObject::findField(const char *name) const
@@ -454,6 +454,17 @@ template<> cpsAPI const char* cpsTypename<bool>()
     return "System.Boolean";
 }
 
+template<> cpsAPI cpsClass    cpsTypeinfo<uint8_t>()
+{
+    static cpsCachedClass s_class;
+    if (!s_class) { s_class = mono_get_byte_class(); }
+    return s_class;
+}
+template<> cpsAPI const char* cpsTypename<uint8_t>()
+{
+    return "System.Byte";
+}
+
 template<> cpsAPI cpsClass    cpsTypeinfo<int>()
 {
     static cpsCachedClass s_class;
@@ -487,9 +498,18 @@ template<> cpsAPI const char* cpsTypename<cpsString>()
     return "System.String";
 }
 
+cpsAPI uint32_t cpsPin(cpsObject obj)
+{
+    return mono_gchandle_new(obj, 1);
+}
+
+cpsAPI void cpsUnpin(uint32_t handle)
+{
+    mono_gchandle_free(handle);
+}
 
 
-void cpsClearCache();
+
 
 cpsCLinkage cpsExport void cpsCoreInitialize()
 {

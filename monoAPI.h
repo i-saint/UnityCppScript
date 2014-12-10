@@ -401,6 +401,7 @@ MONO_API gboolean               mono_class_is_subclass_of(MonoClass *klass, Mono
 MONO_API MonoObject*        mono_object_new(MonoDomain *domain, MonoClass *klass);
 MONO_API MonoDomain*        mono_object_get_domain(MonoObject *obj);
 MONO_API MonoClass*         mono_object_get_class(MonoObject *obj);
+MONO_API gpointer           mono_object_unbox(MonoObject *obj);
 
 MONO_API MonoArray*         mono_array_new(MonoDomain *domain, MonoClass *eclass, mono_array_size_t n);
 
@@ -425,6 +426,11 @@ MONO_API MonoClass* mono_get_enum_class();
 MONO_API MonoClass* mono_get_array_class();
 MONO_API MonoClass* mono_get_thread_class(); 
 MONO_API MonoClass* mono_get_exception_class();
+
+MONO_API guint32      mono_gchandle_new(MonoObject *obj, gboolean pinned);
+MONO_API guint32      mono_gchandle_new_weakref(MonoObject *obj, gboolean track_resurrection);
+MONO_API MonoObject*  mono_gchandle_get_target(guint32 gchandle);
+MONO_API void         mono_gchandle_free(guint32 gchandle);
 
 } // extern "C"
 #endif // monoAPI_h

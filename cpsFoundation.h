@@ -242,6 +242,7 @@ public:
     iterator        end()                       { return m_data + m_size; }
     const_iterator  begin() const               { return m_data; }
     const_iterator  end() const                 { return m_data + m_size; }
+    operator bool() const { return m_array; }
     operator cpsArray() const { return m_array; }
 
 private:
@@ -315,11 +316,19 @@ template<class T> cpsClass    cpsTypeinfo() { return T::getClass(); }
 
 template<> cpsAPI cpsClass    cpsTypeinfo<bool>();
 template<> cpsAPI const char* cpsTypename<bool>();
+template<> cpsAPI cpsClass    cpsTypeinfo<uint8_t>();
+template<> cpsAPI const char* cpsTypename<uint8_t>();
 template<> cpsAPI cpsClass    cpsTypeinfo<int>();
 template<> cpsAPI const char* cpsTypename<int>();
 template<> cpsAPI cpsClass    cpsTypeinfo<float>();
 template<> cpsAPI const char* cpsTypename<float>();
 template<> cpsAPI cpsClass    cpsTypeinfo<cpsString>();
 template<> cpsAPI const char* cpsTypename<cpsString>();
+
+cpsAPI uint32_t cpsPin(cpsObject obj);
+cpsAPI void cpsUnpin(uint32_t handle);
+
+cpsAPI void cpsClearCache();
+
 
 #endif // cpsFoundation_h

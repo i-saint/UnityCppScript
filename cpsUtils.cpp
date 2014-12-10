@@ -189,7 +189,7 @@ struct cpsCaches
     std::vector<cpsCachedProperty*> properties;
 } g_cpsCaches;
 
-void cpsClearCache()
+cpsAPI void cpsClearCache()
 {
     for (auto o : g_cpsCaches.images)      { o->mimage = nullptr; }
     for (auto o : g_cpsCaches.classes)     { o->mclass = nullptr; }
